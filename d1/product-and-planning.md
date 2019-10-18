@@ -157,23 +157,23 @@ Each task will have its own priority, and we will be focusing on the one will hi
 ### Highlights
 1. What language to be used for backend?
 
-Decision: Nodejs with express framework.
+   - Decision: Nodejs with express framework.
 
-Reasoning: 
-Some other alternatives we considered were PHP and Python flask. We decided to use NodeJS because all of our team members have learnt or will finish learning CSC309 which is a Web Programming course teaching NodeJS this semester. We all will have proficiency in NodeJS while programming the web app.
+   - Reasoning: 
+   Some other alternatives we considered were PHP and Python flask. We decided to use NodeJS because all of our team members have learnt or will finish learning CSC309 which is a Web Programming course teaching NodeJS this semester. We all will have proficiency in NodeJS while programming the web app.
 
 
 2. What database to be used (SQL or NoSQL)?
 
-Decision: SQL
+   - Decision: SQL
 
-Reasoning:
-We are somewhat experienced with SQL and very experienced with no SQL database system like MongoDB, but as requested by our partner, she only wants the application to be run locally using SQL.  
+   - Reasoning:
+   We are somewhat experienced with SQL and very experienced with no SQL database system like MongoDB, but as requested by our partner, she only wants the application to be run locally using SQL.  
 
 
 3. What language/framework to be used for frontend?
 
-We temporarily decide to use React as our frontend framework. 
+   - We temporarily decide to use React as our frontend framework. 
 
-Reasoning: 
-It’s a very handy framework that provides virtual DOM and component creation services for the developer, which make the development process a lot easier and much more efficient. Also, it’s easy for beginners to start from scratch, so that our team can get working with it in a very short time.
+   - Reasoning: 
+   It’s a very handy framework that provides virtual DOM and component creation services for the developer, which make the development process a lot easier and much more efficient. Also, it’s easy for beginners to start from scratch, so that our team can get working with it in a very short time.
