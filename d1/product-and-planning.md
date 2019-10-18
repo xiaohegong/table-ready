@@ -13,12 +13,19 @@ There are applications like yelp that solve external problems and there are appl
    * For employees, they must be created by the restaurant managers to join a restaurant and then has access to its seating and communication to customers.
 
 #### Q2: Who are your target users?
+![Alt](/docs/personas/devin.png "devin")
+
+
+![Alt](/docs/personas/fabbi.png "fabbi")
+
+
+![Alt](/docs/personas/walter.png "walter")
 
 Our target audiences are restaurant owners who need reservations and seating charts for managing their customers and employees while trying to advertise their restaurants. 
 Consider the following personas:
-1. Devin is the owner of This is So Delicious Cafe at north york. He just started his business this spring and desperately needs customers. He is looking everywhere for a cheap advertisement but there is no luck so far.
-2. Fabbi is the owner of This is So Famous Cafe at downtown toronto. Since his food is so delicious, there is always a long waitlist for his restaurant. He is overwhelmed by the number of customers and negative reviews about his restaurant having “Too much waiting time”. Fabbi is a good cook but not a good manager, so he does not have a proper restaurant management tool. Therefore, he desperately needs a new management system for his restaurant to solve this problem.
-3.  Walter is the waiter of This is So Famous Cafe. He is having a hard time dealing with the numerous of customers they have each day. Right now he is using pen and paper to keep track of all the available seats. However, this is really inefficient and he often make mistakes when recording.
+1. Devin is the manager of *This is So Delicious Restaurant* at north york. He uses restaurant management software to handle reservations and waitlisting, but they all require the customers to provide private information so he gets a lot of complaints. 
+2. Fabbi is the owner of *This is So Famous Cafe* at downtown toronto. Since his food is so delicious, there is always a long waitlist for his restaurant. He is overwhelmed by the number of customers and negative reviews about his restaurant having “Too much waiting time”. Fabbi is a good cook but not a good manager, so he does not have a proper restaurant management tool. Therefore, he desperately needs a new management system for his restaurant to solve this problem.
+3. Walter is the waiter of *This is Very Famous Cafe*. He is having a hard time dealing with the numerous of customers they have each day. Right now he is using pen and paper to keep track of all the available seats. However, this is really inefficient and he often make mistakes when writing them down on paper.
 
 #### Q3: Why would your users choose your product? What are they using today to solve their problem/need?
 
