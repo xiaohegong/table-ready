@@ -5,9 +5,9 @@ Team #5
  
 #### Q1: What are you planning to build?
 
-We are planning to build a web portal that allows restaurant owners to efficiently manage their restaurants’ waitlist and reservations, customers, and employees with ease. The clients register and manage their restaurant internally, such as reservations and nightly seating, and externally, such as advertising restaurant, while maintaining positive interactions with new and returning customers. In addition, our portal will integrate with another app that customers use to make reservations.
+We are planning to build a web portal for [Table Ready](http://www.tableready.net) that allows restaurant owners to efficiently manage their restaurants’ waitlist and reservations, customers, and employees with ease. The clients register and manage their restaurant internally, such as reservations and nightly seating, and externally, such as advertising restaurant, while maintaining positive interactions with new and returning customers. In addition, our portal will integrate with another app that customers use to make reservations.
 
-There are applications like yelp that solve external problems and there are applications like opentable.com that solves internal problems. We want to build a website that does both. Our platform has three levels of users: admin, restaurant manager, and employees. 
+There are applications like [yelp](https://www.yelp.ca) that solve external problems and there are applications like [opentable.com](opentable.com) that solves internal problems. We want to build a website that does both. Our platform has three levels of users: admin, restaurant manager, and employees. 
    * Admin has the highest authority, it manages all the user information and status. 
    * Restaurant owner registers on our website and posts their restaurant information (menu, location, operating hours)  to the public. Additionally, our system will support bill tracking (payments for this service) and nighty seating management. 
    * For employees, they must be created by the restaurant managers to join a restaurant and then has access to its seating and communication to customers.
@@ -31,7 +31,7 @@ Consider the following personas:
 
 With our web portal, restaurant owners will be able to manage reservations, wait lists and manage nightly seating, making it easier for them to have positive interactions with customers.
 
-Many similar products exist. For example, opentable.com also provides restaurant reservations. However, our restaurant management web portal is trying to help the restaurant managers, while working with the customers’ mobile app in the backend to deliver a series of convenience for restaurant owners and customers. Management with ease and efficiency is our partner Table Ready’s goal. In addition, unlike most of the existing product, our app does not require users to register using their private information (phone numbers, email address, etc). This way, we can perform similar tasks without taking their private information so that the user feels secure. 
+Many similar products exist. For example, [opentable.com](opentable.com) also provides restaurant reservations. However, our restaurant management web portal is trying to help the restaurant managers, while working with the customers’ mobile app in the backend to deliver a series of convenience for restaurant owners and customers. Management with ease and efficiency is our partner Table Ready’s goal. In addition, unlike most of the existing product, our app does not require users to register using their private information (phone numbers, email address, etc). This way, we can perform similar tasks without taking their private information so that the user feels secure. 
 
 
 #### Q4: How will you build it?
