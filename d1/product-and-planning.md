@@ -13,13 +13,13 @@ There are applications like yelp that solve external problems and there are appl
    * For employees, they must be created by the restaurant managers to join a restaurant and then has access to its seating and communication to customers.
 
 #### Q2: Who are your target users?
-![Alt](/docs/personas/devin.png "devin")
+![Alt](./docs/personas/devin.png "devin")
 
 
-![Alt](/docs/personas/fabbi.png "fabbi")
+![Alt](./docs/personas/fabbi.png "fabbi")
 
 
-![Alt](/docs/personas/walter.png "walter")
+![Alt](./docs/personas/walter.png "walter")
 
 Our target audiences are restaurant owners who need reservations and seating charts for managing their customers and employees while trying to advertise their restaurants. 
 Consider the following personas:
