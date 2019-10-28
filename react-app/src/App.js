@@ -4,6 +4,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { Route, Switch, BrowserRouter } from "react-router-dom";
 import Navbar from "./Components/Navbar"
 import RestaurateurPage from "./Components/Restaurateur/RestaurateurPage"
+import Dashboard from "./Components/Restaurateur/Dashboard"
 import './App.scss';
 
 function App() {
@@ -13,9 +14,15 @@ function App() {
         <Navbar />
         <Switch>
           <Route exact path="/" component={RestaurateurPage} />
+
         </Switch>
+
+          <Route exact path="/" component={Dashboard} />
+
+
       </BrowserRouter>
     </div>
+
   );
 }
 
