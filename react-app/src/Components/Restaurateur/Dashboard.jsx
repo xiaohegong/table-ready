@@ -1,9 +1,11 @@
 import React, {Component} from 'react';
 import "../../Stylesheets/navbar.scss";
+import Employees from "./Employees";
+import GeneralInfo from "./GeneralInfo";
 
 class Dashboard extends Component {
     state = {
-        curState :'menu',
+        curState :<GeneralInfo />,
         functions:[
             {
                 id:1,
@@ -11,7 +13,7 @@ class Dashboard extends Component {
             },
             {
                 id:2,
-                title: 'employees'
+                title: 'Manage Employees'
             },
             {
                 id:3,
@@ -19,23 +21,24 @@ class Dashboard extends Component {
             },
             {
                 id:4,
-                title: 'general infos'
+                title: 'General Infos'
             }
         ]
 
     };
     components = {
-        'menu':'menu',
-        'dressC':'dressCode',
-        'employee':'employee'
+        '1':'dressCode',
+        '2':<Employees/>,
+        '3':'menu',
+        '4':<GeneralInfo />
 
     };
 
-     curState = 'menu';
+     curState = '4';
 
     showComponent = (componentName) =>{
         console.log(componentName)
-        this.curState = componentName;
+        this.curState =this.components[componentName];
         this.setState({
            curState : this.curState
         })
@@ -48,12 +51,8 @@ class Dashboard extends Component {
             <div>
                 <div>
                     {this.state.functions.map((fun)=>(
-                        <button className="nav-item" onClick={this.showComponent.bind(this,fun.title)}>{fun.title}</button>
+                        <button className="nav-item" onClick={this.showComponent.bind(this,fun.id)}>{fun.title}</button>
                     ))}
-                    {/*<button className="nav-item" onClick={this.showComponent.bind(this,'menu')}><span>Menu</span></button>*/}
-                    {/*<button className="nav-item" onClick={this.showComponent.bind(this,'dressC')}><span>General Infos</span></button>*/}
-                    {/*<button className="nav-item" onClick={this.showComponent.bind(this,'menu')}><span>Employees</span></button>*/}
-                    {/*<button className="nav-item" onClick={this.showComponent.bind(this,'menu')}><span>Dress Code</span></button>*/}
                 </div>
                 <div>
                     {this.state.curState}
