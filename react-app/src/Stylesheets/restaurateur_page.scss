@@ -1,0 +1,33 @@
+.restaurateur-page {
+  text-align: left;
+
+  .container {
+    margin-top: 2em;
+
+    .col-9,
+    .col-3 {
+      padding: 1em;
+    }
+
+    .info {
+      .avatar {
+        width: 100%;
+        border-radius: 50%;
+        border: 5px solid black;
+      }
+    }
+
+    .restaurant-info {
+      display: inline-block;
+    }
+
+    .restaurants-display {
+      overflow: auto;
+      height: 60vh;
+      img {
+        width: 200px;
+        float: right;
+      }
+    }
+  }
+}

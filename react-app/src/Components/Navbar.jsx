@@ -47,9 +47,7 @@ class Navbar extends React.Component {
   render() {
     return (
       <nav className="navbar-page navbar navbar-expand-lg navbar-dark bg-dark">
-        <Link to="/">
-          Brand
-        </Link>
+        <Link to="/">Brand</Link>
 
         <button
           className="navbar-toggler"
@@ -111,28 +109,13 @@ class Navbar extends React.Component {
               </div>
             </li>
           </ul>
-          <div
-            id="theme-btn-group"
-            className="btn-group"
-            role="group"
-            aria-label="..."
-          >
-            <button className="btn btn-light" value="light" checked>
-              Light
-            </button>
-            <button className="btn btn-dark" value="dark">
-              Dark
-            </button>
-          </div>
+
           <div className="btn-group">
             <Link to="/login">
               <button className="btn btn-primary btn-sm">Sign In</button>
             </Link>
             <Link to="/signup">
               <button className="btn btn-success btn-sm">Sign Up</button>
-            </Link>
-            <Link to="/userprofiling">
-              <button className="btn btn-success btn-sm">UserPage</button>
             </Link>
           </div>
         </div>
