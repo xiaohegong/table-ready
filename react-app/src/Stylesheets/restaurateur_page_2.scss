@@ -1,0 +1,34 @@
+.restaurateur-page-2 {
+  // background-color: black;
+  .container {
+    margin-top: 2em;
+  }
+  .restaurant-info {
+    h2 {
+      margin: 0;
+    }
+    ul {
+      margin-top: 1em;
+      margin-bottom: 1em;
+    }
+    .options {
+      margin-top: 1em;
+    }
+  }
+  .employee-list {
+    overflow: auto;
+    height: 70vh;
+  }
+  .employee-list-item {
+    img {
+      width: 5em;
+      border-radius: 50%;
+      border: 3px solid black;
+    }
+    .employee-info {
+      p {
+        margin: 0;
+      }
+    }
+  }
+}
