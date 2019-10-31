@@ -1,0 +1,47 @@
+#signIn {
+  #canvasConfig {
+    background-color: wheat;
+    float: left;
+  }
+
+  #divPage {
+    position:absolute;
+    top: 20%;
+    left: 25%;
+    //float: left;
+    //display: block;
+    margin-left: 15%;
+    margin-top: 5%;
+  }
+  .container {
+    position: relative;
+    width: 100%;
+    max-width: 400px;
+  }
+
+  .container img {
+    width: 50%;
+    height: auto;
+  }
+
+  .container .btn {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    background-color: transparent;
+    color: white;
+    font-size: 16px;
+    padding: 12px 24px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    text-align: center;
+    z-index: 1;
+  }
+
+  .container .btn:hover {
+    background-color: beige;
+  }
+}

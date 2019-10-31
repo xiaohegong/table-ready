@@ -6,6 +6,7 @@ import Navbar from "./Components/Navbar"
 import RestaurateurPage from "./Components/Restaurateur/RestaurateurPage"
 import Dashboard from "./Components/Restaurateur/Dashboard"
 import './App.scss';
+import SignIn from "./Components/SignIn&Up/signIn"
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Navbar />
         <Switch>
           <Route exact path="/" component={RestaurateurPage} />
+          <Route exact path="/SignIn" component={SignIn}/>
 
         </Switch>
 
