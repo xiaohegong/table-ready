@@ -39,7 +39,7 @@ class SignIn extends Component {
         <Animation/>
         <div id="divPage">
           <div className="container">
-            <img src={Avatar} alt="Avatar"/>
+            <img id="avatar" src={Avatar} alt="Avatar"/>
             <button className="btn"> + </button>
           </div> <br/><br/>
           <div className="input-group mb-3">

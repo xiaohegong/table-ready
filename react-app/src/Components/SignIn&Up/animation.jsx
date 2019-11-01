@@ -50,12 +50,12 @@ function Circle(x, y, dx, dy, radius, mouse) {
 
 function init(innerWidth, innerHeight, mouse) {
   let circleArray = [];
-  for (let i = 0; i < 400; i ++) {
+  for (let i = 0; i < 100; i ++) {
     let x = Math.random() * (innerWidth - maxRadius * 2) + maxRadius;
     let y = Math.random() * (innerHeight - maxRadius * 2) + maxRadius;
     let dx = (Math.random() - 0.5) * 4;
     let dy = (Math.random() - 0.5) * 4;
-    let radius = Math.random() * 3 + 1;
+    let radius = Math.random() * 10 + 5;
     circleArray.push(new Circle(x, y, dx, dy, radius, mouse))
   }
   return circleArray
