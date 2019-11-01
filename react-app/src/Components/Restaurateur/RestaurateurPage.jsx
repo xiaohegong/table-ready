@@ -33,7 +33,8 @@ class RestaurateurPage extends Component {
             </div>
 
             <div className="col-md-9">
-              <h2>Your Restaurants</h2>
+              <h2 style={{display:'inline'}}>Your Restaurants</h2>
+              <button className={"addNewButton"}>Add New</button>
               <div className="restaurants-display">
                 <div className="list-group">
                   <RestaurantListItem
