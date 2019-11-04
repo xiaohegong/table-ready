@@ -7,6 +7,7 @@ import RestaurateurPage from "./Components/Restaurateur/RestaurateurPage";
 import RestaurateurPage2 from "./Components/Restaurateur/RestaurateurPage2";
 import Dashboard from "./Components/Restaurateur/Dashboard";
 import "./App.scss";
+import Customers from "./Components/Customers";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <Route exact path="/dashboard" component={Dashboard} />
         </Switch>
       </BrowserRouter>
+      <Customers />
     </div>
   );
 }
