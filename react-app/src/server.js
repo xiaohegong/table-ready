@@ -3,9 +3,9 @@
 const log = console.log;
 
 const express = require('express');
-
+const mongoose = require('./mongoose');
 const path = require('path');
-
+const {Users} = require('./modules');
 
 const app = express();
 const bodyParser = require('body-parser'); // middleware for parsing HTTP body
@@ -22,6 +22,22 @@ app.get('/api/customers', (req, res) => {
 
     res.json(customers);
 });
+
+var u = new Users({
+    name:"DAHAI",
+    password:"1234",
+    isAdmin: false,
+}).save(function (err, res) {
+   console.log('w')
+});
+// Users.insertOne(u);
+
+
+// u.save().then((result) => {
+//     console.log(result);
+// }, (error) => {
+//     console.log("NO");
+// });
 
 app.use(express.static("public"));
 
