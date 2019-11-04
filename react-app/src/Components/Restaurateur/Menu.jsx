@@ -27,8 +27,9 @@ class Menu extends Component {
     }
     render() {
         return ( <><h2 style={{display:'inline'}}>Your Restaurants</h2>
+            <button className={"addNewButton"}>Edit</button>
             <button className={"addNewButton"}>Add New Item</button>
-        <table>{this.addRow()}{this.addRow()}{this.addRow()}</table></>);
+        <table className={'menuTable'}>{this.addRow()}{this.addRow()}{this.addRow()}</table></>);
     }
 }
 

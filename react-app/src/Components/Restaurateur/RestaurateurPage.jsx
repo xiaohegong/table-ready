@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import "../../Stylesheets/restaurateur_page.scss";
 import RestaurantListItem from "./RestaurantListItem";
 
+
 class RestaurateurPage extends Component {
   state = {};
   render() {
