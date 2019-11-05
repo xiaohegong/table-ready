@@ -1,0 +1,25 @@
+.Reservation_card{
+    width:100% !important;
+    height:170px !important;
+    border-radius: 1rem;
+}
+
+#droppable{
+    float:right;
+    margin-right:10px
+
+}
+.individual-reservation{
+    border-radius: 1rem;
+}
+.testing{
+    padding:5px !important;
+}
+
+.date-of-arrival{
+    margin-top: 0px;
+}
+
+.card-text-container{
+    padding:0px;
+}
