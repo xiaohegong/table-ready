@@ -23,13 +23,18 @@ app.get('/api/customers', (req, res) => {
     res.json(customers);
 });
 
-var u = new Users({
-    name:"DAHAI",
-    password:"1234",
-    isAdmin: false,
-}).save(function (err, res) {
-   console.log('w')
+app.post('/api/create',(req,res)=>{
+    Users.create(req.body).then(function (user) {
+        res.send(user)
+    }).catch(res.send(404))
 });
+// var u = new Users({
+//     name:"DAHAI",
+//     password:"1234",
+//     isAdmin: false,
+// }).save(function (err, res) {
+//    console.log('w')
+// });
 // Users.insertOne(u);
 
 
