@@ -1,4 +1,4 @@
-#signIn {
+#signIn-Up {
   #canvasConfig {
     background-color: wheat;
     float: left;
@@ -48,5 +48,8 @@
   #avatar {
     border-radius: 50%;
 
+  }
+  .input-group-text {
+    width: 6em;
   }
 }

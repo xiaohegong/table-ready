@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import "../../Stylesheets/signIn.scss";
+import "../../Stylesheets/signIn&Up.scss";
 import Canvas from "./canvas.jsx";
 
 let canvas_size = {

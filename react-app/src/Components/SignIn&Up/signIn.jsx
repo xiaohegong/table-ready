@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import "../../Stylesheets/signIn.scss";
+import "../../Stylesheets/signIn&Up.scss";
 import Avatar from "./icon.jpg";
 import Animation from "./animation.jsx";
 
@@ -35,7 +35,7 @@ class SignIn extends Component {
 
   render () {
     return (
-      <div id="signIn">
+      <div id="signIn-Up">
         <Animation/>
         <div id="divPage">
           <div className="container">

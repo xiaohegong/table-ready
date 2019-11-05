@@ -128,7 +128,7 @@ class Navbar extends React.Component {
             <Link to="/SignIn">
               <button className="btn btn-primary btn-sm">Sign In</button>
             </Link>
-            <Link to="/signup">
+            <Link to="/SignUp">
               <button className="btn btn-success btn-sm">Sign Up</button>
             </Link>
             <Link to="/userprofiling">

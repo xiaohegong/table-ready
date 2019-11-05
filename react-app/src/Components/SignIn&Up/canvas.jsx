@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import "../../Stylesheets/signIn.scss";
+import "../../Stylesheets/signIn&Up.scss";
 
 class Canvas extends Component {
   constructor(props) {
