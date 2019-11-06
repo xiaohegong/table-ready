@@ -3,9 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "body-parser": "^1.19.0",
     "bootstrap": "^4.3.1",
     "concurrently": "^5.0.0",
     "express": "^4.17.1",
+    "install": "^0.13.0",
     "jquery": "^3.4.1",
     "mongodb": "^3.3.3",
     "node-sass": "^4.12.0",

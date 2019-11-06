@@ -1,17 +1,26 @@
-/* server.js - mar 11 -10am*/
+/* server.js*/
 'use strict';
 const log = console.log;
 
 const express = require('express');
-const mongoose = require('./mongoose');
-const path = require('path');
-const {Users} = require('./modules');
 
-const app = express();
 const bodyParser = require('body-parser'); // middleware for parsing HTTP body
+const app = express();
 const {ObjectID} = require('mongodb');
 
+const User = require('./models/user.js');
 
+/* Use statements for the server */
+app.use(express.static("public"));
+
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.json());
+
+require('./mongoose').connect();
+
+app.get("/", (req, res) => {
+    res.send("Hello World");
+});
 
 app.get('/api/customers', (req, res) => {
     const customers = [
@@ -23,34 +32,25 @@ app.get('/api/customers', (req, res) => {
     res.json(customers);
 });
 
-app.post('/api/create',(req,res)=>{
-    Users.create(req.body).then(function (user) {
-        res.send(user)
-    }).catch(res.send(404))
+app.post("/user/signup", (req, res) => {
+    log(req.body);
+    const user = new User({
+        username: req.body.username,
+        password: req.body.password,
+    });
+
+    user.save()
+        .then(user => {
+            res.send("user " + user.username + " saved to database");
+        })
+        .catch(err => {
+            log(err);
+            res.status(400).send(err);
+        });
 });
-// var u = new Users({
-//     name:"DAHAI",
-//     password:"1234",
-//     isAdmin: false,
-// }).save(function (err, res) {
-//    console.log('w')
-// });
-// Users.insertOne(u);
-
-
-// u.save().then((result) => {
-//     console.log(result);
-// }, (error) => {
-//     console.log("NO");
-// });
-
-app.use(express.static("public"));
-
 
 
 const port = process.env.PORT || 5000;
 app.listen(port, () => {
     log('Listening on port 5000...');
-});  // common local host development port 3000
-// we've bound that port to localhost to go to our express server
-// Must restart web server whenyou make changes to route handlers
+});

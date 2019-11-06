@@ -1,17 +1,16 @@
 'use strict';
 const log = console.log;
 const mongoose = require('mongoose');
-const bcrypt = require('bcrypt-nodejs');
-
-const ObjectId = mongoose.Schema.Types.ObjectId;
-const TypeId = mongoose.Types.ObjectId;
+// const ObjectId = mongoose.Schema.Types.ObjectId;
+// const TypeId = mongoose.Types.ObjectId;
 const Schema = mongoose.Schema;
 const {MongoClient, ObjectID} = require('mongodb');
 
+// Todo: Jiatao
 const UserSchema = new Schema({
-    name: {
+    username: {
         type: String,
-        required: true,
+        required: false,
         minlength: 3,
         unique: true
     },
@@ -22,18 +21,15 @@ const UserSchema = new Schema({
     },
     password: {
         type: String,
-        required: true,
+        required: false,
         minlength: 4
     },
-
-
     isAdmin: {
         type: Boolean,
         required: true,
         default: false
     }
 });
-const Users = mongoose.model("User", UserSchema);
 
 
-module.exports = {Users};
+module.exports = mongoose.model("User", UserSchema);

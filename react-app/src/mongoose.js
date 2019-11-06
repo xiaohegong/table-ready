@@ -1,12 +1,22 @@
 const mongoose = require('mongoose');
 
-// connect to our database
-mongoose.connect('mongodb://trtest1tor:XeNetQxjzUPT8ine4z0VNCjD6R5S4WJwii8cXuRJ0z7aBqbd46An3Ndf7FX8Js1x9tAyihpL5X8tFbtpy18qHw==@trtest1tor.documents.azure.com:10255/?ssl=true/TableReady', {  useUnifiedTopology: true ,useNewUrlParser: true});
+const url = "mongodb://trtest1tor.documents.azure.com:10255/?ssl=true";
 
-// mongoose.set('useFindAndModify', false);
-// Used for silent warning -
-mongoose.set('useCreateIndex', true);
-mongoose.connection.once('open',function () {
-    console.log('Connection has been made');
-});
-module.exports = { mongoose };
+function connect() {
+    mongoose.set('debug', true);
+    return mongoose.connect(url, {
+        auth: {
+            user: 'trtest1tor',
+            password: 'XeNetQxjzUPT8ine4z0VNCjD6R5S4WJwii8cXuRJ0z7aBqbd46An3Ndf7FX8Js1x9tAyihpL5X8tFbtpy18qHw==',
+        }
+    }, function (err, db) {
+        if (!err) {
+            console.log("Successfully connected to database");
+        }
+    });
+}
+
+module.exports = {
+    connect,
+    mongoose
+};
