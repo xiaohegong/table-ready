@@ -1,16 +1,24 @@
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { withStyles } from '@material-ui/core/styles';
+import { green } from '@material-ui/core/colors';
 import './employee.css'
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import Card from 'react-bootstrap/Card'
+import CardDeck from 'react-bootstrap/CardDeck'
+import CardGroup from 'react-bootstrap/CardGroup'
+import CardColumns from 'react-bootstrap/CardColumns'
+import reservations_manager from './dummy_data_for_drag.jsx'
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
+import Favorite from '@material-ui/icons/Favorite';
+import FavoriteBorder from '@material-ui/icons/FavoriteBorder';
+import Button from 'react-bootstrap/Button'
+import CheckIcon from '@material-ui/icons/Check';
+
 
 // fake data generator
-const getItems = (count) =>
-  Array.from({ length: count }, (v, k) => k).map(k => ({
-    id: `item-${k}`,
-    content: `item ${k}`
-  }));
 
 // a little function to help us with reordering the result
 const reorder = (list, startIndex, endIndex) => {
@@ -21,12 +29,22 @@ const reorder = (list, startIndex, endIndex) => {
   return result;
 };
 
+const GreenCheckbox = withStyles({
+  root: {
+    color: green[400],
+    '&$checked': {
+      color: green[600],
+    },
+  },
+  checked: {},
+})(props => <Checkbox color="default" {...props} />);
+
 const grid = 4;
 
 const getItemStyle = (isDragging, draggableStyle) => ({
   // some basic styles to make the items look a bit nicer
   userSelect: "none",
-  padding: '0px',
+  padding: '8 px',
   margin: `0 0 ${grid}px 0`,
 
   // change background colour if dragging
@@ -36,21 +54,34 @@ const getItemStyle = (isDragging, draggableStyle) => ({
   ...draggableStyle
 });
 
+
 const getListStyle = isDraggingOver => ({
   background: isDraggingOver ? "lightblue" : "lightgrey",
+  display:'flex',
   padding: grid,
-  width: 250
+  overflow:"auto"
 });
 
 class employee extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      items: getItems(10)
+      items: reservations_manager.reservations,
+      checkedG:false
     };
     this.onDragEnd = this.onDragEnd.bind(this);
   }
 
+  handleChange = () => {
+    this.setState({checkedG:!this.state.checkedG})
+  };
+
+  info = (e) => {
+    console.log("hi")
+  }
+  removefocus = (e) => {
+    e.preventDefault()
+  }
   onDragEnd(result) {
     // dropped outside the list
     if (!result.destination) {
@@ -72,47 +103,39 @@ class employee extends Component {
   // But in this example everything is just done in one place for simplicity
   render() {
     return (
-      <div id = "droppable">
-        <DragDropContext onDragEnd={this.onDragEnd}>
-          <Droppable style = "background:black"droppableId="droppable">
-            {(provided, snapshot) => (
-              <div
-                className = "testing"
-                {...provided.droppableProps}
-                ref={provided.innerRef}
-                style={getListStyle(snapshot.isDraggingOver)}
-              >
-                {this.state.items.map((item, index) => (
-                  <Draggable key={item.id} draggableId={item.id} index={index}>
-                    {(provided, snapshot) => (
-                      <div
-                        className = "individual-reservation"
-                        ref={provided.innerRef}
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}
-                        style={getItemStyle(
-                          snapshot.isDragging,
-                          provided.draggableProps.style
-                        )}
-                      >
-                          <Card className = "Reservation_card" bg="info" text="white" style={{ width: '18rem' }}>
-                              <Card.Header>Reservation 1</Card.Header>
-                              <Card.Body className = "card-text-container">
-
-                                  <p className = "date-of-arrival">Date: 2019/10/21</p>
-                                  <p>Name: David</p>
-                                  <p>Estimated Time of arrival: 3:30pm</p>
-                              </Card.Body>
-                          </Card>
-                      </div>
-                    )}
-                  </Draggable>
-                ))}
-                {provided.placeholder}
-              </div>
-            )}
-          </Droppable>
-        </DragDropContext>
+      <div className = "card-container">
+        <CardColumns>
+          {
+            this.state.items.map((item,index) => {
+              <Card className = "usercard" bg="light" style={{ width: '18rem' }}>
+                <Card.Header className = "header-of-card">
+                  <div className = "pic-container">
+                    <strong>
+                      {item.Name}
+                    </strong>
+                    <img className = "user-pic"src = "./images/restaurant_images/boy.png"></img>
+                  </div>
+                  <div className = "user_profile_holder">
+                    <div className = "check-container">  
+                        <button class="accept-button" onMouseDown = {this.removefocus}><img src = "./images/restaurant_images/done-tick.png"></img></button>
+                        <button class="reject-button" onClick = {this.info} onMouseDown = {this.removefocus}><img src = "./images/restaurant_images/no-stopping.png"></img></button>
+                    </div>
+                  </div>
+                </Card.Header>
+                <Card.Body>
+                  <div>
+                    <span><img className = "info-png" src = "./images/restaurant_images/calendar.png"></img><span className = 
+                    "reservation_time">03:40pm</span><span className = "reservation_date">/Oct20</span></span>
+                  </div>
+                  <div className = "num_people">
+                    <span><img className = "info-png" src = "./images/restaurant_images/avatar.png"></img><span className = "attendence">4</span></span>
+                  </div>
+                </Card.Body>
+              </Card>
+            })
+            }
+          }
+        </CardColumns>
       </div>
     );
   }

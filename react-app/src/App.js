@@ -8,11 +8,8 @@ import SignUp from "./Components/SignIn&Up/signup"
 import RestaurateurPage from "./Components/Restaurateur/RestaurateurPage";
 import RestaurateurPage2 from "./Components/Restaurateur/RestaurateurPage2";
 import Dashboard from "./Components/Restaurateur/Dashboard";
-<<<<<<< HEAD
 import Admin from "./Components/Admin/Admin";
-=======
 import employee from "./Components/Employee/employee"
->>>>>>> initial drag and drop
 import "./App.scss";
 import { withCookies, useCookies} from 'react-cookie';
 import Customers from "./Components/Customers";
