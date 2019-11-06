@@ -1,19 +1,22 @@
-.Reservation_card{
+/* .Reservation_card{
     width:100% !important;
     height:170px !important;
     border-radius: 1rem;
 }
 
 #droppable{
-    float:right;
     margin-right:10px
+}
 
+
+
+
+
+.info{
+    font-size:10px;
 }
 .individual-reservation{
     border-radius: 1rem;
-}
-.testing{
-    padding:5px !important;
 }
 
 .date-of-arrival{
@@ -22,4 +25,125 @@
 
 .card-text-container{
     padding:0px;
+} */
+
+/* .card-container{
+    width:100%;
+}
+
+.avatar-img{
+    margin-left:37%;
+}
+
+.uppercard{
+    background: #f2f2f2;
+    width:100%
+}
+
+.reservation-card{
+    height:200px;
+} */
+
+.user_profile_holder{
+    display: inline-block;
+    margin-left:10%
+}
+.pic-container{
+    display: inline-block;
+}
+.info-png{
+    width:20px;
+    height:20px;
+}
+
+.header-of-card{
+    padding-right: 0px !important;
+}
+
+.reservation_time{
+    font-weight: 630;
+    margin-left:5%
+}
+
+
+
+.accept-button {
+    width: 45px;
+    height: 45px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 2.5px;
+    font-weight: 500;
+    color: #000;
+    background-color: #fff;
+    border: none;
+    border-radius: 50%;
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease 0s;
+    cursor: pointer;
+    outline: none;
+    margin-right: 10px;
+    }
+  
+.user-pic{
+    margin-left:8px;
+}
+
+  .accept-button:hover {
+    background-color: #2EE59D;
+    box-shadow: 0px 15px 20px rgba(46, 229, 157, 0.4);
+    color: #fff;
+    transform: translateY(-7px);
+  }
+
+  .reject-button {
+    width: 45px;
+    height: 45px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 2.5px;
+    font-weight: 500;
+    color: #000;
+    background-color: #fff;
+    border: none;
+    border-radius: 50%;
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease 0s;
+    cursor: pointer;
+    outline: none;
+    }
+  
+  .reject-button:hover {
+    background-color: #ff0000;
+    box-shadow: 0px 15px 20px rgba(46, 229, 157, 0.4);
+    color: #fff;
+    transform: translateY(-7px);
+  }
+.attendence{
+    margin-left:5%
+}
+
+.reservation_date{
+    font-weight: 200;
+}
+
+.num_people{
+    margin-top:3%
+}
+
+.accept{
+    width:20px;
+    height:20px;
+   
+}
+
+.check-container{
+ margin-left: 40px;
+}
+
+.usercard{
+   margin-left:600px;
+   margin-top:200px
 }

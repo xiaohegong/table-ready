@@ -3,15 +3,22 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@material-ui/core": "^4.6.0",
+    "@material-ui/icons": "^4.5.1",
     "bootstrap": "^4.3.1",
+    "gulp": "^3.9.1",
+    "gulp4": "^4.0.3",
     "jquery": "^3.4.1",
     "node-sass": "^4.12.0",
     "react": "^16.11.0",
+    "react-awesome-button": "^6.2.0",
     "react-beautiful-dnd": "^12.0.0",
     "react-bootstrap": "^1.0.0-beta.14",
     "react-dom": "^16.11.0",
     "react-router-dom": "^5.1.2",
-    "react-scripts": "3.2.0"
+    "react-scripts": "3.2.0",
+    "react-ui-cards": "^2.0.0",
+    "semantic-ui-react": "^0.88.1"
   },
   "scripts": {
     "start": "react-scripts start",
