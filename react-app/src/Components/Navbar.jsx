@@ -111,10 +111,10 @@ class Navbar extends React.Component {
           </ul>
 
           <div className="btn-group">
-            <Link to="/login">
+            <Link to="/SignIn">
               <button className="btn btn-primary btn-sm">Sign In</button>
             </Link>
-            <Link to="/signup">
+            <Link to="/SignUp">
               <button className="btn btn-success btn-sm">Sign Up</button>
             </Link>
           </div>
