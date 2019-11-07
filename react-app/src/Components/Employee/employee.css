@@ -164,12 +164,13 @@
 }
 #reservation_container{
     display: inline-block !important;
-    width:40%;
+    width:30%;
     float: left;
 }
 #avaliable_seats_container{
     display: inline-block !important;
-    width: 40%;;
+    width: 30%;;
+    margin-left:30%
 }
 .accept{
     width:20px;
