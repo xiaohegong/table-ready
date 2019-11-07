@@ -85,8 +85,8 @@ class employee extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      items: getItems(10),
-      to_be_reserved:getItems(5,10),
+      items: reservations_manager.reservations,
+      to_be_reserved:[],
       checkedG:false,
       current_date:null,
       menu_open:false
@@ -106,9 +106,9 @@ class employee extends Component {
   };
   change_menu_state = (index) => {
     this.setState({menu_open:!this.state.menu_open})
-    // this.state.to_be_reserved.push(this.state.items[index])
-    // this.setState({to_be_reserved:this.state.to_be_reserved})
-    // console.log(this.state.to_be_reserved)
+    this.state.to_be_reserved.push(this.state.items[index])
+    this.setState({to_be_reserved:this.state.to_be_reserved})
+    console.log(this.state.to_be_reserved)
    }
   info = (e) => {
     console.log("hi")
@@ -170,7 +170,7 @@ class employee extends Component {
       <div id = "outer-container" className = "card-container">
         <Menu pageWrapId={ "page-wrap" } width = {'1000px'} outerContainerId={ "outer-container" } right disableAutoFocus customBurgerIcon={false} isOpen={this.state.menu_open}
          onStateChange={(state) => this.handleStateChange(state)}>
-          {/* <span id = "reservation_container" onMouseDown = {this.removefocus}>
+          <span id = "reservation_container" onMouseDown = {this.removefocus}>
             {
               this.state.to_be_reserved.map((item,index) => (
                 <Card className = "usercard" bg="light" style={{ width: '18rem' }} onMouseDown = {this.startdragging}>
@@ -231,115 +231,7 @@ class employee extends Component {
                 </Card>
               ))
               }
-            </span> */}
-             <DragDropContext onDragEnd={this.onDragEnd}>
-                <Droppable droppableId="droppable">
-                    {(provided, snapshot) => (
-                        <div
-                            ref={provided.innerRef}
-                            style={getListStyle(snapshot.isDraggingOver)}
-                            id = "reservation_container">
-                            {this.state.to_be_reserved.map((item, index) => (
-                                <Draggable
-                                    key={item.id}
-                                    draggableId={item.id}
-                                    index={index}>
-                                    {(provided, snapshot) => (
-                                        <div
-                                            ref={provided.innerRef}
-                                            {...provided.draggableProps}
-                                            {...provided.dragHandleProps}
-                                            style={getItemStyle(
-                                                snapshot.isDragging,
-                                                provided.draggableProps.style
-                                            )}>
-                                            <Card className = "usercard" bg="light" style={{ width: '18rem' }} onMouseDown = {this.startdragging}>
-                                              <Card.Header className = "header-of-card">
-                                                <div className = "pic-container">
-                                                  <strong>
-                                                    {item.Name}
-                                                  </strong>
-                                                  <img className = "user-pic"src = "./images/restaurant_images/boy.png"></img>
-                                                </div>
-                                              </Card.Header>
-                                              <Card.Body>
-                                                <div>
-                                                  <span><img className = "info-png" src = "./images/restaurant_images/calendar.png"></img><span className = 
-                                                  "reservation_time">{item.estimated_time}</span><span className = "reservation_date">/{item.date_of_arrival}</span></span>
-                                                </div>
-                                                <div className = "num_people">
-                                                  <span><img className = "info-png" src = "./images/restaurant_images/avatar.png"></img><span className = "attendence">{item.people}</span></span>
-                                                </div>
-                                                <div className = "user_profile_holder">
-                                                  <div className = "check-container">  
-                                                      <button class="accept-button" onClick = {(e) => this.change_menu_state(index)} onMouseDown = {this.removefocus}><img src = "./images/restaurant_images/done-tick.png"></img></button>
-                                                      <button class="reject-button" onClick = {(e) => this.change_menu_state(index)} onMouseDown = {this.removefocus}><img src = "./images/restaurant_images/no-stopping.png"></img></button>
-                                                  </div>
-                                                </div>
-                                              </Card.Body>
-                                            </Card>
-                                        </div>
-                                    )}
-                                </Draggable>
-                            ))}
-                            {provided.placeholder}
-                        </div>
-                    )}
-                </Droppable>
-                <Droppable droppableId="droppable2">
-                    {(provided, snapshot) => (
-                        <div
-                            ref={provided.innerRef}
-                            style={getListStyle(snapshot.isDraggingOver)}
-                            id = "avaliable_seats_container">
-                            {this.state.items.map((item, index) => (
-                                <Draggable
-                                    key={item.id}
-                                    draggableId={item.id}
-                                    index={index}>
-                                    {(provided, snapshot) => (
-                                        <div
-                                            ref={provided.innerRef}
-                                            {...provided.draggableProps}
-                                            {...provided.dragHandleProps}
-                                            style={getItemStyle(
-                                                snapshot.isDragging,
-                                                provided.draggableProps.style
-                                            )}>
-                                            <Card className = "usercard" bg="light" style={{ width: '18rem' }} onMouseDown = {this.startdragging}>
-                  <Card.Header className = "header-of-card">
-                    <div className = "pic-container">
-                      <strong>
-                        {item.Name}
-                      </strong>
-                      <img className = "user-pic"src = "./images/restaurant_images/boy.png"></img>
-                    </div>
-                  </Card.Header>
-                  <Card.Body>
-                    <div>
-                      <span><img className = "info-png" src = "./images/restaurant_images/calendar.png"></img><span className = 
-                      "reservation_time">{item.estimated_time}</span><span className = "reservation_date">/{item.date_of_arrival}</span></span>
-                    </div>
-                    <div className = "num_people">
-                      <span><img className = "info-png" src = "./images/restaurant_images/avatar.png"></img><span className = "attendence">{item.people}</span></span>
-                    </div>
-                    <div className = "user_profile_holder">
-                      <div className = "check-container">  
-                          <button class="accept-button" onClick = {(e) => this.change_menu_state(index)} onMouseDown = {this.removefocus}><img src = "./images/restaurant_images/done-tick.png"></img></button>
-                          <button class="reject-button" onClick = {(e) => this.change_menu_state(index)} onMouseDown = {this.removefocus}><img src = "./images/restaurant_images/no-stopping.png"></img></button>
-                      </div>
-                    </div>
-                  </Card.Body>
-                </Card>
-                                        </div>
-                                    )}
-                                </Draggable>
-                            ))}
-                            {provided.placeholder}
-                        </div>
-                    )}
-                </Droppable>
-            </DragDropContext>
+            </span>
       </Menu>
       <div id = "page-wrap">
         <div id = "cal" style={{height: '80px'}}>
