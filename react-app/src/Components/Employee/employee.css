@@ -155,13 +155,22 @@
 }
 #cal{
     position: relative;
-    left:40%;
-   top:30px
+    margin-left:40%;
+    width: 50%;
+    top:30px
 }
 .num_people{
     margin-top:3%
 }
-
+#reservation_container{
+    display: inline-block !important;
+    width:40%;
+    float: left;
+}
+#avaliable_seats_container{
+    display: inline-block !important;
+    width: 40%;;
+}
 .accept{
     width:20px;
     height:20px;
