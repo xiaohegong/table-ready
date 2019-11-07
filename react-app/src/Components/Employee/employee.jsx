@@ -106,7 +106,7 @@ class employee extends Component {
       <div className = "card-container">
         <CardColumns>
           {
-            this.state.items.map((item,index) => {
+            this.state.items.map((item,index) => (
               <Card className = "usercard" bg="light" style={{ width: '18rem' }}>
                 <Card.Header className = "header-of-card">
                   <div className = "pic-container">
@@ -132,7 +132,7 @@ class employee extends Component {
                   </div>
                 </Card.Body>
               </Card>
-            })
+            ))
             }
           }
         </CardColumns>
