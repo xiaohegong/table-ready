@@ -3,7 +3,7 @@ const reservations_manager = {
         {
             id:'1',
             Name:"David",
-            People:4,
+            people:4,
             date_of_arrival:"2019/09/07",
             estimated_time:"6:00pm"
         },

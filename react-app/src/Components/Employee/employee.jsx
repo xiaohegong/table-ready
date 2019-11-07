@@ -16,8 +16,10 @@ import Favorite from '@material-ui/icons/Favorite';
 import FavoriteBorder from '@material-ui/icons/FavoriteBorder';
 import Button from 'react-bootstrap/Button'
 import CheckIcon from '@material-ui/icons/Check';
-
-
+import '@y0c/react-datepicker/assets/styles/calendar.scss';
+import { DatePicker } from '@y0c/react-datepicker';
+import { slide as Menu } from 'react-burger-menu'
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 // fake data generator
 
 // a little function to help us with reordering the result
@@ -67,7 +69,9 @@ class employee extends Component {
     super(props);
     this.state = {
       items: reservations_manager.reservations,
-      checkedG:false
+      checkedG:false,
+      current_date:null,
+      menu_open:false
     };
     this.onDragEnd = this.onDragEnd.bind(this);
   }
@@ -75,12 +79,24 @@ class employee extends Component {
   handleChange = () => {
     this.setState({checkedG:!this.state.checkedG})
   };
-
+  change_menu_state = () => {
+    this.setState({menu_open:!this.state.menu_open})
+  }
   info = (e) => {
     console.log("hi")
   }
   removefocus = (e) => {
     e.preventDefault()
+  }
+  showdate = (value) => {
+    const year = value.$y
+    const month = (value.$M) + 1
+    const day = (value.$D)
+    const date = `${year}-${month}-${day}`
+    this.setState({current_date:date})
+  }
+  handleStateChange = (state) => {
+    this.setState({menu_open:state.isOpen})
   }
   onDragEnd(result) {
     // dropped outside the list
@@ -103,39 +119,105 @@ class employee extends Component {
   // But in this example everything is just done in one place for simplicity
   render() {
     return (
-      <div className = "card-container">
-        <CardColumns>
-          {
-            this.state.items.map((item,index) => (
-              <Card className = "usercard" bg="light" style={{ width: '18rem' }}>
-                <Card.Header className = "header-of-card">
-                  <div className = "pic-container">
-                    <strong>
-                      {item.Name}
-                    </strong>
-                    <img className = "user-pic"src = "./images/restaurant_images/boy.png"></img>
-                  </div>
-                  <div className = "user_profile_holder">
-                    <div className = "check-container">  
-                        <button class="accept-button" onMouseDown = {this.removefocus}><img src = "./images/restaurant_images/done-tick.png"></img></button>
-                        <button class="reject-button" onClick = {this.info} onMouseDown = {this.removefocus}><img src = "./images/restaurant_images/no-stopping.png"></img></button>
+      <div id = "outer-container" className = "card-container">
+        <Menu pageWrapId={ "page-wrap" } width = {'500px'} outerContainerId={ "outer-container" } right disableAutoFocus customBurgerIcon={false} isOpen={this.state.menu_open}
+         onStateChange={(state) => this.handleStateChange(state)}>
+          <DragDropContext onDragEnd={this.onDragEnd}>
+            <Droppable droppableId="droppable">
+              {(provided, snapshot) => (
+                  <div
+                    ref={provided.innerRef}
+                    style={getListStyle(snapshot.isDraggingOver)}>
+                    {this.state.items.map((item, index) => (
+                        <Draggable
+                            key={item.id}
+                            draggableId={item.id}
+                            index={index}>
+                            {(provided, snapshot) => (
+                                <div
+                                    ref={provided.innerRef}
+                                    {...provided.draggableProps}
+                                    {...provided.dragHandleProps}
+                                    style={getItemStyle(
+                                        snapshot.isDragging,
+                                        provided.draggableProps.style
+                                    )}>
+                                    {item.content}
+                                </div>
+                            )}
+                        </Draggable>
+                    ))}
+                    {provided.placeholder}
+                </div>
+              )}
+            </Droppable>
+            <Droppable droppableId="droppable2">
+                {(provided, snapshot) => (
+                    <div
+                      ref={provided.innerRef}
+                      style={getListStyle(snapshot.isDraggingOver)}>
+                      {this.state.selected.map((item, index) => (
+                          <Draggable
+                              key={item.id}
+                              draggableId={item.id}
+                              index={index}>
+                              {(provided, snapshot) => (
+                                  <div
+                                      ref={provided.innerRef}
+                                      {...provided.draggableProps}
+                                      {...provided.dragHandleProps}
+                                      style={getItemStyle(
+                                          snapshot.isDragging,
+                                          provided.draggableProps.style
+                                      )}>
+                                      {item.content}
+                                  </div>
+                              )}
+                          </Draggable>
+                      ))}
+                      {provided.placeholder}
                     </div>
-                  </div>
-                </Card.Header>
-                <Card.Body>
-                  <div>
-                    <span><img className = "info-png" src = "./images/restaurant_images/calendar.png"></img><span className = 
-                    "reservation_time">03:40pm</span><span className = "reservation_date">/Oct20</span></span>
-                  </div>
-                  <div className = "num_people">
-                    <span><img className = "info-png" src = "./images/restaurant_images/avatar.png"></img><span className = "attendence">4</span></span>
-                  </div>
-                </Card.Body>
-              </Card>
-            ))
-            }
-          }
-        </CardColumns>
+                )}
+            </Droppable>
+          </DragDropContext>
+        </Menu>
+        <div id = "page-wrap">
+          <div id = "cal" style={{height: '80px'}}>
+            <DatePicker onChange={(value)=>this.showdate(value)} showDefaultIcon clear></DatePicker>
+            <button id = "date-confirm">Confirm</button>
+          </div>
+          <CardColumns id = "content-wrapper">
+            {
+              this.state.items.map((item,index) => (
+                <Card className = "usercard" bg="light" style={{ width: '18rem' }}>
+                  <Card.Header className = "header-of-card">
+                    <div className = "pic-container">
+                      <strong>
+                        {item.Name}
+                      </strong>
+                      <img className = "user-pic"src = "./images/restaurant_images/boy.png"></img>
+                    </div>
+                  </Card.Header>
+                  <Card.Body>
+                    <div>
+                      <span><img className = "info-png" src = "./images/restaurant_images/calendar.png"></img><span className = 
+                      "reservation_time">{item.estimated_time}</span><span className = "reservation_date">/{item.date_of_arrival}</span></span>
+                    </div>
+                    <div className = "num_people">
+                      <span><img className = "info-png" src = "./images/restaurant_images/avatar.png"></img><span className = "attendence">{item.people}</span></span>
+                    </div>
+                    <div className = "user_profile_holder">
+                      <div className = "check-container">  
+                          <button class="accept-button" onClick = {this.change_menu_state} onMouseDown = {this.removefocus}><img src = "./images/restaurant_images/done-tick.png"></img></button>
+                          <button class="reject-button" onClick = {this.change_menu_state} onMouseDown = {this.removefocus}><img src = "./images/restaurant_images/no-stopping.png"></img></button>
+                      </div>
+                    </div>
+                  </Card.Body>
+                </Card>
+              ))
+              }
+          </CardColumns>
+        </div>
       </div>
     );
   }
