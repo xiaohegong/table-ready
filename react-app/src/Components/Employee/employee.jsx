@@ -241,7 +241,8 @@ class employee extends Component {
       current_table:null,
       all_table:all_table.tables,
       reservations_color:initial_color,
-      user_obj: null
+      user_obj: null,
+      changed: false
     };
   }
 
@@ -256,12 +257,24 @@ class employee extends Component {
     this.setState({user_obj:tmp})
     this.setState({draggin:true})
   }
-  handleStop = () => {
+  handleStop = (e, data) => {
+    this.setOccupied()
+    if(this.state.changed){
+      this.setState({
+        to_be_reserved: this.state.to_be_reserved.filter((value) => value != this.state.user_obj)
+      })
+    }
     this.setState({
       draggin:false,
       user_obj: null
     })
-    
+  }
+  setOccupied = () => {
+    for(let i = 0; i < this.state.reservations_color.length; i++){
+      if(this.state.reservations_color[i] == "green"){
+        this.state.all_table[i].table_occupied = true
+      }
+    }
   }
   change_menu_state = (index) => {
     this.setState({menu_open:!this.state.menu_open})
@@ -298,19 +311,22 @@ class employee extends Component {
     // this.setState({current_table:cur_table})
     const cur_table_obj = this.state.all_table[index]
     if (this.state.draggin){
-      if (cur_table_obj.table_capacity >= this.state.user_obj.people){
+      if (cur_table_obj.table_capacity >= this.state.user_obj.people && cur_table_obj.table_occupied == false){
         this.state.reservations_color[index] = "green"
-        this.setState({reservations_color:this.state.reservations_color})
+        this.setState({reservations_color:this.state.reservations_color, changed: true})
       }
-      else{
+      else if(cur_table_obj.table_occupied == false){
         this.state.reservations_color[index] = "red"
-        this.setState({reservations_color:this.state.reservations_color})
+        this.setState({reservations_color:this.state.reservations_color, changed: false})
       }
     }
   }
   resumecard = (index) => {
-    this.state.reservations_color[index] = "#f8f9fa"
-    this.setState({reservations_color:this.state.reservations_color})
+    if(this.state.all_table[index].table_occupied == false){
+      this.state.reservations_color[index] = "#f8f9fa"
+      this.setState({reservations_color:this.state.reservations_color, changed: false})
+    }
+
   }
   showdate = (value) => {
     const year = value.$y
@@ -327,7 +343,6 @@ class employee extends Component {
       this.checkcapacity(index)
     }
   }
- 
   // Normally you would want to split things out into separate components.
   // But in this example everything is just done in one place for simplicity
   render() {
