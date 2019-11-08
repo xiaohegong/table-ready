@@ -35,8 +35,12 @@ app.get('/api/customers', (req, res) => {
 app.post("/user/signup", (req, res) => {
     log(req.body);
     const user = new User({
+        accountType: req.body.accountType,
         username: req.body.username,
         password: req.body.password,
+        email: req.body.email,
+        tel: req.body.tel,
+        manager: req.body.manager
     });
 
     user.save()
@@ -47,6 +51,12 @@ app.post("/user/signup", (req, res) => {
             log(err);
             res.status(400).send(err);
         });
+});
+
+app.get("/user/info", (req, res) => {
+    User.find()
+      .then(users => res.json(users))
+      .catch(error => res.status(400).json('Err '+ error))
 });
 
 
