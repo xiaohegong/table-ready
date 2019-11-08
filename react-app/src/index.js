@@ -11,16 +11,7 @@ const mongoose = require('./mongoose');
 ReactDOM.render(<App />, document.getElementById('root'));
 
 
-// var u = new Users({
-//     name:"DAHAI",
-//     password:"1234",
-//     isAdmin: false,
-// });
-// u.save().then((result) => {
-//     console.log(result);
-// }, (error) => {
-//     console.log("NO");
-// });
+
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://bit.ly/CRA-PWA

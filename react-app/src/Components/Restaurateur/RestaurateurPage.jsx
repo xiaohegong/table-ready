@@ -1,10 +1,26 @@
 import React, { Component } from "react";
 import "../../Stylesheets/restaurateur_page.scss";
 import RestaurantListItem from "./RestaurantListItem";
+import { Link } from "react-router-dom";
 
 
 class RestaurateurPage extends Component {
   state = {};
+
+  componentDidMount() {
+      fetch('http://localhost:3000/restaurant/findRestaurantByOwner', {
+          method: 'POST',
+          headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+          }
+      }).then(res => res.json())
+          .then(customers => console.log('Customers fetched...', customers))
+          .catch(err => {
+              console.log(400);
+          });
+  }
+
   render() {
     return (
       <div className="restaurateur-page">
@@ -35,7 +51,7 @@ class RestaurateurPage extends Component {
 
             <div className="col-md-9">
               <h2 style={{display:'inline'}}>Your Restaurants</h2>
-              <button className={"addNewButton"}>Add New</button>
+              <Link to="/addNewRestaurant"><button className={"addNewButton"}> Add New </button></Link>
               <div className="restaurants-display">
                 <div className="list-group">
                   <RestaurantListItem

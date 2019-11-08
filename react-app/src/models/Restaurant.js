@@ -7,34 +7,42 @@ const Schema = mongoose.Schema;
 const {MongoClient, ObjectID} = require('mongodb');
 
 // Todo: Jiatao
-const UserSchema = new Schema({
-    username: {
+const RestaurantSchema = new Schema({
+    owner:{
+        type:String,
+        required: true
+    },
+    name: {
         type: String,
         required: false,
         minlength: 3,
-        unique: true
     },
-    accountType:{
-        type: String,
-        required: true,
-        default: "employee"
-    },
-    description: {
+    location: {
         type: String,
         required: false,
         default: ""
     },
-    password: {
+    phoneNumber: {
         type: String,
-        required: false,
+        required: true,
         minlength: 4
     },
-    isAdmin: {
-        type: Boolean,
+    image:{
+        type:String,
         required: true,
-        default: false
+        default:'/images/restaurant_images/restaurant2.jpeg'
+    },
+    Rating: {
+        type: Number,
+        required: true,
+        default: 0
+    },
+    Cursine:{
+        type:String,
+        required:false,
+        default: ""
     }
 });
 
 
-module.exports = mongoose.model("User", UserSchema);
+module.exports = mongoose.model("Restaurant", RestaurantSchema);

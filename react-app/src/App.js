@@ -11,6 +11,7 @@ import RestaurateurPage2 from "./Components/Restaurateur/RestaurateurPage2";
 import Dashboard from "./Components/Restaurateur/Dashboard";
 import "./App.scss";
 import Customers from "./Components/Customers";
+import NewRestaurant from "./Components/Restaurateur/NewRestaurant";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
           <Route exact path="/SignUp" component={SignUp}/>
           <Route exact path="/restaurateur" component={RestaurateurPage} />
           <Route exact path="/restaurateur2" component={RestaurateurPage2} />
+            <Route exact path="/addNewRestaurant" component={NewRestaurant} />
           <Route exact path="/dashboard" component={Dashboard} />
         </Switch>
       </BrowserRouter>
