@@ -1,15 +1,15 @@
 import React, {Component} from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Route, Switch, BrowserRouter } from "react-router-dom";
-import Navbar from "./Components/Navbar"
+import {Route, Switch, BrowserRouter} from "react-router-dom";
+import Navbar from "./Components/Navbar";
 import './App.scss';
 import SignIn from "./Components/SignIn&Up/signIn"
 import SignUp from "./Components/SignIn&Up/signup"
 import RestaurateurPage from "./Components/Restaurateur/RestaurateurPage";
 import RestaurateurPage2 from "./Components/Restaurateur/RestaurateurPage2";
 import Dashboard from "./Components/Restaurateur/Dashboard";
+import Admin from "./Components/Admin/Admin";
 import "./App.scss";
-import Customers from "./Components/Customers";
 import { withCookies, useCookies} from 'react-cookie';
 
 function App() {
@@ -45,9 +45,12 @@ function App() {
             exact path="/dashboard"
             render={() => (<Dashboard cookies={{cookies, setCookie, removeCookie}}/>)}
             />
+          <Route
+              exact path="/admin"
+              render={() => (<Admin cookies={{cookies, setCookie, removeCookie}}/>)}
+          />
         </Switch>
       </BrowserRouter>
-      <Customers />
     </div>
   );
 }

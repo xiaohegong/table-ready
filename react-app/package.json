@@ -3,9 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@babel/runtime": "^7.7.2",
     "axios": "^0.19.0",
     "body-parser": "^1.19.0",
     "bootstrap": "^4.3.1",
+    "chart.js": "^2.9.2",
     "concurrently": "^5.0.0",
     "express": "^4.17.1",
     "install": "^0.13.0",
@@ -13,11 +15,15 @@
     "mongodb": "^3.3.3",
     "mongoose": "^5.7.8",
     "node-sass": "^4.12.0",
+    "popper.js": "^1.16.0",
     "react": "^16.11.0",
+    "react-chartjs-2": "^2.8.0",
+    "react-charts": "^2.0.0-beta.4",
     "react-cookie": "^4.0.1",
     "react-dom": "^16.11.0",
     "react-router-dom": "^5.1.2",
-    "react-scripts": "3.2.0"
+    "react-scripts": "3.2.0",
+    "typescript": "^3.7.2"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -42,6 +48,8 @@
     ]
   },
   "devDependencies": {
+    "components": "^0.1.0",
+    "hooks": "^0.3.2",
     "nodemon": "^1.19.4"
   },
   "proxy": "http://localhost:5000"
