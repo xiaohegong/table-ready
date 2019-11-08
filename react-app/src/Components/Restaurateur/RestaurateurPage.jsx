@@ -5,6 +5,7 @@ import RestaurantListItem from "./RestaurantListItem";
 class RestaurateurPage extends Component {
   state = {};
   render() {
+    console.log(this.props.cookies.cookies);
     return (
       <div className="restaurateur-page">
         <div className="container">

@@ -115,6 +115,7 @@ class SignUp extends Component {
         }, error => {
           log(error)
         });
+        window.location.href = "/SignIn"
       }
     }
   }

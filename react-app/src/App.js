@@ -1,5 +1,4 @@
-import React from "react";
-// import logo from "./logo.svg";
+import React, {Component} from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Route, Switch, BrowserRouter } from "react-router-dom";
 import Navbar from "./Components/Navbar"
@@ -11,19 +10,41 @@ import RestaurateurPage2 from "./Components/Restaurateur/RestaurateurPage2";
 import Dashboard from "./Components/Restaurateur/Dashboard";
 import "./App.scss";
 import Customers from "./Components/Customers";
+import { withCookies, useCookies} from 'react-cookie';
 
 function App() {
+
+  const [cookies, setCookie, removeCookie] = useCookies(['cur_user']);
+
   return (
     <div className="App">
       <BrowserRouter>
         <Navbar />
         <Switch>
-          <Route exact path="/" component={RestaurateurPage} />
-          <Route exact path="/SignIn" component={SignIn}/>
-          <Route exact path="/SignUp" component={SignUp}/>
-          <Route exact path="/restaurateur" component={RestaurateurPage} />
-          <Route exact path="/restaurateur2" component={RestaurateurPage2} />
-          <Route exact path="/dashboard" component={Dashboard} />
+          <Route
+            exact path="/"
+            render={() => (<RestaurateurPage cookies={{cookies, setCookie, removeCookie}}/>)}
+            />
+          <Route
+            exact path="/SignIn"
+            render={() => (<SignIn cookies={{cookies, setCookie, removeCookie}}/>)}
+            />
+          <Route
+            exact path="/SignUp"
+            render={() => (<SignUp cookies={{cookies, setCookie, removeCookie}}/>)}
+            />
+          <Route
+            exact path="/restaurateur"
+            render={() => (<RestaurateurPage cookies={{cookies, setCookie, removeCookie}}/>)}
+            />
+          <Route
+            exact path="/restaurateur2"
+            render={() => (<RestaurateurPage2 cookies={{cookies, setCookie, removeCookie}}/>)}
+            />
+          <Route
+            exact path="/dashboard"
+            render={() => (<Dashboard cookies={{cookies, setCookie, removeCookie}}/>)}
+            />
         </Switch>
       </BrowserRouter>
       <Customers />
@@ -31,4 +52,4 @@ function App() {
   );
 }
 
-export default App;
+export default withCookies(App);
