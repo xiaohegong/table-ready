@@ -17,7 +17,7 @@ import Button from 'react-bootstrap/Button'
 import CheckIcon from '@material-ui/icons/Check';
 import '@y0c/react-datepicker/assets/styles/calendar.scss';
 import { DatePicker } from '@y0c/react-datepicker';
-import { scaleRotate	 as Menu } from 'react-burger-menu'
+import { slide	 as Menu } from 'react-burger-menu'
 import all_table from './dummy_table_data'
 import Draggable, {DraggableCore} from 'react-draggable';
 // fake data generator
@@ -251,20 +251,38 @@ class employee extends Component {
   handleChange = () => {
     this.setState({checkedG:!this.state.checkedG})
   };
-  handleDrag = (index) => {
+  handleStart = (index) => {
     const tmp = this.state.to_be_reserved[index]
     this.setState({user_obj:tmp})
     this.setState({draggin:true})
   }
   handleStop = () => {
-    this.setState({dragged:false})
+    this.setState({
+      draggin:false,
+      user_obj: null
+    })
     
   }
   change_menu_state = (index) => {
     this.setState({menu_open:!this.state.menu_open})
-    this.state.to_be_reserved.push(this.state.items[index])
-    this.setState({to_be_reserved:this.state.to_be_reserved})
-   }
+    let in_list = false;
+    this.state.to_be_reserved.forEach(element => {
+      if(element == this.state.items[index]){
+        in_list = true;
+      }
+    });
+    if(in_list == false){
+      this.state.to_be_reserved.push(this.state.items[index])
+      this.setState({to_be_reserved:this.state.to_be_reserved})
+    }
+
+  }
+  remove_reservation_from_items = (index) => {
+    this.setState({
+      //TODO: Backend handle
+      items: this.state.items.filter(i=>i.id != this.state.items[index].id)
+    })
+  }
   info = (e) => {
     // console.log("hi")
   }
@@ -304,6 +322,11 @@ class employee extends Component {
   handleStateChange = (state) => {
     this.setState({menu_open:state.isOpen})
   }
+  handleMouseOver = (index) => {
+    if(this.state.draggin){
+      this.checkcapacity(index)
+    }
+  }
  
   // Normally you would want to split things out into separate components.
   // But in this example everything is just done in one place for simplicity
@@ -315,7 +338,7 @@ class employee extends Component {
           <span id = "reservation_container" onMouseDown = {this.removefocus}>
             {
               this.state.to_be_reserved.map((item,index) => (
-                <Draggable onStart = {() => this.ondragstart(index)} onDrag={() => this.handleDrag(index)}  onStop={this.handleStop}>
+                <Draggable onStart = {() => this.ondragstart(index)} onStart={() => this.handleStart(index)}  onStop={this.handleStop}>
                   <Card id = {`usercard-${index}`} draggable = "true" style={{backgroundColor:"#f8f9fa", width: '18rem' }}>
                     <Card.Header className = "header-of-card">
                       <div className = "pic-container">
@@ -348,7 +371,7 @@ class employee extends Component {
           <span id = "avaliable_seats_container" onMouseDown = {this.removefocus}>
             {
               this.state.all_table.map((item,index) => (
-                <Card id = {`Table-${index}`} className = "tablecard" style={{backgroundColor:this.state.reservations_color[index],  width: '18rem' }}  onMouseOver = {(e) => this.checkcapacity(index)} onMouseLeave = {() => this.resumecard(index)}>
+                <Card id = {`Table-${index}`} className = "tablecard" style={{backgroundColor:this.state.reservations_color[index],  width: '18rem' }}  onMouseOver = {(e) => this.handleMouseOver(index)} onMouseLeave = {() => this.resumecard(index)}>
                   <Card.Header className = "header-of-card">
                     <div className = "pic-container">
                       <strong>
@@ -401,7 +424,7 @@ class employee extends Component {
                   <div className = "user_profile_holder">
                     <div className = "check-container">  
                         <button class="accept-button" onClick = {(e) => this.change_menu_state(index)} onMouseDown = {this.removefocus}><img src = "./images/restaurant_images/done-tick.png"></img></button>
-                        <button class="reject-button" onClick = {(e) => this.change_menu_state(index)} onMouseDown = {this.removefocus}><img src = "./images/restaurant_images/no-stopping.png"></img></button>
+                        <button class="reject-button" onClick = {(e) => this.remove_reservation_from_items(index)} onMouseDown = {this.removefocus}><img src = "./images/restaurant_images/no-stopping.png"></img></button>
                     </div>
                   </div>
                 </Card.Body>
