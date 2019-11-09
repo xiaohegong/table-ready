@@ -43,7 +43,7 @@ class Admin extends Component {
       );
     } else if (this.state.page === 'setting') {
       return (
-        <Setting/>
+        <Setting cookies={this.props.cookies}/>
       );
     }
   };

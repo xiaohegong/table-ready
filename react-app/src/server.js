@@ -50,36 +50,36 @@ app.post("/user/signup", (req, res) => {
 });
 
 app.post("/restaurant/newRestaurant", (req, res) => {
-    const restaurant = new Restaurant({
-        name: req.body.name,
-        phoneNumber: req.body.phoneNumber,
-        location: req.body.location,
-        cuisine: req.body.cuisine,
-        owner: req.body.owner
+  const restaurant = new Restaurant({
+    name: req.body.name,
+    phoneNumber: req.body.phoneNumber,
+    location: req.body.location,
+    cuisine: req.body.cuisine,
+    owner: req.body.owner
+  });
+  console.log(restaurant);
+  restaurant.save()
+    .then(restaurant => {
+      res.send("restaurant " + restaurant.name + " saved to database");
+    })
+    .catch(err => {
+      log(err);
+      res.send({code: 404, error});
     });
-    console.log(restaurant)
-    restaurant.save()
-        .then(restaurant => {
-            res.send("restaurant " + restaurant.name + " saved to database");
-        })
-        .catch(err => {
-            log(err);
-            res.send({code: 404, error});
-        });
-    // return new Promise((resolve, reject) => {
-    //
-    // });
+  // return new Promise((resolve, reject) => {
+  //
+  // });
 });
 
 app.post("/restaurant/findRestaurantByOwner", (req, res) => {
-    Restaurant.find({_id: "5dc4a693086ca7174b00fed7" }).then((restaurant) => {
-        res.send(restaurant);
-    }, (error) => {
-        res.send({code: 404, error});
-    });
-    // return new Promise((resolve, reject) => {
-    //
-    // });
+  Restaurant.find({_id: "5dc4a693086ca7174b00fed7"}).then((restaurant) => {
+    res.send(restaurant);
+  }, (error) => {
+    res.send({code: 404, error});
+  });
+  // return new Promise((resolve, reject) => {
+  //
+  // });
 
 });
 
@@ -133,6 +133,19 @@ app.get("/user/info", (req, res) => {
     .catch(error => res.status(400).json('Err ' + error));
 });
 
+// update the information of the user specified by the id.
+app.put("/user/:id", (req, res) => {
+  log('this body is: ' + req.body.email);
+  log('this body is: ' + req.body.password);
+  User.findByIdAndUpdate(req.params.id, req.body, {new: true}, (err, todo) => {
+    if (err) {
+      return res.status(500).send(err)
+    }
+
+    console.log(todo);
+    return res.send(todo);
+  });
+});
 
 const port = process.env.PORT || 5000;
 app.listen(port, () => {

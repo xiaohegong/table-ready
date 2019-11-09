@@ -52,7 +52,6 @@ class Restaurants extends Component {
       .catch((error) => {
         console.log(error);
       });
-
   }
 
   deleteRest(id) {

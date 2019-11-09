@@ -57,7 +57,6 @@ class Manage extends Component {
 
   render() {
     return (
-
       <div className='manage'>
         <div className='manage-container'>
           <div className='row manage-content'>
