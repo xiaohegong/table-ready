@@ -37,7 +37,7 @@ const RestaurantSchema = new Schema({
         required: true,
         default: 0
     },
-    Cursine:{
+    Cuisine:{
         type:String,
         required:false,
         default: ""
