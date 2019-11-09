@@ -4,49 +4,56 @@ const reservations_manager = {
             id:'1',
             Name:"David",
             people:4,
-            date_of_arrival:"2019/09/07",
+            date_of_arrival:"2019/9/7",
             estimated_time:"6:00pm"
         },
         {
             id:'2',
             Name:"Jerry",
             people:2,
-            date_of_arrival:"2019/09/07",
+            date_of_arrival:"2019/9/7",
             estimated_time:"6:30pm"
         },
         {
             id:'3',
             Name:"Helen",
             people:6,
-            date_of_arrival:"2019/09/07",
+            date_of_arrival:"2019/9/7",
             estimated_time:"4:30pm"
         },
         {
             id:'4',
             Name:"Peter",
             people:6,
-            date_of_arrival:"2019/09/07",
+            date_of_arrival:"2019/9/7",
             estimated_time:"5:30pm"
         },
         {
             id:'5',
             Name:"Lee",
             people:2,
-            date_of_arrival:"2019/09/07",
+            date_of_arrival:"2019/9/7",
             estimated_time:"6:40pm"
         },
         {
             id:'6',
             Name:"Max",
             people:2,
-            date_of_arrival:"2019/09/07",
+            date_of_arrival:"2019/9/7",
             estimated_time:"6:40pm"
         },
         {
             id:'7',
             Name:"Stephen",
             people:2,
-            date_of_arrival:"2019/09/07",
+            date_of_arrival:"2019/9/7",
+            estimated_time:"6:40pm"
+        },
+        {
+            id:'8',
+            Name:"Kevin",
+            people:2,
+            date_of_arrival:"2019/9/8",
             estimated_time:"6:40pm"
         }
     ]
