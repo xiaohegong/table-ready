@@ -20,6 +20,7 @@ import { DatePicker } from '@y0c/react-datepicker';
 import { slide	 as Menu } from 'react-burger-menu'
 import all_table from './dummy_table_data'
 import Draggable, {DraggableCore} from 'react-draggable';
+import VerticalModal from './verticalModal'
 // fake data generator
 
 // a little function to help us with reordering the result
@@ -243,7 +244,8 @@ class employee extends Component {
       all_table:all_table.tables,
       reservations_color:initial_color,
       user_obj: null,
-      changed: false
+      changed: false,
+      modal_show: false
     };
   }
 
@@ -363,6 +365,23 @@ class employee extends Component {
       items: this.state.all_seats.filter((value) => value.date_of_arrival == this.state.current_date)
     })
   }
+  setModalState = (state) => {
+    this.setState({
+      modal_show: state
+    })
+    console.log(this.state.modal_show)
+  }
+  add_reservation = (name, ppl_num, date, time) =>{
+    this.state.all_seats.push({
+      id: this.state.all_seats.length + 1,
+      Name: name,
+      people: ppl_num,
+      date_of_arrival: date,
+      estimated_time: time
+    })
+    this.filter_date()
+    this.setModalState(false)
+  }
   // Normally you would want to split things out into separate components.
   // But in this example everything is just done in one place for simplicity
   render() {
@@ -434,6 +453,7 @@ class employee extends Component {
         <div id = "cal" style={{height: '80px'}}>
           <DatePicker onChange={(value)=>this.showdate(value)} showDefaultIcon clear></DatePicker>
           <button id = "date-confirm" onClick={()=>this.filter_date()}>Confirm</button>
+          <button id = "date-confirm" onClick={()=>this.setModalState(true)}>Add Reservation</button>
         </div>
         <CardColumns id = "content-wrapper">
           {
@@ -466,6 +486,11 @@ class employee extends Component {
             ))
           }
           </CardColumns>
+          <VerticalModal 
+            show={this.state.modal_show}
+            onHide={()=>this.setModalState(false)}
+            add_reservation = {this.add_reservation}
+          ></VerticalModal>
         </div>
       </div>
     );
