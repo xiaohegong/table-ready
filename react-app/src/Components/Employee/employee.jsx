@@ -257,11 +257,13 @@ class employee extends Component {
     this.setState({user_obj:tmp})
     this.setState({draggin:true})
   }
-  handleStop = (e, data) => {
+  handleStop = (index) => {
     this.setOccupied()
+    console.log(index)
     if(this.state.changed){
       this.setState({
-        to_be_reserved: this.state.to_be_reserved.filter((value) => value != this.state.user_obj)
+        to_be_reserved: this.state.to_be_reserved.filter((value) => value != this.state.user_obj),
+        changed: false
       })
     }
     this.setState({
@@ -343,6 +345,18 @@ class employee extends Component {
       this.checkcapacity(index)
     }
   }
+  empty_seats = (index) => {
+    if(this.state.all_table[index].table_occupied == true){
+      this.state.all_table[index].table_occupied = false
+      this.resumecard(index)
+    }
+  }
+  remove_from_reserved = (index) =>{
+    this.setState({
+      //TODO: Backend handle
+      to_be_reserved: this.state.to_be_reserved.filter(i=>i.id != this.state.to_be_reserved[index].id)
+    })
+  }
   // Normally you would want to split things out into separate components.
   // But in this example everything is just done in one place for simplicity
   render() {
@@ -353,7 +367,8 @@ class employee extends Component {
           <span id = "reservation_container" onMouseDown = {this.removefocus}>
             {
               this.state.to_be_reserved.map((item,index) => (
-                <Draggable onStart = {() => this.ondragstart(index)} onStart={() => this.handleStart(index)}  onStop={this.handleStop}>
+                //Fix bug
+                <Draggable onStart = {() => this.ondragstart(index)} onStart={() => this.handleStart(index)}  onStop={() => this.handleStop(index)}>
                   <Card id = {`usercard-${index}`} draggable = "true" style={{backgroundColor:"#f8f9fa", width: '18rem' }}>
                     <Card.Header className = "header-of-card">
                       <div className = "pic-container">
@@ -373,8 +388,7 @@ class employee extends Component {
                       </div>
                       <div className = "user_profile_holder">
                         <div className = "check-container">  
-                            <button class="accept-button" onClick = {(e) => this.change_menu_state(index)} onMouseDown = {this.removefocus}><img src = "./images/restaurant_images/done-tick.png"></img></button>
-                            <button class="reject-button" onClick = {(e) => this.change_menu_state(index)} onMouseDown = {this.removefocus}><img src = "./images/restaurant_images/no-stopping.png"></img></button>
+                          <button class="reject-button" onClick = {(e) => this.remove_from_reserved(index)} onMouseDown = {this.removefocus}><img src = "./images/restaurant_images/no-stopping.png"></img></button>
                         </div>
                       </div>
                     </Card.Body>
@@ -401,8 +415,7 @@ class employee extends Component {
                     </div>
                     <div className = "user_profile_holder">
                       <div className = "check-container">  
-                          <button class="accept-button" onClick = {(e) => this.change_menu_state(index)} onMouseDown = {this.removefocus}><img src = "./images/restaurant_images/done-tick.png"></img></button>
-                          <button class="reject-button" onClick = {(e) => this.change_menu_state(index)} onMouseDown = {this.removefocus}><img src = "./images/restaurant_images/no-stopping.png"></img></button>
+                          <button class="reject-button" onClick = {(e) => this.empty_seats(index)} onMouseDown = {this.removefocus}><img src = "./images/restaurant_images/no-stopping.png"></img></button>
                       </div>
                     </div>
                   </Card.Body>
