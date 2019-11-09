@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import axios from 'axios';
 
 class NewRestaurant extends Component {
     constructor(props) {
@@ -9,25 +10,44 @@ class NewRestaurant extends Component {
     handleSubmit(event) {
         event.preventDefault();
 
-        fetch('http://localhost:3000/restaurant/newRestaurant', {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                owner: "Heddy",
-                name: event.target.name.value,
-                phoneNumber: event.target.phoneNumber.value,
-                cuisine: event.target.cuisine.value,
-                location:event.target.location.value
-            })
-        }).then(restaurant => {
-            console.log("restaurant " + restaurant.name + " saved to database");
-        })
-            .catch(err => {
-                console.log(400);
+        const header = {
+            headers: {'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        };
+
+        axios.post('/restaurant/newRestaurant', {
+            owner: "Heddy",
+            name: event.target.name.value,
+            phoneNumber: event.target.phoneNumber.value,
+            cuisine: event.target.cuisine.value,
+            location:event.target.location.value
+        },header)
+            .then((response) => {
+                console.log(response);
+            }, (error) => {
+                console.log(error);
             });
+
+        // fetch('http://localhost:3000/restaurant/newRestaurant', {
+        //     method: 'POST',
+        //     headers: {
+        //         'Accept': 'application/json',
+        //         'Content-Type': 'application/json',
+        //     },
+        //     body: JSON.stringify({
+        //         owner: "Heddy",
+        //         name: event.target.name.value,
+        //         phoneNumber: event.target.phoneNumber.value,
+        //         cuisine: event.target.cuisine.value,
+        //         location:event.target.location.value
+        //     })
+        // }).then(restaurant => {
+        //     console.log("restaurant " + restaurant.name + " saved to database");
+        // })
+        //     .catch(err => {
+        //         console.log(400);
+        //     });
 
     }
     render() {

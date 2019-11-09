@@ -58,6 +58,7 @@ app.post("/restaurant/newRestaurant", (req, res) => {
         cuisine: req.body.cuisine,
         owner: req.body.owner
     });
+    console.log(restaurant)
     restaurant.save()
         .then(restaurant => {
             res.send("restaurant " + restaurant.name + " saved to database");
