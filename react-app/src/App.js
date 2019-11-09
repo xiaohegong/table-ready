@@ -7,7 +7,6 @@ import RestaurateurPage from "./Components/Restaurateur/RestaurateurPage";
 import RestaurateurPage2 from "./Components/Restaurateur/RestaurateurPage2";
 import Dashboard from "./Components/Restaurateur/Dashboard";
 import employee from "./Components/Employee/employee"
-import bill from './Components/Employee/bill'
 import "./App.scss";
 
 function App() {
@@ -20,7 +19,6 @@ function App() {
           <Route exact path="/restaurateur2" component={RestaurateurPage2} />
           <Route exact path="/dashboard" component={Dashboard} />
           <Route exact path="/employee" component={employee}/>
-          <Route exact path="/bill" component={bill}/>
         </Switch>
       </BrowserRouter>
     </div>
