@@ -232,7 +232,8 @@ class employee extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      items: reservations_manager.reservations,
+      all_seats: reservations_manager.reservations,
+      items: [],
       to_be_reserved:[],
       checkedG:false,
       current_date:null,
@@ -334,7 +335,7 @@ class employee extends Component {
     const year = value.$y
     const month = (value.$M) + 1
     const day = (value.$D)
-    const date = `${year}-${month}-${day}`
+    const date = `${year}/${month}/${day}`
     this.setState({current_date:date})
   }
   handleStateChange = (state) => {
@@ -355,6 +356,11 @@ class employee extends Component {
     this.setState({
       //TODO: Backend handle
       to_be_reserved: this.state.to_be_reserved.filter(i=>i.id != this.state.to_be_reserved[index].id)
+    })
+  }
+  filter_date = () => {
+    this.setState({
+      items: this.state.all_seats.filter((value) => value.date_of_arrival == this.state.current_date)
     })
   }
   // Normally you would want to split things out into separate components.
@@ -427,7 +433,7 @@ class employee extends Component {
       <div id = "page-wrap">
         <div id = "cal" style={{height: '80px'}}>
           <DatePicker onChange={(value)=>this.showdate(value)} showDefaultIcon clear></DatePicker>
-          <button id = "date-confirm">Confirm</button>
+          <button id = "date-confirm" onClick={()=>this.filter_date()}>Confirm</button>
         </div>
         <CardColumns id = "content-wrapper">
           {
