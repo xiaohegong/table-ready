@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "axios": "^0.19.0",
     "@babel/runtime": "^7.7.2",
     "axios": "^0.19.0",
     "body-parser": "^1.19.0",
@@ -12,6 +13,7 @@
     "express": "^4.17.1",
     "install": "^0.13.0",
     "jquery": "^3.4.1",
+    "json-loader": "^0.5.7",
     "mongodb": "^3.3.3",
     "mongoose": "^5.7.8",
     "node-sass": "^4.12.0",

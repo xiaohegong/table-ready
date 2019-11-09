@@ -11,6 +11,8 @@ import Dashboard from "./Components/Restaurateur/Dashboard";
 import Admin from "./Components/Admin/Admin";
 import "./App.scss";
 import { withCookies, useCookies} from 'react-cookie';
+import Customers from "./Components/Customers";
+import NewRestaurant from "./Components/Restaurateur/NewRestaurant";
 
 function App() {
 
@@ -49,6 +51,9 @@ function App() {
               exact path="/admin"
               render={() => (<Admin cookies={{cookies, setCookie, removeCookie}}/>)}
           />
+
+            <Route exact path="/addNewRestaurant" component={NewRestaurant} />
+
         </Switch>
       </BrowserRouter>
     </div>
