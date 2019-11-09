@@ -1,8 +1,25 @@
 import React from 'react'
 import Modal from 'react-bootstrap/Modal'
 import Button from 'react-bootstrap/Button'
+import Form from 'react-bootstrap/Form'
+import Col from 'react-bootstrap/Col'
+import { DatePicker } from '@y0c/react-datepicker';
 
 class VerticalModal extends React.Component{
+    state = {
+      name: null,
+      ppl_number: 0,
+      date: null,
+      time_arrive: null,
+      time: null
+    }
+    showdate = (value) => {
+      const year = value.$y
+      const month = (value.$M) + 1
+      const day = (value.$D)
+      const date = `${year}/${month}/${day}`
+      this.state.date = date
+    }
     render(){
         return (
             <Modal
@@ -13,19 +30,31 @@ class VerticalModal extends React.Component{
             >
               <Modal.Header closeButton>
                 <Modal.Title id="contained-modal-title-vcenter">
-                  Bills For Table {this.props.table.table_id}
+                  Adding a Reservation 
                 </Modal.Title>
               </Modal.Header>
               <Modal.Body>
-                <h4>Centered Modal</h4>
-                <p>
-                  Cras mattis consectetur purus sit amet fermentum. Cras justo odio,
-                  dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac
-                  consectetur ac, vestibulum at eros.
-                </p>
+                <Form>
+                  <Form.Row>
+                    <Form.Group as={Col} md="5">
+                      <Form.Control onChange={(e) => this.state.name = e.target.value} placeholder="name"></Form.Control>
+                    </Form.Group>
+                    <Form.Group as={Col} md="2">
+                      <Form.Control onChange={(e) => this.state.ppl_number = e.target.value} placeholder="1"></Form.Control>
+                    </Form.Group>
+                  </Form.Row>
+                  <Form.Row>
+                    <Form.Group as={Col} md="auto">
+                      <Form.Control onChange={(e) =>  this.state.time = e.target.value} placeholder="6:30pm"></Form.Control>
+                    </Form.Group>
+                    <Form.Group as={Col} md="auto">
+                      <DatePicker onChange={(value)=>this.showdate(value)} showDefaultIcon clear></DatePicker>
+                    </Form.Group>
+                  </Form.Row>
+                </Form>
               </Modal.Body>
               <Modal.Footer>
-                <Button onClick={this.props.onHide} >Close</Button>
+                <Button onClick={()=> this.props.add_reservation(this.state.name, this.state.ppl_number, this.state.date, this.state.time)} >Submit</Button>
               </Modal.Footer>
             </Modal>
           );
