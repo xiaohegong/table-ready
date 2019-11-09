@@ -1,0 +1,108 @@
+.admin-page {
+  margin-top: 5%;
+
+  .menu-bar {
+    $secondary: white;
+    $danger: #e20f00;
+
+    @import "bootstrap";
+
+    .menu {
+      margin-left: 15%;
+
+      .btn-group {
+        width: 100%
+      }
+    }
+
+    .profile {
+      .user-info {
+        display: inline-block;
+        vertical-align: top;
+      }
+    }
+  }
+
+  .admin-content {
+    .overview {
+      .card {
+        width: 70%;
+        height: 90%;
+        margin: 3%;
+        margin-top: 5%;
+      }
+    }
+
+    .setting {
+      .card {
+        display: flex;
+        width: max-content;
+        height: max-content;
+        min-width: 40%;
+        margin: 3%;
+        margin-top: 5%;
+        margin-bottom: 10%;
+      }
+
+      .btn {
+        margin: 5px;
+      }
+
+      .setting-container {
+        margin-left: 15%;
+        margin-top: 3%;
+
+        .left-content {
+          padding-right: 19%;
+        }
+
+        #confirm-button {
+          float: right;
+        }
+      }
+    }
+
+    .manage {
+      margin-left: 15%;
+
+      .active {
+        background-color: #6c757d;
+      }
+
+      .card {
+        display: flex;
+        width: max-content;
+        height: max-content;
+        margin: 3%;
+        margin-top: 5%;
+        margin-bottom: 10%;
+      }
+
+      .manage-container {
+        margin-left: 15%;
+        margin-top: 3%;
+        margin-right: 12%;
+
+        .the-list {
+          margin-top: 7%;
+
+        }
+      }
+
+      .manage-content {
+        .left-content {
+          padding-right: 12%;
+        }
+      }
+    }
+  }
+
+  .avatar {
+    vertical-align: middle;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+  }
+
+
+}

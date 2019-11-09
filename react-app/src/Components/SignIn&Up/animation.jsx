@@ -72,7 +72,6 @@ class Animation extends Component {
       function (event) {
         mouse.x = event.x;
         mouse.y = event.y;
-        console.log(mouse);
       });
     let circleArray = init(canvas_size.w, canvas_size.h, mouse);
     this.state = { circles: circleArray};

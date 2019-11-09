@@ -36,8 +36,12 @@ app.get('/api/customers', (req, res) => {
 app.post("/user/signup", (req, res) => {
     log(req.body);
     const user = new User({
+        accountType: req.body.accountType,
         username: req.body.username,
         password: req.body.password,
+        email: req.body.email,
+        tel: req.body.tel,
+        manager: req.body.manager
     });
 
     user.save()
@@ -82,6 +86,56 @@ app.post("/restaurant/findRestaurantByOwner", (req, res) => {
     //
     // });
 
+});
+
+app.get('/api/users', (req, res) => {
+    User.find({}, function (err, users) {
+        if (err) {
+            log(err);
+            return err;
+        }
+
+        res.send(users);
+    });
+});
+
+app.get('/api/restaurants', (req, res) => {
+    Restaurant.find({}, function (err, restaurants) {
+        if (err) {
+            log(err);
+            return err;
+        }
+        res.send(restaurants);
+    });
+});
+
+app.delete('/api/users/:id', (req, res) => {
+    const id = req.params.id;
+    User.findByIdAndDelete(id)
+        .then(() => {
+            res.json('User ' + id + ' deleted.');
+        })
+        .catch(err => {
+            res.status(400).json('Error: ' + err);
+        });
+});
+
+app.delete('/api/restaurants/:id', (req, res) => {
+    const id = req.params.id;
+    Restaurant.findByIdAndDelete(id)
+        .then(() => {
+            res.json('Restaurant ' + id + ' deleted.');
+        })
+        .catch(err => {
+            res.status(400).json('Error: ' + err);
+        });
+});
+
+
+app.get("/user/info", (req, res) => {
+    User.find()
+        .then(users => res.json(users))
+        .catch(error => res.status(400).json('Err ' + error));
 });
 
 

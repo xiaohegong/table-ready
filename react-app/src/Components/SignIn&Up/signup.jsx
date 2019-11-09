@@ -1,5 +1,8 @@
 import React, {Component} from 'react';
 import "../../Stylesheets/signIn&Up.scss";
+import axios from 'axios';
+
+const log = console.log;
 
 class SignUp extends Component {
   constructor(props) {
@@ -62,10 +65,23 @@ class SignUp extends Component {
     this.setState({confirm: event.target.value});
   }
 
+  componentWillMount() {
+    axios.get('/user/info')
+      .then(res => {
+        log(res.data);
+        this.setState({
+          users: res.data
+        })
+      })
+      .catch(error => {
+        log(error);
+      });
+  }
+
   signUp(event) {
     event.preventDefault();
     const accountType = this.state.accountType;
-    const username = this.state.name;
+    const username = this.state.username;
     const email = this.state.email;
     const tel = this.state.tel;
     const password = this.state.password;
@@ -82,24 +98,24 @@ class SignUp extends Component {
     } else if (!email.includes("@") && !email.includes(".")) {
       alert("enter proper email");
     }else {
-      // The following code should be replaced with code connecting to server and create an account in database
-      // Check if user exists from server
-      // code below requires server call
-      const users = []; //TODO: from server
+      const users = this.state.users;
       if (users.filter(user => user.username === username).length !== 0) {
-        console.log("Username already exists");
+        log("Username already exists");
         alert("Username already exists, change another one");
       } else {
-        const user = {};
-        user["email"] = email;
-        user["password"] = password;
-        user["tel"] = tel;
-        user["username"] = username;
-        user["avatar"] = "";
-        user["banner"] = "";
-        user["nickname"] = username;
-        users.push(user);
-        // this.props.history.push("/");
+        axios.post('/user/signup', {
+          accountType: this.state.accountType,
+          username: this.state.username,
+          password: this.state.password,
+          email: this.state.email,
+          tel: this.state.tel,
+          manager: this.state.manager
+        }).then(response => {
+          log(response.data);
+        }, error => {
+          log(error)
+        });
+        window.location.href = "/SignIn"
       }
     }
   }

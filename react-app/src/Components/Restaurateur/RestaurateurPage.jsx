@@ -22,6 +22,7 @@ class RestaurateurPage extends Component {
   }
 
   render() {
+    console.log(this.props.cookies.cookies);
     return (
       <div className="restaurateur-page">
         <div className="container">
