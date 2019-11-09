@@ -10,7 +10,6 @@ import RestaurateurPage2 from "./Components/Restaurateur/RestaurateurPage2";
 import Dashboard from "./Components/Restaurateur/Dashboard";
 import Admin from "./Components/Admin/Admin";
 import employee from "./Components/Employee/employee"
-import bill from './Components/Employee/bill'
 import "./App.scss";
 import { withCookies, useCookies} from 'react-cookie';
 import Customers from "./Components/Customers";
