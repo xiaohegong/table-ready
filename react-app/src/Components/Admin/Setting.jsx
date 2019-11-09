@@ -24,17 +24,33 @@ class Setting extends Component {
     const new_password = document.getElementById("nf-password").value;
     // get the id of the current user
     const cur_info = this.props.cookies.cookies.cur_user._id;
-    console.log('the cookie is: ' + cur_info);
     const link = 'user/' + cur_info;
+    console.log('the cookie is: ' + cur_info);
+    axios.get(link)
+      .then(res => {
+        console.log('The previous user info is: ' + res);
+        this.setState({
+          accountType: res.accountType,
+          username: res.username,
+          tel: res.tel,
+          manager: res.manager,
+          __v: res.__v,
+        });
+      })
+      .catch((error) => {
+        console.log('get information failed!!!');
+        console.log(error);
+      });
+
     const new_user_info = {
-      "_id": "5dc4e1a94276c30e4cfbbba3",
-      "accountType": "SuperAdmin",
-      "username": "dahai",
+      "_id": cur_info,
+      "accountType": this.state.accountType,
+      "username": this.state.username,
       "password": new_password,
       "email": new_email,
-      "tel": "1234567890",
-      "manager": "",
-      "__v": 0
+      "tel": this.state.tel,
+      "manager": this.state.manager,
+      "__v": this.state.__v
     };
     axios.put(link, new_user_info)
       .then(res => {

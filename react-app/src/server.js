@@ -147,6 +147,15 @@ app.put("/user/:id", (req, res) => {
   });
 });
 
+app.get("user/:id", (req, res) => {
+  User.findById(req.params.id)
+    .then(user => {
+      log("server.js successed!");
+      res.json(user);
+    })
+    .catch(error => log(error));
+});
+
 const port = process.env.PORT || 5000;
 app.listen(port, () => {
   log('Listening on port 5000...');
