@@ -11,9 +11,12 @@ import Dashboard from "./Components/Restaurateur/Dashboard";
 import Admin from "./Components/Admin/Admin";
 import employee from "./Components/Employee/employee"
 import "./App.scss";
+<<<<<<< HEAD
 import { withCookies, useCookies} from 'react-cookie';
 import Customers from "./Components/Customers";
 import NewRestaurant from "./Components/Restaurateur/NewRestaurant";
+=======
+>>>>>>> rebased
 
 function App() {
 
