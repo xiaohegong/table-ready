@@ -229,7 +229,7 @@ const initial_color = (() => {
   return tmp
 })()
 
-class employee extends Component {
+class Employee extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -497,4 +497,4 @@ class employee extends Component {
   }
 }
 
-export default employee
+export default Employee

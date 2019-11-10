@@ -72,7 +72,7 @@ app.post("/restaurant/newRestaurant", (req, res) => {
 });
 
 app.post("/restaurant/findRestaurantByOwner", (req, res) => {
-  Restaurant.find({_id: "5dc4a693086ca7174b00fed7"}).then((restaurant) => {
+  Restaurant.find({owner: "Heddy"}).then((restaurant) => {
     res.send(restaurant);
   }, (error) => {
     res.send({code: 404, error});
