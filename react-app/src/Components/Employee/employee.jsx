@@ -20,7 +20,9 @@ import { DatePicker } from '@y0c/react-datepicker';
 import { slide	 as Menu } from 'react-burger-menu'
 import all_table from './dummy_table_data'
 import Draggable, {DraggableCore} from 'react-draggable';
-import VerticalModal from './verticalModal'
+import VerticalModal from './verticalModal';
+import axios from 'axios';
+import { Link } from "react-router-dom";
 // fake data generator
 
 // a little function to help us with reordering the result
@@ -233,7 +235,7 @@ class Employee extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      all_seats: reservations_manager.reservations,
+      all_seats: [],
       items: [],
       to_be_reserved:[],
       checkedG:false,
@@ -248,7 +250,20 @@ class Employee extends Component {
       modal_show: false
     };
   }
-
+  fetch_data = () => {
+    fetch('http://localhost:3000/waitlist/getWaitlist', {
+      method: 'POST',
+      headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+      }
+    }).then(res => res.json())
+      .then(waitlists => this.setState({all_seats: waitlists}))
+        .catch(err => {
+            console.log(400);
+      });
+  }
+    
 
   getList = (id) => this.state[this.idtoList[id]];
 
@@ -361,6 +376,7 @@ class Employee extends Component {
     })
   }
   filter_date = () => {
+    this.fetch_data()
     this.setState({
       items: this.state.all_seats.filter((value) => value.date_of_arrival == this.state.current_date)
     })
@@ -369,18 +385,35 @@ class Employee extends Component {
     this.setState({
       modal_show: state
     })
-    console.log(this.state.modal_show)
   }
   add_reservation = (name, ppl_num, date, time) =>{
-    this.state.all_seats.push({
+    const new_wl = {
       id: this.state.all_seats.length + 1,
       Name: name,
       people: ppl_num,
       date_of_arrival: date,
       estimated_time: time
-    })
+    }
     this.filter_date()
     this.setModalState(false)
+    const header = {
+      headers: {'Accept': 'application/json',
+          'Content-Type': 'application/json'
+      }
+    };
+
+    axios.post('/waitlist/newWaitlist', {
+      id: new_wl.id,
+      name: new_wl.Name,
+      people: new_wl.people,
+      date_of_arrival: new_wl.date_of_arrival,
+      estimated_time: new_wl.estimated_time
+    },header)
+      .then((response) => {
+          console.log(response);
+      }, (error) => {
+          console.log(error);
+      });
   }
   // Normally you would want to split things out into separate components.
   // But in this example everything is just done in one place for simplicity
@@ -462,7 +495,7 @@ class Employee extends Component {
                 <Card.Header className = "header-of-card">
                   <div className = "pic-container">
                     <strong>
-                      {item.Name}
+                      {item.name}
                     </strong>
                     <img className = "user-pic"src = "./images/restaurant_images/boy.png"></img>
                   </div>
