@@ -509,7 +509,6 @@ class Employee extends Component {
                     <img className = "user-pic"src = "./images/restaurant_images/boy.png"></img>
                     
                   </div>
-                  <h5 style={{float:"right"}}>asdasdasd</h5>
                 </Card.Header>
                 <Card.Body>
                   <div>
@@ -518,6 +517,9 @@ class Employee extends Component {
                   </div>
                   <div className = "num_people">
                     <span><img className = "info-png" src = "./images/restaurant_images/avatar.png"></img><span className = "attendence">{item.people}</span></span>
+                  </div>
+                  <div>
+                  <span><img className = "info-png" src = "./images/restaurant_images/avatar.png"></img><span className = "attendence">{item.reserved ? 'reserved' : 'not reserved'}</span></span>
                   </div>
                   <div className = "user_profile_holder">
                     <div className = "check-container">  
