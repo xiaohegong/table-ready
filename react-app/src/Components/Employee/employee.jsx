@@ -535,7 +535,7 @@ class Employee extends Component {
                     <span><img className = "info-png" src = "./images/restaurant_images/avatar.png"></img><span className = "attendence">{item.people}</span></span>
                   </div>
                   <div>
-                  <span><img className = "info-png" src = "./images/restaurant_images/avatar.png"></img><span className = "attendence">{item.reserved ? 'reserved' : 'not reserved'}</span></span>
+                  <span><img className = "info-png" src = "./images/restaurant_images/receptionist.png"></img><span className = "attendence">{item.reserved ? 'Reserved' : 'Not Reserved'}</span></span>
                   </div>
                   <div className = "user_profile_holder">
                     <div className = "check-container">  
