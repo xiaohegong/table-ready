@@ -22,7 +22,6 @@ import all_table from './dummy_table_data'
 import Draggable, {DraggableCore} from 'react-draggable';
 import VerticalModal from './verticalModal';
 import axios from 'axios';
-import { Link } from "react-router-dom";
 // fake data generator
 
 // a little function to help us with reordering the result
@@ -277,17 +276,17 @@ class Employee extends Component {
   }
   handleStop = (index) => {
     this.setOccupied()
-    console.log(index)
+    this.state.user_obj.reserved = true
+    this.setState({
+      draggin:false
+    })
     if(this.state.changed){
       this.setState({
-        to_be_reserved: this.state.to_be_reserved.filter((value) => value != this.state.user_obj),
+        to_be_reserved: this.state.to_be_reserved.filter((value, i) => i != index),
         changed: false
       })
     }
-    this.setState({
-      draggin:false,
-      user_obj: null
-    })
+    
   }
   setOccupied = () => {
     for(let i = 0; i < this.state.reservations_color.length; i++){
@@ -322,9 +321,7 @@ class Employee extends Component {
   removefocus = (e) => {
     e.preventDefault()
   }
-  ondragstart = (index) => {
 
-  }
   /* change color of card */ 
   checkcapacity = (index) => {
     // const cur_table = document.getElementById(`Table-${index}`)
@@ -415,9 +412,18 @@ class Employee extends Component {
           console.log(error);
       });
   }
+  render_button(index){
+    if(this.state.items[index].reserved){
+      return null
+    }
+    else{
+      return <button class="accept-button" onClick = {(e) => this.change_menu_state(index)} onMouseDown = {this.removefocus}><img src = "./images/restaurant_images/done-tick.png"></img></button>
+    }
+  }
   // Normally you would want to split things out into separate components.
   // But in this example everything is just done in one place for simplicity
   render() {
+    
     return (
       <div id = "outer-container" className = "card-container">
         <Menu pageWrapId={ "page-wrap" } width = {'1000px'} outerContainerId={ "outer-container" } right disableAutoFocus customBurgerIcon={false} isOpen={this.state.menu_open}
@@ -426,12 +432,15 @@ class Employee extends Component {
             {
               this.state.to_be_reserved.map((item,index) => (
                 //Fix bug
-                <Draggable onStart = {() => this.ondragstart(index)} onStart={() => this.handleStart(index)}  onStop={() => this.handleStop(index)}>
+                <Draggable onStart={() => this.handleStart(index)} onStop={(e, data) => {
+                  console.log(data)
+                  this.handleStop(index)
+                  }}>
                   <Card id = {`usercard-${index}`} draggable = "true" style={{backgroundColor:"#f8f9fa", width: '18rem' }}>
                     <Card.Header className = "header-of-card">
                       <div className = "pic-container">
                         <strong>
-                          {item.Name}
+                          {item.name}
                         </strong>
                         <img className = "user-pic"src = "./images/restaurant_images/boy.png"></img>
                       </div>
@@ -498,7 +507,9 @@ class Employee extends Component {
                       {item.name}
                     </strong>
                     <img className = "user-pic"src = "./images/restaurant_images/boy.png"></img>
+                    
                   </div>
+                  <h5 style={{float:"right"}}>asdasdasd</h5>
                 </Card.Header>
                 <Card.Body>
                   <div>
@@ -510,7 +521,7 @@ class Employee extends Component {
                   </div>
                   <div className = "user_profile_holder">
                     <div className = "check-container">  
-                        <button class="accept-button" onClick = {(e) => this.change_menu_state(index)} onMouseDown = {this.removefocus}><img src = "./images/restaurant_images/done-tick.png"></img></button>
+                        {this.render_button(index)}
                         <button class="reject-button" onClick = {(e) => this.remove_reservation_from_items(index)} onMouseDown = {this.removefocus}><img src = "./images/restaurant_images/no-stopping.png"></img></button>
                     </div>
                   </div>

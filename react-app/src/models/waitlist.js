@@ -26,6 +26,11 @@ const WaitlistSchema = new Schema({
     estimated_time:{
         type: String,
         required: true
+    },
+    reserved:{
+        type: Boolean,
+        required: false,
+        default: false
     }
 });
 
