@@ -433,7 +433,7 @@ class Employee extends Component {
               this.state.to_be_reserved.map((item,index) => (
                 //Fix bug
                 <Draggable onStart={() => this.handleStart(index)} onStop={(e, data) => {
-                  console.log(data)
+                  console.log(e)
                   this.handleStop(index)
                   }}>
                   <Card id = {`usercard-${index}`} draggable = "true" style={{backgroundColor:"#f8f9fa", width: '18rem' }}>
