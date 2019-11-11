@@ -277,6 +277,7 @@ class Employee extends Component {
   }
   handleStop = (index) => {
     this.setOccupied()
+    this.state.items[index].reserved = true
     if(this.state.changed){
       let tmp = []
       this.state.to_be_reserved.forEach((item) => {
@@ -415,6 +416,14 @@ class Employee extends Component {
       }, (error) => {
           console.log(error);
       });
+  }
+  render_button = (index) =>{
+    if(this.state.items[index].reserved){
+      return null
+    }
+    else{
+      return <button class="accept-button" onClick = {(e) => this.change_menu_state(index)} onMouseDown = {this.removefocus}><img src = "./images/restaurant_images/done-tick.png"></img></button>
+    }
   }
 
   // Normally you would want to split things out into separate components.
