@@ -1,0 +1,254 @@
+/* .Reservation_card{
+    width:100% !important;
+    height:170px !important;
+    border-radius: 1rem;
+}
+
+#droppable{
+    margin-right:10px
+}
+
+
+
+
+
+.info{
+    font-size:10px;
+}
+.individual-reservation{
+    border-radius: 1rem;
+}
+
+.date-of-arrival{
+    margin-top: 0px;
+}
+
+.card-text-container{
+    padding:0px;
+} */
+
+/* .card-container{
+    width:100%;
+}
+
+.avatar-img{
+    margin-left:37%;
+}
+
+.uppercard{
+    background: #f2f2f2;
+    width:100%
+}
+
+.reservation-card{
+    height:200px;
+} */
+
+.user_profile_holder{
+    display: inline-block;
+    margin-left:40%
+}
+.pic-container{
+    display: inline-block;
+}
+.info-png{
+    width:20px;
+    height:20px;
+}
+
+.header-of-card{
+    padding-right: 0px !important;
+}
+
+.reservation_time{
+    font-weight: 630;
+    margin-left:5%
+}
+
+
+
+.accept-button {
+    width: 45px;
+    height: 45px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 2.5px;
+    font-weight: 500;
+    color: #000;
+    background-color: #fff;
+    border: none;
+    border-radius: 50%;
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease 0s;
+    cursor: pointer;
+    outline: none;
+    margin-right: 10px;
+    }
+  
+.user-pic{
+    margin-left:8px;
+}
+
+  .accept-button:hover {
+    background-color: #2EE59D;
+    box-shadow: 0px 15px 20px rgba(46, 229, 157, 0.4);
+    color: #fff;
+    transform: translateY(-7px);
+  }
+
+  .reject-button {
+    width: 45px;
+    height: 45px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 2.5px;
+    font-weight: 500;
+    color: #000;
+    background-color: #fff;
+    border: none;
+    border-radius: 50%;
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease 0s;
+    cursor: pointer;
+    outline: none;
+    }
+  
+  .reject-button:hover {
+    background-color: #ff0000;
+    box-shadow: 0px 15px 20px rgba(46, 229, 157, 0.4);
+    color: #fff;
+    transform: translateY(-7px);
+  }
+.attendence{
+    margin-left:5%
+}
+#date-confirm {
+    width: 120px;
+    height: 35px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 2.5px;
+    font-weight: 700;
+    color: #000;
+    background-color: #fff;
+    border: none;
+    border-radius: 45px;
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.5);
+    transition: all 0.3s ease 0s;
+    cursor: pointer;
+    outline: none;
+    margin-left:3%;
+  }
+  
+  #date-confirm:hover {
+    background-color: #2EE59D;
+    box-shadow: 0px 15px 20px rgba(46, 229, 157, 0.4);
+    color: #fff;
+    transform: translateY(-7px);
+  }
+
+.reservation_date{
+    font-weight: 200;
+}
+#cal{
+    position: relative;
+    margin-left:40%;
+    width: 50%;
+    top:30px
+}
+.num_people{
+    margin-top:3%
+}
+#reservation_container{
+    display: inline-block !important;
+    width:30%;
+    float: left;
+}
+#avaliable_seats_container{
+    display: inline-block !important;
+    width: 30%;;
+    margin-left:30%
+}
+.accept{
+    width:20px;
+    height:20px;
+   
+}
+.check-container{
+ margin-left: 40px;
+}
+
+#content-wrapper{
+    margin-top:1%;
+    margin-left:4%
+}
+/* CSS for sidebar*/
+/* Position and sizing of burger button */
+.bm-burger-button {
+    position: fixed;
+    width: 36px;
+    height: 30px;
+    left: 36px;
+    top: 36px;
+  }
+  
+  /* Color/shape of burger icon bars */
+  .bm-burger-bars {
+    background: #373a47;
+  }
+  
+  /* Color/shape of burger icon bars on hover*/
+  .bm-burger-bars-hover {
+    background: #a90000;
+  }
+  
+  /* Position and sizing of clickable cross button */
+  .bm-cross-button {
+    height: 24px;
+    width: 24px;
+  }
+  
+  /* Color/shape of close button cross */
+  .bm-cross {
+    background: #bdc3c7;
+  }
+  
+  /*
+  Sidebar wrapper styles
+  Note: Beware of modifying this element as it can break the animations - you should not need to touch it in most cases
+  */
+  .bm-menu-wrap {
+    position: fixed;
+    height: 100%;
+  }
+  
+  /* General sidebar styles */
+  .bm-menu {
+    background: #e6e6e6;
+    padding: 2.5em 1.5em 0;
+    font-size: 1.15em;
+  }
+  
+  /* Morph shape necessary with bubble or elastic */
+  .bm-morph-shape {
+    fill: #373a47;
+  }
+  
+  /* Wrapper for item list */
+  .bm-item-list {
+    color: #b8b7ad;
+    padding: 0.8em;
+  }
+  
+  /* Individual item */
+  .bm-item {
+    display: inline-block;
+  }
+  
+  /* Styling of overlay */
+  .bm-overlay {
+    background: rgba(0, 0, 0, 0.3);
+  }

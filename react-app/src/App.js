@@ -9,6 +9,7 @@ import RestaurateurPage from "./Components/Restaurateur/RestaurateurPage";
 import RestaurateurPage2 from "./Components/Restaurateur/RestaurateurPage2";
 import Dashboard from "./Components/Restaurateur/Dashboard";
 import Admin from "./Components/Admin/Admin";
+import Employee from "./Components/Employee/employee"
 import "./App.scss";
 import { withCookies, useCookies} from 'react-cookie';
 import Customers from "./Components/Customers";
@@ -21,7 +22,6 @@ function App() {
   return (
     <div className="App">
       <BrowserRouter>
-        <Navbar />
         <Switch>
           <Route
             exact path="/"
@@ -50,6 +50,10 @@ function App() {
           <Route
               exact path="/admin"
               render={() => (<Admin cookies={{cookies, setCookie, removeCookie}}/>)}
+          />
+          <Route
+              exact path="/employee"
+              render={() => (<Employee cookies={{cookies, setCookie, removeCookie}}/>)}
           />
 
             <Route exact path="/addNewRestaurant" component={NewRestaurant} />

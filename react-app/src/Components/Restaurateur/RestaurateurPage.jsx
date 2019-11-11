@@ -15,7 +15,7 @@ class RestaurateurPage extends Component {
               'Content-Type': 'application/json',
           }
       }).then(res => res.json())
-          .then(customers => console.log('Customers fetched...', customers))
+        .then(customers => console.log('Customers fetched...', customers))
           .catch(err => {
               console.log(400);
           });
