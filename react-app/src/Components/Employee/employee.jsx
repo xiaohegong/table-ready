@@ -23,7 +23,6 @@ import all_table from './dummy_table_data'
 import Draggable, {DraggableCore} from 'react-draggable';
 import VerticalModal from './verticalModal';
 import axios from 'axios';
-import { Link } from "react-router-dom";
 // fake data generator
 
 // a little function to help us with reordering the result
@@ -278,7 +277,6 @@ class Employee extends Component {
   }
   handleStop = (index) => {
     this.setOccupied()
-    console.log(this.state.changed)
     if(this.state.changed){
       let tmp = []
       this.state.to_be_reserved.forEach((item) => {
@@ -514,6 +512,7 @@ class Employee extends Component {
                       {item.name}
                     </strong>
                     <img className = "user-pic"src = "./images/restaurant_images/boy.png"></img>
+                    
                   </div>
                 </Card.Header>
                 <Card.Body>
@@ -524,9 +523,12 @@ class Employee extends Component {
                   <div className = "num_people">
                     <span><img className = "info-png" src = "./images/restaurant_images/avatar.png"></img><span className = "attendence">{item.people}</span></span>
                   </div>
+                  <div>
+                  <span><img className = "info-png" src = "./images/restaurant_images/avatar.png"></img><span className = "attendence">{item.reserved ? 'reserved' : 'not reserved'}</span></span>
+                  </div>
                   <div className = "user_profile_holder">
                     <div className = "check-container">  
-                        <button class="accept-button" onClick = {(e) => this.change_menu_state(index)} onMouseDown = {this.removefocus}><img src = "./images/restaurant_images/done-tick.png"></img></button>
+                        {this.render_button(index)}
                         <button class="reject-button" onClick = {(e) => this.remove_reservation_from_items(index)} onMouseDown = {this.removefocus}><img src = "./images/restaurant_images/no-stopping.png"></img></button>
                     </div>
                   </div>
