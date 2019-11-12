@@ -13,6 +13,7 @@ import Employee from "./Components/Employee/employee"
 import "./App.scss";
 import { withCookies, useCookies} from 'react-cookie';
 import Customers from "./Components/Customers";
+import NotFound from './Components/page_not_found/page_not_found'
 import NewRestaurant from "./Components/Restaurateur/NewRestaurant";
 
 function App() {
@@ -34,6 +35,7 @@ function App() {
             exact path="/SignUp"
             render={() => (<SignUp cookies={{cookies, setCookie, removeCookie}}/>)}
             />
+          <Route path="/error" component={NotFound} />
           <Route
             exact path="/restaurateur"
             render={() => (<RestaurateurPage cookies={{cookies, setCookie, removeCookie}}/>)}

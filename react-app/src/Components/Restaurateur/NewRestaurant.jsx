@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import axios from 'axios';
+import {Redirect} from 'react-router-dom'
 
 class NewRestaurant extends Component {
     constructor(props) {
@@ -51,7 +52,8 @@ class NewRestaurant extends Component {
 
     }
     render() {
-        return <><form onSubmit={this.handleSubmit}>
+        if (this.is_authenticated()){
+            return <><form onSubmit={this.handleSubmit}>
             <label htmlFor="name">Enter restaurant name*</label>
             <input id="name" name="name" type="text" />
 
@@ -68,6 +70,11 @@ class NewRestaurant extends Component {
 
             <button>Create Restaurant</button>
         </form></>
+        }
+        else{
+            return(<Redirect to = "/error"></Redirect>)
+        }
+    
     }
 }
 

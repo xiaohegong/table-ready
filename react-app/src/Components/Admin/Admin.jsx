@@ -7,6 +7,8 @@ import {
   ButtonGroup,
   Button
 } from 'reactstrap';
+import { Route, Redirect } from 'react-router'
+
 
 const log = console.log;
 
@@ -48,6 +50,16 @@ class Admin extends Component {
     }
   };
 
+  is_authenticated = () => {
+    const user = this.props.cookies.cookies.cur_user
+    if (user.accountType === "SuperAdmin"){
+      return true
+    }
+    else{
+      return false
+    }
+  }
+
   setActive = (e) => {
     for (let i = 0; i < 3; i++) {
       let btn = e.target.parentNode.childNodes[i];
@@ -57,23 +69,30 @@ class Admin extends Component {
   };
 
   render() {
-    return (
-      <div className='admin-page'>
-        <div className="row menu-bar">
-          <div className="col-sm-8 menu d-flex justify-content-lg-center">
-            <ButtonGroup size={"lg"}>
-              <Button outline color="danger" active={true} size="lg" onClick={this.chooseOverview}>Overview
-              </Button>
-              <Button outline color="danger" size="lg" onClick={this.chooseManage}>Manage
-              </Button>
-              <Button outline color="danger" size="lg" onClick={this.chooseSetting}>Setting
-              </Button>
-            </ButtonGroup>
+    if (this.is_authenticated()){
+      return (
+        <div className='admin-page'>
+          <div className="row menu-bar">
+            <div className="col-sm-8 menu d-flex justify-content-lg-center">
+              <ButtonGroup size={"lg"}>
+                <Button outline color="danger" active={true} size="lg" onClick={this.chooseOverview}>Overview
+                </Button>
+                <Button outline color="danger" size="lg" onClick={this.chooseManage}>Manage
+                </Button>
+                <Button outline color="danger" size="lg" onClick={this.chooseSetting}>Setting
+                </Button>
+              </ButtonGroup>
+            </div>
           </div>
+          <div className="admin-content">{this.showContent()}</div>
         </div>
-        <div className="admin-content">{this.showContent()}</div>
-      </div>
-    );
+      )
+    }
+    else {
+      return(
+        <Redirect to = "/error"></Redirect> 
+      )
+    }
   }
 
 }

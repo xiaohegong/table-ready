@@ -81,6 +81,9 @@ app.get("/", (req, res) => {
   res.send("Hello World");
 });
 
+// app.get('*', (req, res) => {
+//   res.sendFile(path.join(__dirname, './index.html'));
+//   });
 
 app.post("/user/signup", (req, res) => {
   log(req.body);
