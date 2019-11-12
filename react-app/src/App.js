@@ -16,7 +16,6 @@ import Customers from "./Components/Customers";
 import NewRestaurant from "./Components/Restaurateur/NewRestaurant";
 
 function App() {
-
   const [cookies, setCookie, removeCookie] = useCookies(['cur_user']);
 
   return (

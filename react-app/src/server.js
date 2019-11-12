@@ -9,7 +9,68 @@ const User = require('./models/user.js');
 const Restaurant = require('./models/restaurant.js');
 const Waitlist = require('./models/waitlist.js');
 const Table = require('./models/table.js');
+var session = require('express-session')
+/* Attempting to setup passport.js for user */
+app.use(session({
+  secret: 'oursecret',
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+      expires: 600000,
+      httpOnly: true
+  }
+}));
 
+// use to redirect to home if already logged in
+const sessionChecker = (req, res, next) => {
+  if (req.session.userId) {
+      res.redirect('/index');
+  } else {
+      res.clearCookie("name");
+      res.clearCookie("id");
+      res.clearCookie("admin");
+      res.clearCookie("newnotifications");
+      next();
+  }
+};
+
+// use to clear the cookie whenever the user is not actually logged in
+const cookieClearer = (req, res, next) => {
+  if (req.session.userId) {
+      next();
+  } else {
+      res.clearCookie("name");
+      res.clearCookie("id");
+      res.clearCookie("admin");
+      res.clearCookie("newnotifications");
+      next();
+  }
+};
+
+// use to redirect if a session has not been created
+const sessionCheckLoggedIn = (req, res, next) => {
+  if (!req.session.userId) {
+      res.clearCookie("name");
+      res.clearCookie("id");
+      res.clearCookie("admin");
+      res.clearCookie("newnotifications");
+      res.redirect('/login');
+  } else {
+      next();
+  }
+};
+
+const sessionHandleRequest = (req, res, next) => {
+  if (!req.session.userId) {
+      res.clearCookie("name");
+      res.clearCookie("id");
+      res.clearCookie("admin");
+      res.clearCookie("newnotifications");
+      res.status(404).send();
+  } else {
+      next();
+  }
+};
 /* Use statements for the server */
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({extended: true}));
@@ -20,15 +81,6 @@ app.get("/", (req, res) => {
   res.send("Hello World");
 });
 
-app.get('/api/customers', (req, res) => {
-  const customers = [
-    {id: 1, firstName: 'John', lastName: 'Doe'},
-    {id: 2, firstName: 'Brad', lastName: 'Traversy'},
-    {id: 3, firstName: 'Mary', lastName: 'Swanson'},
-  ];
-
-  res.json(customers);
-});
 
 app.post("/user/signup", (req, res) => {
   log(req.body);

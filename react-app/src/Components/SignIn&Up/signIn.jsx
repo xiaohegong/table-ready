@@ -28,7 +28,7 @@ class SignIn extends Component {
     console.log(users);
     const user = users.filter(user => user.username === this.state.username);
     if (user.length === 0) {
-      alert("this user is not exist!");
+      alert("this user does not exist!");
     }else if (this.state.password !== user[0].password){
       alert("incorrect password!")
     }else {

@@ -23,6 +23,7 @@ import all_table from './dummy_table_data'
 import Draggable, {DraggableCore} from 'react-draggable';
 import VerticalModal from './verticalModal';
 import axios from 'axios';
+import {Redirect} from 'react-router-dom'
 // fake data generator
 
 // a little function to help us with reordering the result
@@ -234,6 +235,7 @@ const initial_color = (() => {
 class Employee extends Component {
   constructor(props) {
     super(props);
+    console.log(this.props.cookies.cookies)
     this.state = {
       all_seats: [],
       items: [],
