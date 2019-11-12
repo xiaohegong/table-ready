@@ -253,16 +253,16 @@ class Employee extends Component {
     };
   }
   fetch_data = () => {
-    fetch('http://localhost:3000/waitlist/getWaitlist', {
-      method: 'POST',
-      headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
+    let data
+    const header = {
+      headers: {'Accept': 'application/json',
+          'Content-Type': 'application/json'
       }
-    }).then(res => res.json())
-      .then(waitlists => this.setState({all_seats: waitlists}))
-        .catch(err => {
-            console.log(400);
+    }; 
+    axios.post('/waitlist/getWaitlist', {}, header)
+      .then(res => this.setState({all_seats: res.data}))
+      .catch(function (error) {
+        console.log(error);
       });
   }
     
@@ -279,7 +279,8 @@ class Employee extends Component {
   }
   handleStop = (index) => {
     this.setOccupied()
-    this.state.items[index].reserved = true
+    const i = this.state.items.indexOf(this.state.to_be_reserved[index])
+    this.state.items[i].reserved = true
     if(this.state.changed){
       let tmp = []
       this.state.to_be_reserved.forEach((item) => {
@@ -418,6 +419,7 @@ class Employee extends Component {
       }, (error) => {
           console.log(error);
       });
+    this.fetch_data()
   }
   render_button = (index) =>{
     if(this.state.items[index].reserved){
