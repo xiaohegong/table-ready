@@ -44,6 +44,39 @@ class Navbar extends React.Component {
       // $('#theme-btn-group button[value="light"]').click();
     });
   }
+
+  getButton(){
+    // console.log(this.props.cookies);
+    if (!this.props.cookies.cookies.cur_user) {
+      return (
+        <div className="btn-group">
+          <Link to="/SignIn">
+            <button className="btn btn-primary btn-sm">Sign In</button>
+          </Link>
+          <Link to="/SignUp">
+            <button className="btn btn-success btn-sm">Sign Up</button>
+          </Link>
+        </div>
+      )
+    }else {
+      return(
+        <div>
+          <button
+            className="btn btn-outline-danger btn-sm logout-btn"
+            onClick={this.logout.bind(this)}
+          >
+            Logout
+          </button>
+        </div>
+      )
+    }
+  }
+
+  logout() {
+    this.props.cookies.removeCookie("cur_user");
+    window.location.href = "/SignIn"
+  }
+
   render() {
     return (
       <nav className="navbar-page navbar navbar-expand-lg navbar-dark bg-dark">
@@ -109,15 +142,7 @@ class Navbar extends React.Component {
               </div>
             </li>
           </ul>
-
-          <div className="btn-group">
-            <Link to="/SignIn">
-              <button className="btn btn-primary btn-sm">Sign In</button>
-            </Link>
-            <Link to="/SignUp">
-              <button className="btn btn-success btn-sm">Sign Up</button>
-            </Link>
-          </div>
+          {this.getButton()}
         </div>
       </nav>
     );

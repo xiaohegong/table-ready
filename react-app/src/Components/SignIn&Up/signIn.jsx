@@ -37,11 +37,13 @@ class SignIn extends Component {
         this.props.cookies.setCookie("cur_user", user[0], { path: '/', expires: 0});
         log("sign in successfully!");
         console.log(this.props.cookies.cookies);
-        window.location.href = "/"
+        window.location.href = "/admin"
       }else if (userType === "Admin") {
-        window.location.href = "/"
+        this.props.cookies.setCookie("cur_user", user[0], { path: '/', expires: 0});
+        window.location.href = "/restaurateur"
       }else if (userType === "Employee"){
-        window.location.href = "/"
+        this.props.cookies.setCookie("cur_user", user[0], { path: '/', expires: 0});
+        window.location.href = "/employee"
       }
     }
   }
