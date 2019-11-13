@@ -23,7 +23,7 @@ const UserSchema = new Schema({
     minlength: 4
   },
   workFor: {
-    type: Array,
+    type: String,
     required: false
   },
   image: {

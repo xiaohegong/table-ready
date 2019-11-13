@@ -8,6 +8,7 @@ import {
   Button
 } from 'reactstrap';
 import { Route, Redirect } from 'react-router'
+import Navbar from "../Navbar";
 
 
 const log = console.log;
@@ -72,6 +73,7 @@ class Admin extends Component {
     if (this.is_authenticated()){
       return (
         <div className='admin-page'>
+          <Navbar cookies={this.props.cookies}/>
           <div className="row menu-bar">
             <div className="col-sm-8 menu d-flex justify-content-lg-center">
               <ButtonGroup size={"lg"}>
