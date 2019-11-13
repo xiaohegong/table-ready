@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import EmployeeListItem from "./EmployeeListItem";
-import { lorem, rand_string } from "../../util";
 import uid from "uid";
 import axios from "axios";
 
