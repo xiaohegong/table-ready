@@ -559,7 +559,7 @@ class Employee extends Component {
               </span>
         </Menu>
         <div id = "page-wrap">
-        <Navbar />
+          <Navbar cookies={this.props.cookies}/>
           <div id = "cal" style={{height: '80px'}}>
             <DatePicker onChange={(value)=>this.showdate(value)} showDefaultIcon></DatePicker>
             <button id = "date-confirm" onClick={()=>this.filter_date()}>Confirm</button>
