@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import "../../Stylesheets/restaurateur_page.scss";
 import RestaurantListItem from "./RestaurantListItem";
 import { Link } from "react-router-dom";
+import Navbar from "../Navbar";
 
 
 class RestaurateurPage extends Component {
@@ -22,9 +23,9 @@ class RestaurateurPage extends Component {
   }
 
   render() {
-    console.log(this.props.cookies.cookies);
     return (
       <div className="restaurateur-page">
+        <Navbar cookies={this.props.cookies}/>
         <div className="container">
           <div className="row">
             <div className="col-md-3 info">

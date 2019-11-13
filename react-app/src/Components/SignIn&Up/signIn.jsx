@@ -4,6 +4,7 @@ import Avatar from "./icon.jpg";
 import Animation from "./animation.jsx";
 import { Redirect } from 'react-router-dom'
 import axios from 'axios';
+import Navbar from "../Navbar";
 const log = console.log;
 class SignIn extends Component {
   constructor(props) {
@@ -70,6 +71,7 @@ class SignIn extends Component {
   render () {
     return (
       <div id="signIn-Up">
+        <Navbar cookies={this.props.cookies}/>
         <Animation/>
         <div id="divPage">
           <div className="container">

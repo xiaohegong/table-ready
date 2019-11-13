@@ -22,7 +22,6 @@ function App() {
   return (
     <div className="App">
       <BrowserRouter>
-        <Navbar cookies={{cookies, setCookie, removeCookie}}/>
         <Switch>
           <Route
             exact path="/"
