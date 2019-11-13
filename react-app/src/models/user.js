@@ -1,6 +1,6 @@
 // 'use strict';
 // const log = console.log;
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 // const ObjectId = mongoose.Schema.Types.ObjectId;
 // const TypeId = mongoose.Types.ObjectId;
 const Schema = mongoose.Schema;
@@ -9,7 +9,7 @@ const Schema = mongoose.Schema;
 const UserSchema = new Schema({
   accountType: {
     type: String,
-    required: true,
+    required: true
   },
   username: {
     type: String,
@@ -21,6 +21,15 @@ const UserSchema = new Schema({
     type: String,
     required: true,
     minlength: 4
+  },
+  workFor: {
+    type: Array,
+    required: false
+  },
+  image: {
+    type: String,
+    required: true,
+    default: "/images/avatar_sample.png"
   },
   email: String,
   tel: String,
