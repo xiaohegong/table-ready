@@ -39,7 +39,22 @@
   }
   .restaurant-list-item {
   }
-  .addNewButton{
-    float:right;
+  .addNewButton {
+    float: right;
+  }
+}
+
+.new-restaurant-page {
+  .container {
+    margin-top: 1em;
+  }
+
+  .form-container {
+    max-width: 50vw;
+    .input-group-prepend {
+      .input-group-text {
+        width: 12em;
+      }
+    }
   }
 }

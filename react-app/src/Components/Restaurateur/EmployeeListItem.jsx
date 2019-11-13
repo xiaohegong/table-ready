@@ -2,24 +2,39 @@ import React, { Component } from "react";
 class EmployeeListItem extends Component {
   state = {};
   render() {
+    const { deleteEmployee, id } = this.props;
     return (
       <button
         type="button"
-        className="list-group-item list-group-item-action employee-list-item"
+        className="employee-list-item-component list-group-item list-group-item-action employee-list-item"
       >
-        <img className="float-left" src={this.props.image} alt="" />
-        <div className="employee-info float-right">
-          <p>
-            <strong>Name: </strong>
-            {this.props.name}
-          </p>
-          <p>
-            <strong>ID: </strong> {this.props.id}
-          </p>
-          <p>
-            <strong>Telephone: </strong>
-            {this.props.telephone}
-          </p>
+        <div className="row">
+          <div className="col col-md-4">
+            <img className="" src={this.props.image} alt="" />
+          </div>
+          <div className="col col-md-6">
+            <div className="employee-info">
+              <p>
+                <strong>Name: </strong>
+                {this.props.name}
+              </p>
+              <p>
+                <strong>ID: </strong> {id}
+              </p>
+              <p>
+                <strong>Telephone: </strong>
+                {this.props.telephone}
+              </p>
+            </div>
+          </div>
+          <div className="col col-md-2">
+            <span
+              className="btn btn-sm btn-outline-danger"
+              onClick={deleteEmployee.bind(this, id)}
+            >
+              Delete
+            </span>
+          </div>
         </div>
       </button>
     );

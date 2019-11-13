@@ -7,51 +7,37 @@ const Schema = mongoose.Schema;
 const {MongoClient, ObjectID} = require('mongodb');
 
 // Todo: Jiatao
-const RestaurantSchema = new Schema({
-    owner:{
+const MenuItemSchema = new Schema({
+    restaurant:{
         type:String,
         required: true
     },
     name: {
         type: String,
-        required: false,
+        required: true,
         minlength: 3,
     },
-    location: {
+    price: {
+        type: Number,
+        required: true,
+        default: 0
+    },
+    ingredients: {
         type: String,
         required: false,
         default: ""
-    },
-    phoneNumber: {
-        type: String,
-        required: true,
-        minlength: 4
     },
     image:{
         type:String,
         required: true,
         default:'/images/restaurant_images/restaurant2.jpeg'
     },
-    Rating: {
+    calories: {
         type: Number,
         required: true,
         default: 0
-    },
-    Cuisine:{
-        type:String,
-        required:false,
-        default: ""
-    },
-    DressCode:{
-        type:String,
-        required:true,
-        default:"you do not have a dress code yet"
-    },
-    operationHour:{
-        type:String,
-        required:false
     }
 });
 
 
-module.exports = mongoose.model("Restaurant", RestaurantSchema);
+module.exports = mongoose.model("MenuItem", MenuItemSchema);
