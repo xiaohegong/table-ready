@@ -13,7 +13,6 @@ class SignUp extends Component {
       password: "",
       email: "",
       tel: "",
-      manager: "",
       confirm: "",
       Super: true
     };
@@ -21,7 +20,6 @@ class SignUp extends Component {
     this.handleTypeChange = this.handleTypeChange.bind(this);
     this.handleEmailChange = this.handleEmailChange.bind(this);
     this.handleTelChange = this.handleTelChange.bind(this);
-    this.handleManagerChange = this.handleManagerChange.bind(this);
     this.handleUsernameChange = this.handleUsernameChange.bind(this);
     this.handlePasswordChange = this.handlePasswordChange.bind(this);
     this.handleConfirmChange = this.handleConfirmChange.bind(this);
@@ -47,10 +45,6 @@ class SignUp extends Component {
 
   handleTelChange (event) {
     this.setState({tel: event.target.value});
-  }
-
-  handleManagerChange (event) {
-    this.setState({manager: event.target.value});
   }
 
   handleUsernameChange (event) {
@@ -80,16 +74,14 @@ class SignUp extends Component {
 
   signUp(event) {
     event.preventDefault();
-    const accountType = this.state.accountType;
     const username = this.state.username;
     const email = this.state.email;
     const tel = this.state.tel;
     const password = this.state.password;
     const confirm = this.state.confirm;
-    const manager = this.state.manager;
 
     if (username === "" || password === "" || tel === "" ||
-      email === "" || confirm === "" || (accountType !== "SuperAdmin" && manager === "")) {
+      email === "" || confirm === "" ) {
       alert("All inputs must be filled in");
     } else if (password !== confirm) {
       alert("Your password doesn't match confirm");
@@ -109,7 +101,6 @@ class SignUp extends Component {
           password: this.state.password,
           email: this.state.email,
           tel: this.state.tel,
-          manager: this.state.manager
         }).then(response => {
           log(response.data);
         }, error => {
@@ -180,27 +171,27 @@ class SignUp extends Component {
                 onChange = {this.handleTelChange}
               />
             </div>
-            {!this.state.Super ?
-              (<div>
-                <div className="input-group mb-3">
-                  <div className="input-group-prepend">
-                        <span
-                          className="input-group-text"
-                          id="inputGroup-sizing-default"
-                        >
-                          Manager
-                        </span>
-                  </div>
-                  <input
-                    name="manager"
-                    type="text"
-                    className="form-control"
-                    aria-label="Sizing example input"
-                    aria-describedby="inputGroup-sizing-default"
-                    onChange = {this.handleManagerChange}
-                  />
-                </div>
-              </div>): null}
+            {/*{!this.state.Super ?*/}
+            {/*  (<div>*/}
+            {/*    <div className="input-group mb-3">*/}
+            {/*      <div className="input-group-prepend">*/}
+            {/*            <span*/}
+            {/*              className="input-group-text"*/}
+            {/*              id="inputGroup-sizing-default"*/}
+            {/*            >*/}
+            {/*              Manager*/}
+            {/*            </span>*/}
+            {/*      </div>*/}
+            {/*      <input*/}
+            {/*        name="manager"*/}
+            {/*        type="text"*/}
+            {/*        className="form-control"*/}
+            {/*        aria-label="Sizing example input"*/}
+            {/*        aria-describedby="inputGroup-sizing-default"*/}
+            {/*        onChange = {this.handleManagerChange}*/}
+            {/*      />*/}
+            {/*    </div>*/}
+            {/*  </div>): null}*/}
             <div className="input-group mb-3">
               <div className="input-group-prepend">
                     <span
