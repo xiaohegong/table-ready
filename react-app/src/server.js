@@ -70,27 +70,23 @@ app.post("/restaurant/newRestaurant", (req, res) => {
       log(err);
       res.send({ code: 404, err });
     });
-
 });
 
 app.post("/restaurant/updateRestaurant", (req, res) => {
-  Restaurant.
-  findByIdAndUpdate( req.body._id, {
-
+  Restaurant.findByIdAndUpdate(req.body._id, {
     name: req.body.name,
     phoneNumber: req.body.phoneNumber,
     location: req.body.location,
     Cuisine: req.body.cuisine,
     operationHour: req.body.hours
-
   })
-      .then(restaurant => {
-        res.send("restaurant " + restaurant.name + " updated to database");
-      })
-      .catch(err => {
-        log(err);
-        res.send({ code: 404, err });
-      });
+    .then(restaurant => {
+      res.send("restaurant " + restaurant.name + " updated to database");
+    })
+    .catch(err => {
+      log(err);
+      res.send({ code: 404, err });
+    });
 });
 
 app.post("/restaurant/newMenuItem", (req, res) => {
@@ -142,26 +138,23 @@ app.post("/restaurant/findEmployeesByRestaurant", (req, res) => {
     }
   );
 
-
   // return new Promise((resolve, reject) => {
   //
   // });
 });
 
-  app.post("/restaurant/updateDressCode", (req, res) => {
-  Restaurant.findByIdAndUpdate( req.body._id, {
-
+app.post("/restaurant/updateDressCode", (req, res) => {
+  Restaurant.findByIdAndUpdate(req.body._id, {
     DressCode: req.body.dressCode
-
   }).then(
-      user => {
-        res.send(user);
-      },
-      error => {
-        res.send({code: 404, error});
-      }
+    user => {
+      res.send(user);
+    },
+    error => {
+      res.send({ code: 404, error });
+    }
   );
-})
+});
 
 app.post("/restaurant/add_employee", (req, res) => {
   // res.send("1000");
@@ -169,22 +162,10 @@ app.post("/restaurant/add_employee", (req, res) => {
   const restaurant_id = req.body.restaurant_id;
   console.log("username:", username);
   if (username && restaurant_id) {
-    User.findOne({ username: username })
-      .then(function(user) {
-        if (!user) {
-          return;
-        }
-        console.log(user.workFor);
-        console.log(restaurant_id);
-        if (!user.workFor.includes(restaurant_id)) {
-          user.workFor.push(restaurant_id);
-        }
-        user.save();
-        res.send(user);
-      })
-      .catch(err => {
-        console.log(err);
-      });
+    User.findOneAndUpdate(
+      { username: username },
+      { workFor: restaurant_id }
+    ).then(user => {});
   }
 });
 
