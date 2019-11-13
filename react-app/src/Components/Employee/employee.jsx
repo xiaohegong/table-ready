@@ -1,21 +1,12 @@
 import React, { Component } from "react";
-import ReactDOM from "react-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { withStyles } from '@material-ui/core/styles';
 import { green } from '@material-ui/core/colors';
 import './employee.css'
 import Card from 'react-bootstrap/Card'
-import CardDeck from 'react-bootstrap/CardDeck'
 import Navbar from "../Navbar.jsx";
-import CardGroup from 'react-bootstrap/CardGroup'
 import CardColumns from 'react-bootstrap/CardColumns'
-import reservations_manager from './dummy_data_for_drag.jsx'
-import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
-import Favorite from '@material-ui/icons/Favorite';
-import FavoriteBorder from '@material-ui/icons/FavoriteBorder';
-import Button from 'react-bootstrap/Button'
-import CheckIcon from '@material-ui/icons/Check';
 import '@y0c/react-datepicker/assets/styles/calendar.scss';
 import { DatePicker } from '@y0c/react-datepicker';
 import { slide	 as Menu } from 'react-burger-menu'
@@ -23,6 +14,7 @@ import all_table from './dummy_table_data'
 import Draggable, {DraggableCore} from 'react-draggable';
 import VerticalModal from './verticalModal';
 import axios from 'axios';
+import HeaderSubHeader from "semantic-ui-react/dist/commonjs/elements/Header/HeaderSubheader";
 // fake data generator
 
 // a little function to help us with reordering the result
@@ -251,21 +243,52 @@ class Employee extends Component {
     };
   }
   fetch_data = () => {
-    let data
     const header = {
       headers: {'Accept': 'application/json',
           'Content-Type': 'application/json'
       }
     }; 
-    axios.post('/waitlist/getWaitlist', {}, header)
+    axios.post('/waitlist/getWaitlist')
       .then(res => this.setState({all_seats: res.data}))
       .catch(function (error) {
         console.log(error);
       });
   }
-    
+  delete_data = (data) => {
+    const header = {
+      headers: {'Accept': 'application/text',
+          'Content-Type': 'application/text'
+      }
+    }; 
+    axios.delete('/api/removeWaitlist/' + data._id)
+    .then((response) => {
+      console.log(response);
+    }, (error) => {
+      console.log(error);
+    });
+  }
+  update_data = (data) => {
+    const header = {
+      headers: {'Accept': 'application/text',
+          'Content-Type': 'application/text'
+      }
+    }; 
+    console.log(data._id)
+    axios.put('/updateWaitlist/' + data._id, {
+      id: data.id,
+      name: data.name,
+      people: data.people,
+      date_of_arrival: data.date_of_arrival,
+      estimated_time: data.estimated_time,
+      reserved: data.reserved
+    })
+    .then((response) => {
+      console.log(response);
+    }, (error) => {
+      console.log(error);
+    });
+  }
 
-  getList = (id) => this.state[this.idtoList[id]];
 
   handleChange = () => {
     this.setState({checkedG:!this.state.checkedG})
@@ -278,8 +301,10 @@ class Employee extends Component {
   handleStop = (index) => {
     this.setOccupied()
     const i = this.state.items.indexOf(this.state.to_be_reserved[index])
-    this.state.items[i].reserved = true
+    
     if(this.state.changed){
+      this.state.items[i].reserved = true
+      this.update_data(this.state.items[i])
       let tmp = []
       this.state.to_be_reserved.forEach((item) => {
         if(item == this.state.user_obj){
@@ -291,7 +316,8 @@ class Employee extends Component {
       })
       this.setState({
         to_be_reserved: tmp,
-        changed: false
+        changed: false,
+        draggin: false
       })
     }
   }
@@ -317,6 +343,7 @@ class Employee extends Component {
 
   }
   remove_reservation_from_items = (index) => {
+    this.delete_data(this.state.items[index])
     this.setState({
       //TODO: Backend handle
       items: this.state.items.filter(i=>i.id != this.state.items[index].id)
@@ -380,6 +407,7 @@ class Employee extends Component {
   }
   filter_date = () => {
     this.fetch_data()
+    console.log(this.state.all_seats)
     this.setState({
       items: this.state.all_seats.filter((value) => value.date_of_arrival == this.state.current_date)
     })
@@ -391,8 +419,8 @@ class Employee extends Component {
   }
   add_reservation = (name, ppl_num, date, time) =>{
     const new_wl = {
-      id: this.state.all_seats.length + 1,
-      Name: name,
+      id: Math.random().toString(36).substr(2, 9),
+      name: name,
       people: ppl_num,
       date_of_arrival: date,
       estimated_time: time
@@ -407,7 +435,7 @@ class Employee extends Component {
 
     axios.post('/waitlist/newWaitlist', {
       id: new_wl.id,
-      name: new_wl.Name,
+      name: new_wl.name,
       people: new_wl.people,
       date_of_arrival: new_wl.date_of_arrival,
       estimated_time: new_wl.estimated_time

@@ -142,7 +142,7 @@ app.delete('/api/users/:id', (req, res) => {
   const id = req.params.id;
   User.findByIdAndDelete(id)
     .then(() => {
-      res.json('User ' + id + ' deleted.');
+      res.send('User ' + id + ' deleted.');
     })
     .catch(err => {
       res.status(400).json('Error: ' + err);
@@ -153,13 +153,24 @@ app.delete('/api/restaurants/:id', (req, res) => {
   const id = req.params.id;
   Restaurant.findByIdAndDelete(id)
     .then(() => {
-      res.json('Restaurant ' + id + ' deleted.');
+      res.send('Restaurant ' + id + ' deleted.');
     })
     .catch(err => {
       res.status(400).json('Error: ' + err);
     });
 });
 
+app.delete('/api/removeWaitlist/:id', (req, res) => {
+  const id = req.params.id;
+  console.log(id)
+  Waitlist.findByIdAndDelete(id)
+    .then(() => {
+      res.send("Waitlist " + id + " deleted")
+    })
+    .catch(err => {
+      res.status(400).json('Error: ' + err);
+    });  
+})
 
 app.get("/user/info", (req, res) => {
   User.find()
@@ -181,6 +192,15 @@ app.put("/user/:id", (req, res) => {
   });
 });
 
+app.put("/updateWaitlist/:id", (req, res) => {
+  Waitlist.findByIdAndUpdate(req.params.id, req.body, {new: true})
+    .then(() => {
+      res.send("Waitlist " + id + " updated")
+    })
+    .catch(err => {
+      res.status(400).json('Error: ' + err);
+    }); 
+})
 const port = process.env.PORT || 5000;
 app.listen(port, () => {
   log('Listening on port 5000...');
