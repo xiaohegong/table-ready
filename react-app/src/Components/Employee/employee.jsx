@@ -313,6 +313,9 @@ class Employee extends Component {
         if(item == this.state.user_obj){
           tmp.push(null)
         }
+        else{
+          tmp.push(item)
+        }
       });
       this.setState({
         to_be_reserved: tmp,

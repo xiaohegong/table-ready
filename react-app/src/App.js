@@ -69,11 +69,12 @@ function App() {
           />
           <Route
             exact
-            path="/admin"
+            path="/admin/:id"
             render={() => (
               <Admin cookies={{ cookies, setCookie, removeCookie }} />
             )}
           />
+          {/*TODO: REMOVE!!!*/}
           <Route
             exact
             path="/employee"
@@ -83,7 +84,7 @@ function App() {
           />
           <Route
             exact
-            path="/employee"
+            path="/employee/:id"
             render={() => (
               <Employee cookies={{ cookies, setCookie, removeCookie }} />
             )}

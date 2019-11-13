@@ -3,17 +3,18 @@ import {Link} from 'react-router-dom';
 import {Button, Card, CardBody, CardHeader, Col, Row, Table} from 'reactstrap';
 import axios from 'axios';
 
+axios.defaults.baseURL = '../';
+
 const log = console.log;
 
 function UserRow(props) {
     const user = props.user;
     const del = props.delete;
-    const userLink = `/users/${user._id}`;
 
     return (
         <tr key={user._id.toString()}>
-            <th scope="row"><Link to={userLink}>{user.username}</Link></th>
-            <td><Link to={userLink}>{user.name}</Link></td>
+            <th scope="row"><Link to={getUserLink(user)}>{user.username}</Link></th>
+            {/*<td><Link to={""}>{user.name}</Link></td>*/}
             {/*<td>{user.registered}</td>*/}
             <td>{user.tel}</td>
             <td>{user.accountType}</td>
@@ -23,6 +24,19 @@ function UserRow(props) {
             </Button></td>
         </tr>
     );
+}
+
+function getUserLink(user) {
+    let res = `/${user._id}`;
+
+    if (user.accountType === "SuperAdmin") {
+        res = "/sysadmin" + res;
+    } else if (user.accountType === "Admin") {
+        res = "/restaurateur" + res;
+    } else if (user.accountType === "Employee")
+        res = "/employee" + res;
+
+    return res;
 }
 
 class Users extends Component {
@@ -97,7 +111,7 @@ class Users extends Component {
                                     <thead>
                                     <tr>
                                         <th scope="col">Username</th>
-                                        <th scope="col">Name</th>
+                                        {/*<th scope="col">Name</th>*/}
                                         <th scope="col">Phone Number</th>
                                         {/*TODO (xiaohegong) add name, date registered*/}
                                         {/*<th scope="col">registered</th>*/}
