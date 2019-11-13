@@ -35,6 +35,7 @@ class SignIn extends Component {
       alert("incorrect password!")
     }else {
       const userType = user[0].accountType;
+      const userId = user[0]._id;
       if (userType === "SuperAdmin") {
         this.props.cookies.setCookie("cur_user", user[0], {
           path: "/",
@@ -42,13 +43,13 @@ class SignIn extends Component {
         });
         log("sign in successfully!");
         console.log(this.props.cookies.cookies);
-        window.location.href = "/admin"
+        window.location.href = "/admin/" + userId;
       }else if (userType === "Admin") {
         this.props.cookies.setCookie("cur_user", user[0], { path: '/', expires: 0});
-        window.location.href = "/restaurateur"
+        window.location.href = "/restaurateur/" + userId;
       }else if (userType === "Employee"){
         this.props.cookies.setCookie("cur_user", user[0], { path: '/', expires: 0});
-        window.location.href = "/employee"
+        window.location.href = "/employee/" + userId;
       }
     }
   }

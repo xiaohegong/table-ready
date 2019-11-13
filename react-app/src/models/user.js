@@ -24,7 +24,8 @@ const UserSchema = new Schema({
   },
   workFor: {
     type: String,
-    required: false
+    required: true,
+    default: ""
   },
   image: {
     type: String,

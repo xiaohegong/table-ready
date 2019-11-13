@@ -13,8 +13,6 @@ import uid from "uid";
 import axios from "axios";
 import EditRestaurant from "./EditRestaurant";
 
-const queryString = require("query-string");
-
 class RestaurateurPage2 extends Component {
   state = {
     info: [],
@@ -45,7 +43,7 @@ class RestaurateurPage2 extends Component {
 
   is_authenticated = () => {
     const cur_user = this.props.cookies.cookies.cur_user;
-    if (cur_user.accountType != "Employee") {
+    if (cur_user.accountType !== "Employee") {
       return true;
     }
     return false;
@@ -90,7 +88,7 @@ class RestaurateurPage2 extends Component {
     }
     return (
       <div>
-        <Navbar />
+        <Navbar cookies={this.props.cookies} />
         <div className="restaurateur-page-2">
           <div className="container">
             <div className="row">
