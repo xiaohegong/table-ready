@@ -170,21 +170,20 @@ app.post("/restaurant/add_employee", (req, res) => {
 });
 
 app.post("/restaurant/delete_employee", (req, res) => {
-  const restaurant_id = req.body.restaurant_id;
+  // const restaurant_id = req.body.restaurant_id;
   const user_id = req.body.user_id;
-  console.log(restaurant_id);
-  console.log(user_id);
-  User.findById(user_id, (err, user) => {
-    if (err) {
-      console.log(err);
-    } else {
-      user.workFor = user.workFor.filter(
-        restaurant => restaurant !== restaurant_id
-      );
-      user.save();
+  console.log("\n\n\n/restaurant/delete_employee\n\n\n");
+  if (user_id) {
+    User.findByIdAndUpdate(user_id, { workFor: "" }, (err, user) => {
+      if (err) {
+        console.log(err);
+        res.send(err);
+      }
+      console.log("user deleted from restaurant");
+      console.log(user);
       res.send(user);
-    }
-  });
+    });
+  }
 });
 
 app.post("/restaurant/findRestaurant", (req, res) => {
