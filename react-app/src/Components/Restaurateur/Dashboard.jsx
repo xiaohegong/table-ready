@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import "../../Stylesheets/navbar.scss";
 import Employees from "./Employees";
 import GeneralInfo from "./GeneralInfo";
-
+import {Redirect} from 'react-router-dom'
 class Dashboard extends Component {
     state = {
         curState :<GeneralInfo />,
@@ -43,23 +43,37 @@ class Dashboard extends Component {
            curState : this.curState
         })
     }
+    is_authenticated = () => {
+        const cur_user = this.props.cookies.cookies.cur_user
+        if(cur_user.accountType == "Employee"){
+            return false
+        }
+        return true
+    }
     // this.state.functions.map((fun)=>(
     // <button className="nav-item" onClick={this.switchBoard}>{fun.title}</button>
     // ))
     render() {
-        return (
-            <div>
+        if (this.is_authenticated()){
+            return (
                 <div>
-                    {this.state.functions.map((fun)=>(
-                        <button className="nav-item" onClick={this.showComponent.bind(this,fun.id)}>{fun.title}</button>
-                    ))}
+                    <div>
+                        {this.state.functions.map((fun)=>(
+                            <button className="nav-item" onClick={this.showComponent.bind(this,fun.id)}>{fun.title}</button>
+                        ))}
+                    </div>
+                    <div>
+                        {this.state.curState}
+                    </div>
                 </div>
-                <div>
-                    {this.state.curState}
-                </div>
-            </div>
-
-        )
+    
+            )
+        }
+        else{
+            return(
+                <Redirect to = "/error"></Redirect>
+            )
+        }
     }
 }
 
