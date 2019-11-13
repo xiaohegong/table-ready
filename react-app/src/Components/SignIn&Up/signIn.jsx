@@ -29,10 +29,10 @@ class SignIn extends Component {
     console.log(users);
     const user = users.filter(user => user.username === this.state.username);
     if (user.length === 0) {
-      alert("this user is not exist!");
-    } else if (this.state.password !== user[0].password) {
-      alert("incorrect password!");
-    } else {
+      alert("this user does not exist!");
+    }else if (this.state.password !== user[0].password){
+      alert("incorrect password!")
+    }else {
       const userType = user[0].accountType;
       if (userType === "SuperAdmin") {
         this.props.cookies.setCookie("cur_user", user[0], {
@@ -41,11 +41,13 @@ class SignIn extends Component {
         });
         log("sign in successfully!");
         console.log(this.props.cookies.cookies);
-        window.location.href = "/";
-      } else if (userType === "Admin") {
-        window.location.href = "/";
-      } else if (userType === "Employee") {
-        window.location.href = "/";
+        window.location.href = "/admin"
+      }else if (userType === "Admin") {
+        this.props.cookies.setCookie("cur_user", user[0], {path:'/', expires: 0});
+        window.location.href = "/"
+      }else if (userType === "Employee"){
+        this.props.cookies.setCookie("cur_user", user[0], {path:'/', expires: 0});
+         window.location.href = "/employee"
       }
     }
   }
