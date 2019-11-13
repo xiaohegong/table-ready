@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import "../../Stylesheets/restaurateur_page.scss";
 import RestaurantListItem from "./RestaurantListItem";
+import { withRouter } from "react-router-dom";
 import { Redirect } from "react-router-dom";
 import { Link } from "react-router-dom";
 import Navbar from "../Navbar";
@@ -20,7 +21,7 @@ class RestaurateurPage extends Component {
       .post(
         "/restaurant/findRestaurantByOwner",
         {
-          owner: this.props.cookies.cookies.cur_user._id
+          owner: this.props.match.params.id
         },
         header
       )
@@ -37,7 +38,7 @@ class RestaurateurPage extends Component {
 
   is_authenticated = () => {
     const cur_user = this.props.cookies.cookies.cur_user;
-    if (cur_user.accountType != "Employee") {
+    if (cur_user.accountType !== "Employee") {
       return true;
     }
     return false;
@@ -119,4 +120,4 @@ class RestaurateurPage extends Component {
   }
 }
 
-export default RestaurateurPage;
+export default withRouter(RestaurateurPage);

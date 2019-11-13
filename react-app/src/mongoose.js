@@ -7,6 +7,11 @@ function connect() {
 
   return mongoose
     .connect(url, { useNewUrlParser: true })
+    .then(msg => {
+      console.log(
+        " \n\n-----------------\nsuccessfully connected to Database\n-----------------\n\n"
+      );
+    })
     .catch(error => console.log(error));
   //   return mongoose.connect(
   //     url,
