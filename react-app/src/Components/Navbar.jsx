@@ -4,7 +4,9 @@ import "../Stylesheets/navbar.scss";
 import $ from "jquery";
 
 class Navbar extends React.Component {
-  state = {};
+  state = {
+      
+  };
   componentDidMount() {
     $(document).ready(function() {
       // Get click event, assign button to var, and get values from that var
@@ -46,7 +48,7 @@ class Navbar extends React.Component {
   }
 
   getButton(){
-    // console.log(this.props.cookies);
+  
     if (!this.props.cookies.cookies.cur_user) {
       return (
         <div className="btn-group">

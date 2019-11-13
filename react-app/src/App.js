@@ -92,6 +92,12 @@ function App() {
             )}
           />
           <Route
+            exact path = "./error"
+            render = {() => (
+              <NotFound cookies = {{ cookies, setCookie, removeCookie }}></NotFound>
+            )}
+          ></Route>
+          <Route
             exact
             path="/addNewRestaurant"
             render={() => (
