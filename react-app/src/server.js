@@ -38,7 +38,6 @@ app.post("/user/signup", (req, res) => {
     password: req.body.password,
     email: req.body.email,
     tel: req.body.tel,
-    manager: req.body.manager
   });
 
   user
