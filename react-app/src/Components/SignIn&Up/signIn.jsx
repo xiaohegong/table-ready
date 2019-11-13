@@ -35,6 +35,7 @@ class SignIn extends Component {
       alert("incorrect password!")
     }else {
       const userType = user[0].accountType;
+      console.log(userType)
       if (userType === "SuperAdmin") {
         this.props.cookies.setCookie("cur_user", user[0], {
           path: "/",

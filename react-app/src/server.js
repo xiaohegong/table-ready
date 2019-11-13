@@ -254,6 +254,17 @@ app.get("/api/restaurants", (req, res) => {
   });
 });
 
+app.get("/api/empolyee/:id", (req, res) => {
+  const empolyee_id = req.params.id
+  User.find({_id:ObjectID(empolyee_id)}, function(err, single_user) {
+    if (err){
+      console.log(err)
+      return err
+    }
+    res.send(single_user)
+  })
+})
+
 app.delete("/api/users/:id", (req, res) => {
   const id = req.params.id;
   User.findByIdAndDelete(id)

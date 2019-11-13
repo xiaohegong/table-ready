@@ -41,10 +41,8 @@ function App() {
               <SignUp cookies={{ cookies, setCookie, removeCookie }} />
             )}
           />
-          <Route path="/error" component={NotFound} />
           <Route
-            exact
-            path="/restaurateur/:id"
+            exact path="/restaurateur/:id"
             render={() => (
               <RestaurateurPage
                 cookies={{ cookies, setCookie, removeCookie }}
@@ -76,14 +74,7 @@ function App() {
           />
           <Route
             exact
-            path="/employee"
-            render={() => (
-              <Employee cookies={{ cookies, setCookie, removeCookie }} />
-            )}
-          />
-          <Route
-            exact
-            path="/employee"
+            path="/employee/:id"
             render={() => (
               <Employee cookies={{ cookies, setCookie, removeCookie }} />
             )}
@@ -97,7 +88,7 @@ function App() {
             )}
           />
           <Route
-            exact path = "./error"
+            exact path = "/error"
             render = {() => (
               <NotFound cookies = {{ cookies, setCookie, removeCookie }}></NotFound>
             )}

@@ -16,6 +16,7 @@ import VerticalModal from './verticalModal';
 import axios from 'axios';
 import HeaderSubHeader from "semantic-ui-react/dist/commonjs/elements/Header/HeaderSubheader";
 import {Redirect} from 'react-router-dom'
+import { withRouter } from "react-router-dom";
 // fake data generator
 
 // a little function to help us with reordering the result
@@ -241,7 +242,7 @@ class Employee extends Component {
       reservations_color:initial_color,
       user_obj: 0,
       changed: false,
-      modal_show: false
+      modal_show: false,
     };
   }
   fetch_data = () => {
@@ -471,12 +472,18 @@ class Employee extends Component {
   }
 
   is_authenticated = () => {
-    const user = this.props.cookies.cookies.cur_user
-    if (user.accountType != "Admin"){
-      return true
-    }
-    else{
-      return false}
+    // const user = this.props.cookies.cookies.cur_user
+    // if (user.accountType != "Admin"){
+    //   return true
+    // }
+    // else{
+    //   return false
+    // }
+    axios.get(`/api/empolyee/${this.props.match.params.id}`).then(user => {
+      const user_account = user.data[0].accountType
+      
+      
+    })
   }
 
   // Normally you would want to split things out into separate components.
@@ -617,4 +624,4 @@ class Employee extends Component {
   }
 }
 
-export default Employee
+export default withRouter(Employee);
