@@ -2,8 +2,9 @@ import React, { Component } from "react";
 import "../../Stylesheets/signIn&Up.scss";
 import Avatar from "./icon.jpg";
 import Animation from "./animation.jsx";
-// import { Redirect } from 'react-router-dom'
-import axios from "axios";
+import { Redirect } from 'react-router-dom'
+import axios from 'axios';
+import Navbar from "../Navbar";
 const log = console.log;
 class SignIn extends Component {
   constructor(props) {
@@ -43,11 +44,11 @@ class SignIn extends Component {
         console.log(this.props.cookies.cookies);
         window.location.href = "/admin"
       }else if (userType === "Admin") {
-        this.props.cookies.setCookie("cur_user", user[0], {path:'/', expires: 0});
-        window.location.href = "/"
+        this.props.cookies.setCookie("cur_user", user[0], { path: '/', expires: 0});
+        window.location.href = "/restaurateur"
       }else if (userType === "Employee"){
-        this.props.cookies.setCookie("cur_user", user[0], {path:'/', expires: 0});
-         window.location.href = "/employee"
+        this.props.cookies.setCookie("cur_user", user[0], { path: '/', expires: 0});
+        window.location.href = "/employee"
       }
     }
   }
@@ -76,7 +77,8 @@ class SignIn extends Component {
   render() {
     return (
       <div id="signIn-Up">
-        <Animation />
+        <Navbar cookies={this.props.cookies}/>
+        <Animation/>
         <div id="divPage">
           <div className="container">
             <img id="avatar" src={Avatar} alt="Avatar" />
