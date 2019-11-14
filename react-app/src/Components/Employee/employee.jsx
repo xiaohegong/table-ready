@@ -248,8 +248,18 @@ class Employee extends Component {
     };
   }
   componentDidMount() {
-    axios.get(`/api/empolyee/${this.props.match.params.id}`).then(user => {
-      this.setState({loading:false,valid:true})
+    axios.get(`/api/empolyee/${this.props .match.params.id}`).then(user => {
+      if (user.data.length === 0){
+        this.setState({loading:false, valid:false})
+      }
+      else{
+        if (user.data[0]._id !== this.props.cookies.cookies.cur_user._id){
+          this.setState({loading:false,valid:true})
+        }
+        else{
+          this.setState({loading:false, valid:false})
+        }
+      }
     })
   }
   fetch_data = () => {
