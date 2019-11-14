@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import axios from "axios";
 import "../../Stylesheets/restaurateur_page.scss";
-import { Redirect } from 'react-router-dom'
+import { Redirect } from 'react-router-dom';
+import { withRouter } from "react-router-dom";
 
 class NewRestaurant extends Component {
   constructor(props) {
@@ -66,7 +67,7 @@ class NewRestaurant extends Component {
     const { redirect } = this.state;
 
     if (redirect) {
-      return <Redirect to='/'/>;
+      return <Redirect to={`/restaurateur/${this.props.location.state.id}`}/>;
     }
     return (
       <div className="new-restaurant-page">
@@ -137,11 +138,11 @@ class NewRestaurant extends Component {
                   </span>
                 </div>
                 <input
-                    type="text"
-                    className="form-control"
-                    placeholder="Operation Hours"
-                    id="hours"
-                    name="hours"
+                  type="text"
+                  className="form-control"
+                  placeholder="Operation Hours"
+                  id="hours"
+                  name="hours"
                 />
               </div>
 
@@ -159,4 +160,4 @@ class NewRestaurant extends Component {
   }
 }
 
-export default NewRestaurant;
+export default withRouter(NewRestaurant);
