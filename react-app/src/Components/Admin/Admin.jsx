@@ -7,18 +7,30 @@ import {
   ButtonGroup,
   Button
 } from 'reactstrap';
+import { withRouter } from "react-router-dom";
 import { Route, Redirect } from 'react-router'
 import Navbar from "../Navbar";
-
+import axios from 'axios';
 
 const log = console.log;
 
 class Admin extends Component {
-  state = {
     // default view
-    page: 'overview'
-  };
+    constructor(props) {
+      super(props);
+      this.state = {
+        page: 'overview',
+        valid: null,
+        loading:true
+      };
+    }
 
+  componentDidMount() {
+    console.log(this.props.match)
+    axios.get(`/api/get_user/${this.props.match.params.id}`).then(user => {
+      this.setState({loading:false,valid:true})
+    })
+  }
   chooseOverview = (e) => {
     this.setState({page: 'overview'});
     this.setActive(e);
@@ -70,33 +82,37 @@ class Admin extends Component {
   };
 
   render() {
-    if (this.is_authenticated()){
-      return (
-        <div className='admin-page'>
-          <Navbar cookies={this.props.cookies}/>
-          <div className="row menu-bar">
-            <div className="col-sm-8 menu d-flex justify-content-lg-center">
-              <ButtonGroup size={"lg"}>
-                <Button outline color="danger" active={true} size="lg" onClick={this.chooseOverview}>Overview
-                </Button>
-                <Button outline color="danger" size="lg" onClick={this.chooseManage}>Manage
-                </Button>
-                <Button outline color="danger" size="lg" onClick={this.chooseSetting}>Setting
-                </Button>
-              </ButtonGroup>
+    if (!this.state.loading){
+      if (!this.state.valid == true){
+        return (
+          <div className='admin-page'>
+            <Navbar cookies={this.props.cookies}/>
+            <div className="row menu-bar">
+              <div className="col-sm-8 menu d-flex justify-content-lg-center">
+                <ButtonGroup size={"lg"}>
+                  <Button outline color="danger" active={true} size="lg" onClick={this.chooseOverview}>Overview
+                  </Button>
+                  <Button outline color="danger" size="lg" onClick={this.chooseManage}>Manage
+                  </Button>
+                  <Button outline color="danger" size="lg" onClick={this.chooseSetting}>Setting
+                  </Button>
+                </ButtonGroup>
+              </div>
             </div>
+            <div className="admin-content">{this.showContent()}</div>
           </div>
-          <div className="admin-content">{this.showContent()}</div>
-        </div>
-      )
-    }
+        )
+      }
     else {
       return(
         <Redirect to = "/error"></Redirect> 
       )
     }
   }
-
+  else{
+    return null
+  }
+  }
 }
 
-export default Admin;
+export default withRouter(Admin);

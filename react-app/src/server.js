@@ -305,6 +305,16 @@ app.get("/user/info", (req, res) => {
     .catch(error => res.status(400).json("Err " + error));
 });
 
+app.get("/api/get_user/:id", (req, res) => {
+  const empolyee_id = req.params.id
+  User.find({_id:ObjectID(empolyee_id)}, function(err, single_user) {
+    if (err){
+      console.log(err)
+      return err
+    }
+    res.send(single_user)
+  })
+})
 // update the information of the user specified by the id.
 app.put("/user/:id", (req, res) => {
   log("this body is: " + req.body.email);
