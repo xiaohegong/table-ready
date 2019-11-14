@@ -73,7 +73,7 @@ class Navbar extends React.Component {
   }
 
   logout() {
-    this.props.cookies.removeCookie("cur_user");
+    this.props.cookies.removeCookie("cur_user", { path: "/" });
     window.location.href = "/SignIn"
   }
 
