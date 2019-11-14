@@ -9,6 +9,7 @@ const { ObjectID } = require("mongodb");
 const User = require("./models/user.js");
 const Restaurant = require("./models/Restaurant.js");
 const MenuItem = require("./models/MenuItem.js");
+const Waitlist = require("./models/waitlist.js")
 
 /* Use statements for the server */
 app.use(express.static("public"));
@@ -155,6 +156,19 @@ app.post("/restaurant/updateDressCode", (req, res) => {
   );
 });
 
+app.post("/restaurant/updateReservation", (req, res) => {
+  Restaurant.findByIdAndUpdate(req.body._id, {
+    reservations: req.body.reservations
+  }).then(
+    user => {
+      res.send(user);
+    },
+    error => {
+      res.send({ code: 404, error });
+    }
+  );
+});
+
 app.post("/restaurant/add_employee", (req, res) => {
   // res.send("1000");
   const username = req.body.username;
@@ -210,16 +224,30 @@ app.post("/waitlist/newWaitlist", (req, res) => {
   waitlist
     .save()
     .then(waitlist => {
-      res.send("waitlist" + waitlist.name + " saved to database");
+      res.send(waitlist._id);
     })
     .catch(err => {
       log(err);
-      res.send({ code: 404, error });
+      res.send({ code: 404, err});
     });
 });
 
 app.post("/waitlist/getWaitlist", (req, res) => {
   Waitlist.find().then(
+    waitlist => {
+      res.send(waitlist);
+    },
+    error => {
+      res.send({ code: 404, error });
+    }
+  );
+  // return new Promise((resolve, reject) => {
+  //
+  // });
+});
+
+app.post("/waitlist/getWaitlistById", (req, res) => {
+  Waitlist.find({ _id: req.body._id }).then(
     waitlist => {
       res.send(waitlist);
     },
@@ -318,9 +346,19 @@ app.put("/updateWaitlist/:id", (req, res) => {
       res.send("Waitlist " + id + " updated");
     })
     .catch(err => {
-      res.status(400).json("Error: " + err);
-    });
-});
+      res.status(400).json('Error: ' + err);
+    }); 
+})
+
+app.put("/updateRestWaitlist/:id", (req, res) => {
+  Restaurant.findByIdAndUpdate(req.params.id, req.body, {new: true})
+    .then(() => {
+      res.send("Rest Waitlist " + id + " updated")
+    })
+    .catch(err => {
+      res.status(400).json('Error: ' + err);
+    }); 
+})
 const port = process.env.PORT || 5000;
 app.listen(port, () => {
   log("Listening on port 5000...");
