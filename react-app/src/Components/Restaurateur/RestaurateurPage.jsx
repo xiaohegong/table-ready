@@ -35,15 +35,13 @@ class RestaurateurPage extends Component {
         console.log(400);
       });
   }
-
   is_authenticated = () => {
     const cur_user = this.props.cookies.cookies.cur_user;
     if (cur_user.accountType !== "Employee") {
       return true;
     }
-    return false;
-  };
-
+    return false
+  }
   render() {
     if (!this.is_authenticated()) {
       return <Redirect to="/error" />;
@@ -111,13 +109,27 @@ class RestaurateurPage extends Component {
                     ))}
                   </div>
                 </div>
+                <ul className="list-group">
+                  <li className="list-group-item">
+                    <strong>Email: </strong>name@email.com
+                  </li>
+                  <li className="list-group-item">
+                    <strong>Telephone: </strong>123-456-7890
+                  </li>
+                  <li className="list-group-item">
+                    <strong>Address: </strong>788 Creek Lane Simpsonville, SC
+                    29680
+                  </li>
+                </ul>
               </div>
+  
             </div>
           </div>
         </div>
-      </div>
-    );
-  }
+        </div>
+      );
+    }
+  
 }
 
 export default withRouter(RestaurateurPage);

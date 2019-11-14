@@ -16,33 +16,49 @@ import {
   Row,
 } from 'reactstrap';
 
+axios.defaults.baseURL = '../';
+
 class Setting extends Component {
-  state = {};
+  constructor(props) {
+    super(props);
+    this.confirmChange = this.confirmChange.bind(this);
+  }
 
   confirmChange = () => {
     const new_email = document.getElementById("nf-email").value;
     const new_password = document.getElementById("nf-password").value;
-    // get the id of the current user
-    const cur_info = this.props.cookies.cookies.cur_user._id;
-    console.log('the cookie is: ' + cur_info);
-    const link = 'user/' + cur_info;
-    const new_user_info = {
-      "_id": "5dc4e1a94276c30e4cfbbba3",
-      "accountType": "SuperAdmin",
-      "username": "dahai",
-      "password": new_password,
-      "email": new_email,
-      "tel": "1234567890",
-      "manager": "",
-      "__v": 0
-    };
-    axios.put(link, new_user_info)
-      .then(res => {
-        console.log('User info updated!');
-      })
-      .catch(err => {
-        console.log(err);
-      });
+    if (new_email === '' || new_password === '') {
+      alert("Please fill all boxes!");
+    } else {
+      const cur_info = this.props.id;
+      const link = '/user/' + cur_info;
+      console.log(cur_info);
+      console.log("above is curr user id");
+      console.log(link);
+      let old_user_info;
+      axios.get(link)
+        .then(res => {
+          old_user_info = res.data;
+          old_user_info.password = new_password;
+          old_user_info.email = new_email;
+          axios.put(link, old_user_info)
+            .then(res => {
+              console.log('User info updated!');
+            })
+            .catch(err => {
+              console.log(err);
+            });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+
+  };
+
+  resetInputBox = () => {
+    document.getElementById('nf-password').value='';
+    document.getElementById('nf-email').value='';
   };
 
   render() {
@@ -139,7 +155,7 @@ class Setting extends Component {
               <CardFooter>
                 <Button type="submit" size="sm" color="primary" onClick={this.confirmChange}><i
                   className="fa fa-dot-circle-o"></i> Submit</Button>
-                <Button type="reset" size="sm" color="danger"><i
+                <Button type="reset" size="sm" color="danger" onClick={this.resetInputBox}><i
                   className="fa fa-ban"></i> Reset</Button>
               </CardFooter>
             </Card>

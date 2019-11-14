@@ -12,7 +12,8 @@ import Admin from "./Components/Admin/Admin";
 import Employee from "./Components/Employee/employee";
 import "./App.scss";
 import { withCookies, useCookies } from "react-cookie";
-import NotFound from "./Components/page_not_found/page_not_found";
+// import NotFound from "./Components/page_not_found/page_not_found";
+import NotFound from "./Components/page_not_found/404";
 import NewRestaurant from "./Components/Restaurateur/NewRestaurant";
 import AddNewMenuItem from "./Components/Restaurateur/AddNewMenuItem";
 
@@ -69,11 +70,12 @@ function App() {
           />
           <Route
             exact
-            path="/admin"
+            path="/admin/:id"
             render={() => (
               <Admin cookies={{ cookies, setCookie, removeCookie }} />
             )}
           />
+          {/*TODO: REMOVE!!!*/}
           <Route
             exact
             path="/employee"
@@ -83,7 +85,7 @@ function App() {
           />
           <Route
             exact
-            path="/employee"
+            path="/employee/:id"
             render={() => (
               <Employee cookies={{ cookies, setCookie, removeCookie }} />
             )}

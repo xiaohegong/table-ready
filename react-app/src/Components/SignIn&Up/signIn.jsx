@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import "../../Stylesheets/signIn&Up.scss";
 import Avatar from "./icon.jpg";
 import Animation from "./animation.jsx";
-import { Redirect } from 'react-router-dom'
+// import { Redirect } from 'react-router-dom'
 import axios from 'axios';
 import Navbar from "../Navbar";
 const log = console.log;
@@ -10,19 +10,19 @@ class SignIn extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      accountType: "employee",
+      // accountType: "employee",
       username: "",
       password: ""
     };
-    this.handleChange = this.handleChange.bind(this);
+    // this.handleChange = this.handleChange.bind(this);
     this.handleSignIn = this.handleSignIn.bind(this);
     this.handleUsername = this.handleUsername.bind(this);
     this.handlePassword = this.handlePassword.bind(this);
   }
 
-  handleChange(event) {
-    this.setState({ accountType: event.target.value });
-  }
+  // handleChange(event) {
+  //   this.setState({ accountType: event.target.value });
+  // }
 
   handleSignIn(event) {
     event.preventDefault();
@@ -35,6 +35,7 @@ class SignIn extends Component {
       alert("incorrect password!")
     }else {
       const userType = user[0].accountType;
+      const userId = user[0]._id;
       if (userType === "SuperAdmin") {
         this.props.cookies.setCookie("cur_user", user[0], {
           path: "/",
@@ -42,13 +43,13 @@ class SignIn extends Component {
         });
         log("sign in successfully!");
         console.log(this.props.cookies.cookies);
-        window.location.href = "/admin"
+        window.location.href = "/admin/" + userId;
       }else if (userType === "Admin") {
         this.props.cookies.setCookie("cur_user", user[0], { path: '/', expires: 0});
-        window.location.href = "/restaurateur"
+        window.location.href = "/restaurateur/" + userId;
       }else if (userType === "Employee"){
         this.props.cookies.setCookie("cur_user", user[0], { path: '/', expires: 0});
-        window.location.href = "/employee"
+        window.location.href = "/employee/" + userId;
       }
     }
   }
@@ -86,22 +87,22 @@ class SignIn extends Component {
           </div>{" "}
           <br />
           <br />
-          <div className="input-group mb-3">
-            <div className="input-group-prepend">
-              <span className="input-group-text" id="inputGroup-sizing-default">
-                Type
-              </span>
-            </div>
-            <select
-              className="form-control"
-              value={this.state.accountType}
-              onChange={this.handleChange}
-            >
-              <option value="SuperAdmin">SuperAdmin</option>
-              <option value="Admin">Admin</option>
-              <option value="Employee">Employee</option>
-            </select>
-          </div>
+          {/*<div className="input-group mb-3">*/}
+          {/*  <div className="input-group-prepend">*/}
+          {/*    <span className="input-group-text" id="inputGroup-sizing-default">*/}
+          {/*      Type*/}
+          {/*    </span>*/}
+          {/*  </div>*/}
+          {/*  <select*/}
+          {/*    className="form-control"*/}
+          {/*    value={this.state.accountType}*/}
+          {/*    onChange={this.handleChange}*/}
+          {/*  >*/}
+          {/*    <option value="SuperAdmin">SuperAdmin</option>*/}
+          {/*    <option value="Admin">Admin</option>*/}
+          {/*    <option value="Employee">Employee</option>*/}
+          {/*  </select>*/}
+          {/*</div>*/}
           <div className="input-group mb-3">
             <div className="input-group-prepend">
               <span className="input-group-text" id="inputGroup-sizing-default">
