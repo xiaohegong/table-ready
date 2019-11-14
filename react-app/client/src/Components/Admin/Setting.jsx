@@ -52,13 +52,14 @@ class Setting extends Component {
         .catch((error) => {
           console.log(error);
         });
+      console.log("update completed!")
     }
 
   };
 
   resetInputBox = () => {
-    document.getElementById('nf-password').value='';
-    document.getElementById('nf-email').value='';
+    document.getElementById('nf-password').value = '';
+    document.getElementById('nf-email').value = '';
   };
 
   render() {

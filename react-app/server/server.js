@@ -6,16 +6,16 @@ const express = require("express");
 const bodyParser = require("body-parser"); // middleware for parsing HTTP body
 const app = express();
 const {ObjectID} = require("mongodb");
-const User = require("./models/user.js");
-const Restaurant = require("./models/Restaurant.js");
-const MenuItem = require("./models/MenuItem.js");
-const Waitlist = require("./models/waitlist.js")
+const User = require("../models/user.js");
+const Restaurant = require("../models/Restaurant.js");
+const MenuItem = require("../models/MenuItem.js");
+const Waitlist = require("../models/waitlist.js");
 
 /* Use statements for the server */
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
-require("./mongoose").connect();
+require("../client/src/mongoose.js").connect();
 
 app.get("/", (req, res) => {
   res.send("Hello World");
