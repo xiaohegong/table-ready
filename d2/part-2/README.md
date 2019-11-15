@@ -95,5 +95,5 @@ https://table-ready.herokuapp.com/
 - "Manage" displays the list of all users and restaurant registered in the system. You can
   - search an user/restaurant using the search bar,
   - remove an user/restaurant by clicking on "Delete" button.
-  - go to the user/restaurant by clicking on their name. 
+  - go to the user/restaurant by clicking on their name (recall that if you go in a super admin's page, this will just stay on this page since they all share the same interface and if you go in a employee's page who is unemployed, that would return a 404 page).  
 - "Settings" lets the system admin user to update his/her email and password. The payment info section will be implemented in d3. 
