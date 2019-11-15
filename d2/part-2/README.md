@@ -52,6 +52,12 @@ For Employees, the key features are:
                 - Menu
                     * add menu item by clicking add new button
                     * delete menu item by clicking delete button
-                
+	- At the employee page:
+		- If the current login user is not working at any restaurant right now, the page will be redirected to a error page.
+		- If the current login user is working at a restaurant, he will be directed to the employee page. There are few elements on the page he can interact with:
+			* There is an input box on the top center. When you click on that, there will be a date picker that allows you to select the current date.
+			* After selecting a date, click on the confirm button next to the input box to display the current reservations on that specific date. The reservations displayed only belongs to the current restaurant. Employees can't see reservations for other restaurant.
+            * If you want to add another reservation, click the "add reservation" button next to the confirm button. This will bring a pop up window that allows the user to fill in the specific information about the reservation. After filling out all of them, click the submit button to add reservation.
+        - To put a reservation from the waitlist to an empty table, click on the check mark button on the reservation card. This will bring up a horizontal menu. One the left of the menu are all the reservation you want to serve. On the right of the menu are all the table status. Green indicates the table is currently occupied. You can drag the reservation card on the left and drop it on one of the empty table. If the capacity of the table does not meet the requirement, the backgroun will be red and dropping the card on that table will have no effect. If the capacity of the table meets the requirement, then the background will turn green, and dropping the card will change the status of the reservation from not served to served.
+        - If you are done with one of the reservation, click on the "stopping" button next to the "check" button on the card to remove it.
  * If you cannot deploy your application for technical reasons, please let your TA know at the beginning of the iteration. You will need to demo the application to your partner either way.
-
