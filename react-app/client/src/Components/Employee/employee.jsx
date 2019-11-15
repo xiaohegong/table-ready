@@ -268,21 +268,31 @@ class Employee extends Component {
         if (user.data[0].accountType !== "Employee"){
           this.setState({loading:false, valid:false})
         }
-        if (this.props.cookies.cookies.cur_user.accountType === "SuperAdmin" ){
-          this.setState({loading:false, valid:true, employee_obj:user.data[0]})
-          this.fetch_data()
-        }
-        else if (this.props.cookies.cookies.cur_user.accountType === "Admin"){
+        else if (user.data[0].accountType === "Employee" && user.data[0].workFor === ""){
           this.setState({loading:false, valid:false})
         }
-        else {
-          if (this.props.cookies.cookies.cur_user._id === user.data[0]._id){
-            this.setState({loading:false, valid:true, employee_obj: user.data[0]})
+        else{
+          if (this.props.cookies.cookies.cur_user.accountType === "SuperAdmin" ){
+            this.setState({loading:false, valid:true, employee_obj:user.data[0]})
             this.fetch_data()
           }
-          else{
+          else if (this.props.cookies.cookies.cur_user.accountType === "Admin"){
             this.setState({loading:false, valid:false})
           }
+          else {
+            if (user.data[0].workFor === ""){
+              this.setState({loading:false, valid:false})
+            }
+            else{
+              if (this.props.cookies.cookies.cur_user._id === user.data[0]._id){
+                this.setState({loading:false, valid:true, employee_obj: user.data[0]})
+                this.fetch_data()
+              }
+              else{
+                this.setState({loading:false, valid:false})
+              }
+            }
+          } 
         }
       }
       
@@ -317,66 +327,48 @@ class Employee extends Component {
     
 
   }
-  update_rest_waitlist = (rest_id) => {
-    const header = {
-      headers: {'Accept': 'application/json',
-          'Content-Type': 'application/json'
-      }
-    };  
+  update_rest_waitlist = (rest_id) => { 
+    console.log("hiii")
     axios.post("/restaurant/findRestaurant", {_id: rest_id})
-      .then(res => this.setState({rest_obj: res.data[0]}))
-      .then(() => {
-        if(this.state.rest_obj != undefined){
+      .then(res => {
+        this.setState({rest_obj: res.data[1][0]})
+        this.setState({all_seats: res.data[0]})
+        if(this.state.current_date != null){
           this.setState({
-            all_seats: []
+            items: this.state.all_seats.filter(value => value.date_of_arrival == this.state.current_date)
           })
-          this.state.rest_obj.reservations.forEach(element => {
-            axios.post("/waitlist/getWaitlistById",{_id: element})
-              .then((res) => {
-                
-                this.setState({
-                  all_seats: [...this.state.all_seats, res.data[0]]
-                })
-                this.setState({
-                  items: this.state.all_seats.filter(
-                    value => value.date_of_arrival == this.state.current_date
-                  ) 
-                })
-              })
-              .catch(function (error){
-                console.log(error);
-              })
-          });
-      }})
-      .catch(function (error){
-        console.log(error);
-    })
-    
-    console.log(this.state.all_seats)
+        }
+      })
 
-      // axios.put('/updateRestWaitlist/' + rest_id, {
-      //   id: new_wl.id,
-      //   name: new_wl.name,
-      //   people: new_wl.people,
-      //   date_of_arrival: new_wl.date_of_arrival,
-      //   estimated_time: new_wl.estimated_time
-      // },header)
-      //   .then((response) => {
-      //       console.log(response);
-      //   }, (error) => {
-      //       console.log(error);
-      //   });
+      // .then(() => {
+      //   if(this.state.rest_obj != undefined){
+      //     this.setState({
+      //       all_seats: []
+      //     })
+          // this.state.rest_obj.reservations.forEach(element => {
+          //   axios.post("/waitlist/getWaitlistById",{_id: element})
+          //     .then((res) => {
+          //       let tmp_seats = [...this.state.all_seats, res.data[0]]
+          //       let values = tmp_seats.filter(value => value.date_of_arrival == this.state.current_date)
+          //       this.setState({
+          //         all_seats: tmp_seats, items:values
+          //       })
+          //     })
+          //     .catch(function (error){
+          //       console.log(error);
+          //     })
+          // }
+
+          // );
+      // }})
+      // .catch(function (error){
+      //   console.log(error);
+    // })
+    
+    // console.log(this.state.all_seats)
 
   }
   fetch_data = () => {
-    
-    const header = {
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json"
-      }
-    }; 
-    
     this.update_rest_waitlist(this.state.employee_obj.workFor)
   }
   delete_data = (data) => {
@@ -675,7 +667,7 @@ class Employee extends Component {
             <Navbar cookies={this.props.cookies}/>
             <div id = "cal" style={{height: '80px'}}>
               <DatePicker onChange={(value)=>this.showdate(value)} showDefaultIcon></DatePicker>
-              <button id = "date-confirm" onClick={()=>this.filter_date()}>Confirm</button>
+              <button id  = "date-confirm" onClick={()=>this.filter_date()}>Confirm</button>
               <button id = "date-confirm" onClick={()=>this.setModalState(true)}>Add Reservation</button>
             </div>
             <CardColumns id = "content-wrapper">
