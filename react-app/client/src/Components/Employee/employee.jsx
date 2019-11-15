@@ -339,7 +339,6 @@ class Employee extends Component {
           })
         }
       })
-<<<<<<< HEAD
 
       // .then(() => {
       //   if(this.state.rest_obj != undefined){
@@ -360,28 +359,6 @@ class Employee extends Component {
           //     })
           // }
 
-=======
-
-      // .then(() => {
-      //   if(this.state.rest_obj != undefined){
-      //     this.setState({
-      //       all_seats: []
-      //     })
-          // this.state.rest_obj.reservations.forEach(element => {
-          //   axios.post("/waitlist/getWaitlistById",{_id: element})
-          //     .then((res) => {
-          //       let tmp_seats = [...this.state.all_seats, res.data[0]]
-          //       let values = tmp_seats.filter(value => value.date_of_arrival == this.state.current_date)
-          //       this.setState({
-          //         all_seats: tmp_seats, items:values
-          //       })
-          //     })
-          //     .catch(function (error){
-          //       console.log(error);
-          //     })
-          // }
-
->>>>>>> 8cc84f0956375f5846e46e64306c3933b68a71bf
           // );
       // }})
       // .catch(function (error){
@@ -690,13 +667,8 @@ class Employee extends Component {
             <Navbar cookies={this.props.cookies}/>
             <div id = "cal" style={{height: '80px'}}>
               <DatePicker onChange={(value)=>this.showdate(value)} showDefaultIcon></DatePicker>
-<<<<<<< HEAD
               <button id  = "date-confirm" onClick={()=>this.filter_date()}>Confirm</button>
               <button id = "date-confirm" onClick={()=>this.setModalState(true)}>Add Reservation</button>
-=======
-              <button className = "date-confirm" onClick={()=>this.filter_date()}>Confirm</button>
-              <button className = "date-confirm" onClick={()=>this.setModalState(true)}>Add Reservation</button>
->>>>>>> 8cc84f0956375f5846e46e64306c3933b68a71bf
             </div>
             <CardColumns id = "content-wrapper">
               {
