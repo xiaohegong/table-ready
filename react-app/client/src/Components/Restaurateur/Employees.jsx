@@ -44,9 +44,10 @@ class Employees extends Component {
   deleteEmployee = id => {
     console.log(id);
     const employees = this.state.employees;
+    const fetchEmployees = this.fetchEmployee;
     for (let i = 0; i < employees.length; i++) {
       if (employees[i]._id === id) {
-        employees.splice(i, 1);
+        // employees.splice(i, 1);
         axios
           .post("/restaurant/delete_employee", {
             restaurant_id: this.props.res_id,
@@ -54,6 +55,7 @@ class Employees extends Component {
           })
           .then(msg => {
             console.log(msg);
+            fetchEmployees();
           })
           .catch(err => {
             console.log(err);
@@ -67,6 +69,7 @@ class Employees extends Component {
     const employee_username = document.getElementById("add-employee-input")
       .value;
     console.log(`employee to be added: ${employee_username}`);
+    const fetchEmployees = this.fetchEmployee;
     axios
       .post("/restaurant/add_employee", {
         restaurant_id: this.props.res_id,
@@ -75,8 +78,7 @@ class Employees extends Component {
       .then(function(response) {
         console.log(response);
         console.log("added");
-        // window.location.href = "/restaurateur2/" + this.props.match.params.id;
-        window.location.reload();
+        fetchEmployees();
       })
       .catch(function(error) {
         console.log(error);
