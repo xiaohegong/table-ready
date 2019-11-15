@@ -74,6 +74,9 @@ class Employees extends Component {
       })
       .then(function(response) {
         console.log(response);
+        console.log("added");
+        // window.location.href = "/restaurateur2/" + this.props.match.params.id;
+        window.location.reload();
       })
       .catch(function(error) {
         console.log(error);

@@ -206,7 +206,9 @@ app.post("/restaurant/add_employee", (req, res) => {
     User.findOneAndUpdate(
       { username: username },
       { workFor: restaurant_id }
-    ).then(user => {});
+    ).then(user => {
+      res.send(user);
+    });
   }
 });
 
