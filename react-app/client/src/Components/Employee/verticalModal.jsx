@@ -7,11 +7,11 @@ import { DatePicker } from "@y0c/react-datepicker";
 
 class VerticalModal extends React.Component {
   state = {
-    name: " ",
+    name: null,
     ppl_number: 0,
-    date: " ",
+    date: null,
     time_arrive: null,
-    time: " "
+    time: null
   };
   showdate = value => {
     const year = value.$y;
@@ -42,10 +42,10 @@ class VerticalModal extends React.Component {
                   placeholder="name"
                 ></Form.Control>
               </Form.Group>
-              <Form.Group as={Col} md="2">
+              <Form.Group as={Col} md="3">
                 <Form.Control
-                  onChange={e => (this.state.ppl_number = e.target.value)}
-                  placeholder="1"
+                  onChange={e => (this.state.ppl_number = Number(e.target.value))}
+                  placeholder="Guest #"
                 ></Form.Control>
               </Form.Group>
             </Form.Row>
@@ -53,7 +53,7 @@ class VerticalModal extends React.Component {
               <Form.Group as={Col} md="auto">
                 <Form.Control
                   onChange={e => (this.state.time = e.target.value)}
-                  placeholder="6:30pm"
+                  placeholder="Time of arrival"
                 ></Form.Control>
               </Form.Group>
               <Form.Group as={Col} md="auto">

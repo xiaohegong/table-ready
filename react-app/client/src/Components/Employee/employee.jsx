@@ -324,6 +324,9 @@ class Employee extends Component {
             console.log(error);
           })
       })
+      .catch((error) => {
+        console.log(error);
+      })
     
 
   }
@@ -562,17 +565,29 @@ class Employee extends Component {
       date_of_arrival: date,
       estimated_time: time
     }
-    
-    this.setModalState(false)
-    this.create_waitlist(new_wl)
-    
+    if(name === null || name === ""){
+      alert("Name requires")
+    }
+    else if(Number.isInteger(ppl_num) === false){
+      alert("Number of people needs to be a number")
+    }
+    else if(date === null || date === ""){
+      alert("You need to select a date")
+    }
+    else if(time === null || time === ""){
+      alert("Time requires")
+    }
+    else{
+      this.setModalState(false)
+      this.create_waitlist(new_wl)
+    }
   }
   render_button = (index) =>{
     if(this.state.items[index].reserved){
       return null
     }
     else{
-      return <button class="accept-button" onClick = {(e) => this.change_menu_state(index)} onMouseDown = {this.removefocus}><img src = {process.env.PUBLIC_URL + "/images/restaurant_images/done-tick.png"}></img></button>
+      return <button className="accept-button" onClick = {(e) => this.change_menu_state(index)} onMouseDown = {this.removefocus}><img src = {process.env.PUBLIC_URL + "/images/restaurant_images/done-tick.png"}></img></button>
     }
   }
 
@@ -614,7 +629,7 @@ class Employee extends Component {
                     </div>
                     <div className = "user_profile_holder">
                       <div className = "check-container">  
-                        <button class="reject-button" onClick = {(e) => this.remove_from_reserved(index)} onMouseDown = {this.removefocus}><img src = {process.env.PUBLIC_URL + "/images/restaurant_images/no-stopping.png"}></img></button>
+                        <button className="reject-button" onClick = {(e) => this.remove_from_reserved(index)} onMouseDown = {this.removefocus}><img src = {process.env.PUBLIC_URL + "/images/restaurant_images/no-stopping.png"}></img></button>
                       </div>
                     </div>
                   </Card.Body>
@@ -634,14 +649,17 @@ class Employee extends Component {
                 {
                   draggables.map((item,index) => (
                     //Fix bug
-                    item
+                    <div key={index}>
+                      {item}
+                    </div>
+                    
                   ))
                 }
               </span>
               <span id = "avaliable_seats_container" onMouseDown = {this.removefocus}>
                 {
                   this.state.all_table.map((item,index) => (
-                    <Card id = {`Table-${index}`} className = "tablecard" style={{backgroundColor:this.state.reservations_color[index],  width: '18rem' }}  onMouseOver = {(e) => this.handleMouseOver(index)} onMouseLeave = {() => this.resumecard(index)}>
+                    <Card key={index} id = {`Table-${index}`} className = "tablecard" style={{backgroundColor:this.state.reservations_color[index],  width: '18rem' }}  onMouseOver = {(e) => this.handleMouseOver(index)} onMouseLeave = {() => this.resumecard(index)}>
                       <Card.Header className = "header-of-card">
                         <div className = "pic-container">
                           <strong>
@@ -656,7 +674,7 @@ class Employee extends Component {
                         </div>
                         <div className = "user_profile_holder">
                           <div className = "check-container">  
-                              <button class="reject-button" onClick = {(e) => this.empty_seats(index)} onMouseDown = {this.removefocus}><img src = {process.env.PUBLIC_URL + "/images/restaurant_images/no-stopping.png"}></img></button>
+                              <button className="reject-button" onClick = {(e) => this.empty_seats(index)} onMouseDown = {this.removefocus}><img src = {process.env.PUBLIC_URL + "/images/restaurant_images/no-stopping.png"}></img></button>
                           </div>
                         </div>
                       </Card.Body>
@@ -675,7 +693,7 @@ class Employee extends Component {
             <CardColumns id = "content-wrapper">
               {
                 this.state.items.map((item,index) => (
-                  <Card className = "usercard" bg="light" style={{ width: '18rem' }}>
+                  <Card key={index} className = "usercard" bg="light" style={{ width: '18rem' }}>
                     <Card.Header className = "header-of-card">
                       <div className = "pic-container">
                         <strong>
@@ -699,7 +717,7 @@ class Employee extends Component {
                       <div className = "user_profile_holder">
                         <div className = "check-container">  
                             {this.render_button(index)}
-                            <button class="reject-button" onClick = {(e) => this.remove_reservation_from_items(index)} onMouseDown = {this.removefocus}><img src = {process.env.PUBLIC_URL + "/images/restaurant_images/no-stopping.png"}></img></button>
+                            <button className="reject-button" onClick = {(e) => this.remove_reservation_from_items(index)} onMouseDown = {this.removefocus}><img src = {process.env.PUBLIC_URL + "/images/restaurant_images/no-stopping.png"}></img></button>
                         </div>
                       </div>
                     </Card.Body>

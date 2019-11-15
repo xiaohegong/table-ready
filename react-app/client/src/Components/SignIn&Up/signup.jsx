@@ -89,6 +89,9 @@ class SignUp extends Component {
       alert("telephone should be length of 10");
     } else if (!email.includes("@") && !email.includes(".")) {
       alert("enter proper email");
+    }
+    else if(password.length < 4){
+      alert("Password too short, need to be at least 4 character.")
     }else {
       const users = this.state.users;
       if (users.filter(user => user.username === username).length !== 0) {
