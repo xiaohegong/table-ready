@@ -75,14 +75,6 @@ function App() {
               <Admin cookies={{ cookies, setCookie, removeCookie }} />
             )}
           />
-          {/*TODO: REMOVE!!!*/}
-          <Route
-            exact
-            path="/employee"
-            render={() => (
-              <Employee cookies={{ cookies, setCookie, removeCookie }} />
-            )}
-          />
           <Route
             exact
             path="/employee/:id"
