@@ -31,7 +31,7 @@ class RestaurateurPage2 extends Component {
       {
         id: 3,
         title: "Menu",
-        model: <Menu res_id={this.props.match.params.id}/>
+        model: <Menu res_id={this.props.match.params.id} />
       },
       {
         id: 4,
@@ -50,28 +50,18 @@ class RestaurateurPage2 extends Component {
   };
 
   componentDidMount() {
-    const header = {
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json"
-      }
-    };
     axios
-      .post(
-        "/restaurant/findRestaurant",
-        {
-          _id: this.props.match.params.id
-        },
-        header
-      )
-
-      .then(restaurant =>
-        this.setState({ info: restaurant.data[0] }, () =>
+      .post("/restaurant/findRestaurantById", {
+        _id: this.props.match.params.id
+      })
+      .then(response => {
+        console.log(response);
+        this.setState({ info: response.data }, () =>
           console.log("Customers fetched...", this.state.info)
-        )
-      )
-      .catch(err => {
-        console.log(400);
+        );
+      })
+      .catch(function(error) {
+        console.log(error);
       });
   }
 

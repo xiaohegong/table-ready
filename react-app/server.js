@@ -232,22 +232,42 @@ app.post("/restaurant/delete_employee", (req, res) => {
 app.post("/restaurant/findRestaurant", (req, res) => {
   Restaurant.find({ _id: req.body._id }).then(
     user => {
-      const num_reserv = user[0].reservations
-      let tmp = []
+      const num_reserv = user[0].reservations;
+      let tmp = [];
       num_reserv.forEach(element => {
-        tmp.push(element)
+        tmp.push(element);
       });
-      console.log(tmp)
+      console.log(tmp);
       Waitlist.find({
-        "_id":{$in: tmp}
-      }).then(docs => {res.send([docs, user])
-      console.log(docs)}).catch(error => console.log(error))
+        _id: { $in: tmp }
+      })
+        .then(docs => {
+          res.send([docs, user]);
+          console.log(docs);
+        })
+        .catch(error => console.log(error));
     },
     error => {
       res.send({ code: 404, error });
     }
   );
 });
+
+app.post("/restaurant/findRestaurantById", (req, res) => {
+  console.log("\n\n\n\n\n\ntest\n\n");
+  Restaurant.findById(req.body._id)
+    .then(restaurant => {
+      console.log(restaurant);
+      res.send(restaurant);
+    })
+    .catch(err => {
+      if (err) {
+        res.send({ code: 404, err });
+      }
+    });
+});
+
+// app.post("/restaurant/")
 
 app.post("/waitlist/newWaitlist", (req, res) => {
   const waitlist = new Waitlist({
@@ -358,16 +378,16 @@ app.get("/user/info", (req, res) => {
 });
 
 app.get("/api/employee/:id", (req, res) => {
-  const employee_id = req.params.id
-  console.log("hii")
-  User.find({_id:ObjectID(employee_id)}, function(err, single_user) {
-    if (err){
-      console.log(err)
-      return err
+  const employee_id = req.params.id;
+  console.log("hii");
+  User.find({ _id: ObjectID(employee_id) }, function(err, single_user) {
+    if (err) {
+      console.log(err);
+      return err;
     }
-    res.send(single_user)
-  })
-})
+    res.send(single_user);
+  });
+});
 
 // update the information of the user specified by the id.
 app.put("/user/:id", (req, res) => {

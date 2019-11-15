@@ -2,14 +2,14 @@ import React, { Component } from "react";
 import axios from "axios";
 import "../../Stylesheets/restaurateur_page.scss";
 import { withRouter } from "react-router-dom";
-import { Redirect } from 'react-router-dom';
+import { Redirect } from "react-router-dom";
 
 class AddNewMenuItem extends Component {
   constructor(props) {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
-  state = {redirect: false};
+  state = { redirect: false };
   handleSubmit(event) {
     event.preventDefault();
 
@@ -41,14 +41,12 @@ class AddNewMenuItem extends Component {
           console.log(error);
         }
       );
-
-
   }
   render() {
     const { redirect } = this.state;
 
     if (redirect) {
-      return <Redirect to={`/restaurateur2/${this.props.location.state.id}`}/>;
+      return <Redirect to={`/restaurateur2/${this.props.location.state.id}`} />;
     }
     return (
       <div className="new-restaurant-page">
@@ -56,59 +54,61 @@ class AddNewMenuItem extends Component {
           <div className="form-container mx-auto">
             <h2>Add A Menu Item</h2>
             <form onSubmit={this.handleSubmit} className="">
-              <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                  <span class="input-group-text" id="basic-addon1">
+              <div className="input-group mb-3">
+                <div className="input-group-prepend">
+                  <span className="input-group-text" id="basic-addon1">
                     Item Name*
                   </span>
                 </div>
                 <input
                   type="text"
-                  class="form-control"
+                  className="form-control"
                   placeholder="Item Name"
                   id="name"
                   name="name"
                 />
               </div>
-              <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                  <span class="input-group-text" id="basic-addon1">
+              <div className="input-group mb-3">
+                <div className="input-group-prepend">
+                  <span className="input-group-text" id="basic-addon1">
                     Price*
                   </span>
                 </div>
                 <input
                   type="text"
-                  class="form-control"
+                  className="form-control"
                   placeholder="price"
+                  type="number"
                   id="price"
                   name="price"
                 />
               </div>
-              <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                  <span class="input-group-text" id="basic-addon1">
+              <div className="input-group mb-3">
+                <div className="input-group-prepend">
+                  <span className="input-group-text" id="basic-addon1">
                     Ingredients
                   </span>
                 </div>
                 <input
                   type="text"
-                  class="form-control"
+                  className="form-control"
                   placeholder="ingredients"
                   id="ingredients"
                   name="ingredients"
                 />
               </div>
-              <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                  <span class="input-group-text" id="basic-addon1">
+              <div className="input-group mb-3">
+                <div className="input-group-prepend">
+                  <span className="input-group-text" id="basic-addon1">
                     Calories
                   </span>
                 </div>
                 <input
                   type="text"
-                  class="form-control"
+                  className="form-control"
                   placeholder="calories"
                   id="calories"
+                  type="number"
                   name="calories"
                 />
               </div>

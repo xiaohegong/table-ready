@@ -65,11 +65,13 @@ class Menu extends Component {
   render() {
     return (
       <>
-        <h2 style={{ display: "inline" }}>Your Restaurants</h2>
-        <Link to={{
-          pathname: "/addNewMenuItem",
-          state: {id: this.props.res_id}
-        }}>
+        <h2 style={{ display: "inline" }}>Menu</h2>
+        <Link
+          to={{
+            pathname: "/addNewMenuItem",
+            state: { id: this.props.res_id }
+          }}
+        >
           <button className="addNewButton btn btn-outline-success btn-sm">
             {" "}
             Add New{" "}
@@ -84,14 +86,13 @@ class Menu extends Component {
                 image={menuItem.image}
                 name={menuItem.name}
                 price={menuItem.price}
-                id = {menuItem._id}
+                id={menuItem._id}
                 ingredients={menuItem.ingredients}
                 deleteItem={this.deleteItem}
               />
             );
           })}
         </div>
-
       </>
     );
   }
