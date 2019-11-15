@@ -283,7 +283,7 @@ class Employee extends Component {
           }
         }
       }
-      // this.fetch_data()
+      this.fetch_data()
     })
   }
   create_waitlist = (new_wl) => {
