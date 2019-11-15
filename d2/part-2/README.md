@@ -18,7 +18,9 @@ For SuperAdmins, the key features are:
 For Restaurant Owners, the key features are:
  * Add/Delete employees from their restaurant.
  * View the restaurant employee's information.
- * View/Edit the menu of their restaurant
+ * Edit the restaurant's information.
+ * Create new restaurant.
+ * View/Add/Delete the menu of their restaurant
 
 For Employees, the key features are:
  * View the restaurant current state. That includes
@@ -33,5 +35,23 @@ For Employees, the key features are:
  * Clear instructions for how to use the application from the end-user's perspective
  * How do you access it? Are accounts pre-created or does a user register? Where do you start? etc. 
  * Provide clear steps for using each feature described above
+    - log in or sign up on homepage
+    - if log in as admin: 
+        - Restaurants Page:
+            - you can view admin's information and all owned restaurant.
+            - you can add new restaurant by clicking the Add New button on the top right corner
+                * complete all information and click Create Restaurant button to create new restaurant.
+            - clicking on any of the restaurant to view its detail.
+        - Restaurant Page:
+            * you can add an employees by entering their username and clicking Add Employee button.
+            * you can delete an employee by clicking the Delete button.
+            * you can update your restaurant information by clicking Edit button next to Restaurant Info
+            * you by view Dress Code, Menu, and Pay by clicking cards under Options
+                - Dress Code
+                    *  edit Dress Code by clicking edit button and Done after edit
+                - Menu
+                    * add menu item by clicking add new button
+                    * delete menu item by clicking delete button
+                
  * If you cannot deploy your application for technical reasons, please let your TA know at the beginning of the iteration. You will need to demo the application to your partner either way.
 
