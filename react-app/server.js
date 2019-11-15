@@ -358,18 +358,6 @@ app.get("/user/info", (req, res) => {
 });
 
 app.get("/api/employee/:id", (req, res) => {
-<<<<<<< HEAD:react-app/server.js
-  const employee_id = req.params.id;
-  console.log("hii");
-  User.find({ _id: ObjectID(employee_id) }, function(err, single_user) {
-    if (err) {
-      console.log(err);
-      return err;
-    }
-    res.send(single_user);
-  });
-});
-=======
   const employee_id = req.params.id
   console.log("hii")
   User.find({_id:ObjectID(employee_id)}, function(err, single_user) {
@@ -380,7 +368,6 @@ app.get("/api/employee/:id", (req, res) => {
     res.send(single_user)
   })
 })
->>>>>>> bug:react-app/src/server.js
 
 // update the information of the user specified by the id.
 app.put("/user/:id", (req, res) => {
