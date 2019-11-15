@@ -268,21 +268,31 @@ class Employee extends Component {
         if (user.data[0].accountType !== "Employee"){
           this.setState({loading:false, valid:false})
         }
-        if (this.props.cookies.cookies.cur_user.accountType === "SuperAdmin" ){
-          this.setState({loading:false, valid:true, employee_obj:user.data[0]})
-          this.fetch_data()
-        }
-        else if (this.props.cookies.cookies.cur_user.accountType === "Admin"){
+        else if (user.data[0].accountType === "Employee" && user.data[0].workFor === ""){
           this.setState({loading:false, valid:false})
         }
-        else {
-          if (this.props.cookies.cookies.cur_user._id === user.data[0]._id){
-            this.setState({loading:false, valid:true, employee_obj: user.data[0]})
+        else{
+          if (this.props.cookies.cookies.cur_user.accountType === "SuperAdmin" ){
+            this.setState({loading:false, valid:true, employee_obj:user.data[0]})
             this.fetch_data()
           }
-          else{
+          else if (this.props.cookies.cookies.cur_user.accountType === "Admin"){
             this.setState({loading:false, valid:false})
           }
+          else {
+            if (user.data[0].workFor === ""){
+              this.setState({loading:false, valid:false})
+            }
+            else{
+              if (this.props.cookies.cookies.cur_user._id === user.data[0]._id){
+                this.setState({loading:false, valid:true, employee_obj: user.data[0]})
+                this.fetch_data()
+              }
+              else{
+                this.setState({loading:false, valid:false})
+              }
+            }
+          } 
         }
       }
       
@@ -657,8 +667,8 @@ class Employee extends Component {
             <Navbar cookies={this.props.cookies}/>
             <div id = "cal" style={{height: '80px'}}>
               <DatePicker onChange={(value)=>this.showdate(value)} showDefaultIcon></DatePicker>
-              <button className = "date-confirm" onClick={()=>this.filter_date()}>Confirm</button>
-              <button className = "date-confirm" onClick={()=>this.setModalState(true)}>Add Reservation</button>
+              <button id  = "date-confirm" onClick={()=>this.filter_date()}>Confirm</button>
+              <button id = "date-confirm" onClick={()=>this.setModalState(true)}>Add Reservation</button>
             </div>
             <CardColumns id = "content-wrapper">
               {
