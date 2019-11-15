@@ -232,15 +232,21 @@ app.post("/restaurant/delete_employee", (req, res) => {
 app.post("/restaurant/findRestaurant", (req, res) => {
   Restaurant.find({ _id: req.body._id }).then(
     user => {
-      res.send(user);
+      const num_reserv = user[0].reservations
+      let tmp = []
+      num_reserv.forEach(element => {
+        tmp.push(element)
+      });
+      console.log(tmp)
+      Waitlist.find({
+        "_id":{$in: tmp}
+      }).then(docs => {res.send(docs)
+      console.log(docs)}).catch(error => console.log(error))
     },
     error => {
       res.send({ code: 404, error });
     }
   );
-  // return new Promise((resolve, reject) => {
-  //
-  // });
 });
 
 app.post("/waitlist/newWaitlist", (req, res) => {
@@ -352,6 +358,7 @@ app.get("/user/info", (req, res) => {
 });
 
 app.get("/api/employee/:id", (req, res) => {
+<<<<<<< HEAD:react-app/server.js
   const employee_id = req.params.id;
   console.log("hii");
   User.find({ _id: ObjectID(employee_id) }, function(err, single_user) {
@@ -362,6 +369,18 @@ app.get("/api/employee/:id", (req, res) => {
     res.send(single_user);
   });
 });
+=======
+  const employee_id = req.params.id
+  console.log("hii")
+  User.find({_id:ObjectID(employee_id)}, function(err, single_user) {
+    if (err){
+      console.log(err)
+      return err
+    }
+    res.send(single_user)
+  })
+})
+>>>>>>> bug:react-app/src/server.js
 
 // update the information of the user specified by the id.
 app.put("/user/:id", (req, res) => {
