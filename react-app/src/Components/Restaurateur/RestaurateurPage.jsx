@@ -79,7 +79,10 @@ class RestaurateurPage extends Component {
 
               <div className="col-md-9">
                 <h2 style={{ display: "inline" }}>Your Restaurants</h2>
-                <Link to="/addNewRestaurant">
+                <Link to={{
+                  pathname: "/addNewRestaurant",
+                  state: {id: this.props.match.params.id}
+                }}>
                   <button className="addNewButton btn btn-outline-success btn-sm">
                     {" "}
                     Add New{" "}

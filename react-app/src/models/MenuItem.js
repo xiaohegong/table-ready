@@ -30,7 +30,7 @@ const MenuItemSchema = new Schema({
     image:{
         type:String,
         required: true,
-        default:'/images/restaurant_images/restaurant2.jpeg'
+        default:'/images/menu/burger.jpg'
     },
     calories: {
         type: Number,

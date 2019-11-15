@@ -24,7 +24,7 @@ const UserSchema = new Schema({
   },
   workFor: {
     type: String,
-    required: true,
+    required: false,
     default: ""
   },
   image: {
@@ -34,7 +34,6 @@ const UserSchema = new Schema({
   },
   email: String,
   tel: String,
-  manager: String
 });
 
 module.exports = mongoose.model("User", UserSchema);

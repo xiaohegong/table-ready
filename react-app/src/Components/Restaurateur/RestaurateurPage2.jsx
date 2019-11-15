@@ -31,7 +31,7 @@ class RestaurateurPage2 extends Component {
       {
         id: 3,
         title: "Menu",
-        model: <Menu />
+        model: <Menu res_id={this.props.match.params.id}/>
       },
       {
         id: 4,
