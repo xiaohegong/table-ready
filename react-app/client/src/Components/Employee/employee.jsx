@@ -380,6 +380,9 @@ class Employee extends Component {
           'Content-Type': 'application/text'
       }
     }; 
+    this.setState({
+      to_be_reserved: this.state.to_be_reserved.filter(value => value._id != data._id)
+    })
     axios.delete('/api/removeWaitlist/' + data._id)
     .then((response) => {
       console.log(response);
