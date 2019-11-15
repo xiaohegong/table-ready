@@ -349,6 +349,18 @@ app.get("/user/info", (req, res) => {
     .catch(error => res.status(400).json("Err " + error));
 });
 
+app.get("/api/employee/:id", (req, res) => {
+  const employee_id = req.params.id
+  console.log("hii")
+  User.find({_id:ObjectID(employee_id)}, function(err, single_user) {
+    if (err){
+      console.log(err)
+      return err
+    }
+    res.send(single_user)
+  })
+})
+
 // update the information of the user specified by the id.
 app.put("/user/:id", (req, res) => {
   log("this body is: " + req.body.email);
