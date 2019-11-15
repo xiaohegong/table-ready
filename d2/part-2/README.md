@@ -33,7 +33,7 @@ There are three types of targeted users for our app: restaurant managers, restau
  <!-- * Clear instructions for how to use the application from the end-user's perspective -->
  <!-- * How do you access it? Are accounts pre-created or does a user register? Where do you start? etc.  -->
  <!-- * Provide clear steps for using each feature described above -->
-#### Live App
+### Live App
 https://table-ready.herokuapp.com/
 
 #### Usages
@@ -56,7 +56,7 @@ https://table-ready.herokuapp.com/
       - Password: empemp
 
 ##### Navigating as Restaurant Manager User
-
+(Log in as Username: user & Password: user)
 - Your personal Page:
   - View your information and all owned restaurant.
   - Add a new restaurant by clicking the "Add New" button on the top right corner
@@ -75,6 +75,7 @@ https://table-ready.herokuapp.com/
           * delete menu item by clicking "delete" button
 
 ##### Navigating as Restaurant Employee User
+(Log in as Username: emp & Password: empemp)
 - If the current login user is not working at any restaurant right now, the page will be redirected to a error page. So please ask your restaurant manager to add you to their restaurant first. 
 - If the current login user is working at a restaurant, he/she will be directed to the employee page.
 - Click on the input box at the top center. Select a date using the date picker and click "confirm" to display a list of guests (each represented by a card) with reservations or on the waitlist for that specific date.
@@ -87,3 +88,19 @@ https://table-ready.herokuapp.com/
   - If the capacity of the table does not meet the capacity limit, the background will turn to red and dropping the card on that table will have no effect. 
   - If the capacity of the table meets the requirement, then the background will turn green, and dropping the card will change the status of the reservation from not served to served.
 - To cancel or serve a reservation, click on the "stopping" button next to the "check" button on the card to remove it.
+
+##### Navigating as System Admin User
+(Log in as Username: admin & Password: admin)
+- Overview displays subscription trends and user statistics. This feature is not implemented yet as we left all the "subscription" features to d3. 
+- "Manage" displays the list of all users and restaurant registered in the system. You can
+  - search an user/restaurant using the search bar,
+  - remove an user/restaurant by clicking on "Delete" button.
+  - go to the user/restaurant by clicking on their name (recall that if you go in a super admin's page, this will just stay on this page since they all share the same interface and if you go in a employee's page who is unemployed, that would return a 404 page).  
+- "Settings" lets the system admin user to update his/her email and password. The payment info section will be implemented in d3. 
+
+### How to run locally
+1. `git clone` this repo
+2. `cd react-app/`
+3. `npm run dev`
+4. Finally, open your browser (suggested Chrome on full screen) and navigate the app. 
+

@@ -30,7 +30,7 @@ function getUserLink(user) {
     let res = `/${user._id}`;
 
     if (user.accountType === "SuperAdmin") {
-        res = "/sysadmin" + res;
+        res = "/admin" + res;
     } else if (user.accountType === "Admin") {
         res = "/restaurateur" + res;
     } else if (user.accountType === "Employee")
