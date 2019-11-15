@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles, ThemeProvider } from '@material-ui/core/styles';
 import { green } from '@material-ui/core/colors';
 import './employee.css'
 import Card from 'react-bootstrap/Card'
@@ -243,7 +243,7 @@ class Employee extends Component {
       items: [],
       to_be_reserved:[],
       checkedG:false,
-      current_date:null,
+      current_date: null,
       draggin:false,
       menu_open:false,
       current_table:null,
@@ -270,6 +270,7 @@ class Employee extends Component {
         }
         if (this.props.cookies.cookies.cur_user.accountType === "SuperAdmin" ){
           this.setState({loading:false, valid:true, employee_obj:user.data[0]})
+          this.fetch_data()
         }
         else if (this.props.cookies.cookies.cur_user.accountType === "Admin"){
           this.setState({loading:false, valid:false})
@@ -277,13 +278,14 @@ class Employee extends Component {
         else {
           if (this.props.cookies.cookies.cur_user._id === user.data[0]._id){
             this.setState({loading:false, valid:true, employee_obj: user.data[0]})
+            this.fetch_data()
           }
           else{
             this.setState({loading:false, valid:false})
           }
         }
       }
-      this.fetch_data()
+      
     })
   }
   create_waitlist = (new_wl) => {
@@ -302,6 +304,7 @@ class Employee extends Component {
     },header)
       .then((response) => {
         id = response.data
+        console.log(response.data)
         axios.post('/restaurant/updateReservation', {
           _id: this.state.rest_obj._id,
           reservations: [...this.state.rest_obj.reservations, id]
