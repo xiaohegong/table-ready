@@ -17,7 +17,7 @@ We are working on a restaurant management web portal for Table Ready. Our web po
 1. Using React + mongodb + express + nodeJS turned out to be very convenient. Some of us had no experience using these tools and we were able to ramp up quickly as there are many tutorials and libraries available. 
 2. Working in separate dev branches avoided conflicts and maintained a clean working tree. This saved a lot of time and effort and we could keep track of each other’s progress and code easily. 
 3. Dividing the team into sub-groups with each sub-group responsible for the interface of one type of user. This workflow allowed each page to be completed independently and saved tons of time needed to debug other people’s code. Instead, each pair can focus on their assigned page. 
-4. Creating mock-ups (https://docs.google.com/presentation/d/1g1dHOyj21-MOzF1t34b7JpvGQRNcFAWaiYuNGUe0HvY/edit?usp=sharing) for UI and implement front-end following the plan. After we decided how the UI should look like, implementing the front-end became much easier as we avoided unnecessary changes and miscommunication.
+4. Creating [mock-ups](https://docs.google.com/presentation/d/1g1dHOyj21-MOzF1t34b7JpvGQRNcFAWaiYuNGUe0HvY/edit?usp=sharing) for UI and implement front-end following the plan. After we decided how the UI should look like, implementing the front-end became much easier as we avoided unnecessary changes and miscommunication.
 
 #### Decisions that did not turn out as well as we hoped
 
