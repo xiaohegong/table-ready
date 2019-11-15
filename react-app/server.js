@@ -240,7 +240,7 @@ app.post("/restaurant/findRestaurant", (req, res) => {
       console.log(tmp)
       Waitlist.find({
         "_id":{$in: tmp}
-      }).then(docs => {res.send(docs)
+      }).then(docs => {res.send([docs, user])
       console.log(docs)}).catch(error => console.log(error))
     },
     error => {

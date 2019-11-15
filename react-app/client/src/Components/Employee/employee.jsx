@@ -321,8 +321,8 @@ class Employee extends Component {
     console.log("hiii")
     axios.post("/restaurant/findRestaurant", {_id: rest_id})
       .then(res => {
-        this.setState({all_seats: res.data})
-        console.log(res.data)
+        this.setState({rest_obj: res.data[1][0]})
+        this.setState({all_seats: res.data[0]})
         if(this.state.current_date != null){
           this.setState({
             items: this.state.all_seats.filter(value => value.date_of_arrival == this.state.current_date)
