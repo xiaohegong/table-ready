@@ -33,7 +33,7 @@ There are three types of targeted users for our app: restaurant managers, restau
  <!-- * Clear instructions for how to use the application from the end-user's perspective -->
  <!-- * How do you access it? Are accounts pre-created or does a user register? Where do you start? etc.  -->
  <!-- * Provide clear steps for using each feature described above -->
-#### Live App
+### Live App
 https://table-ready.herokuapp.com/
 
 #### Usages
@@ -97,3 +97,10 @@ https://table-ready.herokuapp.com/
   - remove an user/restaurant by clicking on "Delete" button.
   - go to the user/restaurant by clicking on their name (recall that if you go in a super admin's page, this will just stay on this page since they all share the same interface and if you go in a employee's page who is unemployed, that would return a 404 page).  
 - "Settings" lets the system admin user to update his/her email and password. The payment info section will be implemented in d3. 
+
+### How to run locally
+1. `git clone` this repo
+2. `cd react-app/`
+3. `npm run dev`
+4. Finally, open your browser (suggested Chrome on full screen) and navigate the app. 
+
