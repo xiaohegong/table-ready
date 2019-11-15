@@ -7,11 +7,11 @@ import { DatePicker } from "@y0c/react-datepicker";
 
 class VerticalModal extends React.Component {
   state = {
-    name: null,
+    name: " ",
     ppl_number: 0,
-    date: null,
+    date: " ",
     time_arrive: null,
-    time: null
+    time: " "
   };
   showdate = value => {
     const year = value.$y;

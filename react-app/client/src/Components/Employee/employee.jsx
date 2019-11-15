@@ -442,11 +442,13 @@ class Employee extends Component {
         }
       });
       this.setState({
-        to_be_reserved: tmp,
-        changed: false,
-        draggin: false
+        to_be_reserved: tmp
       })
     }
+    this.setState({
+      changed: false,
+      draggin: false
+    })
   };
   setOccupied = () => {
     for (let i = 0; i < this.state.reservations_color.length; i++) {
