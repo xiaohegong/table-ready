@@ -379,7 +379,6 @@ class Employee extends Component {
       headers: {'Accept': 'application/text',
           'Content-Type': 'application/text'
       }
-<<<<<<< HEAD
     };
     console.log(this.state.to_be_reserved)
     console.log(data._id)
@@ -395,12 +394,6 @@ class Employee extends Component {
       this.state.to_be_reserved = this.state.to_be_reserved.filter((value) => value._id !== data._id)
     }
     console.log(this.state.to_be_reserved)
-=======
-    }; 
-    this.setState({
-      to_be_reserved: this.state.to_be_reserved.filter(value => value._id != data._id)
-    })
->>>>>>> f77afdabce44274a63809b8f5fde7ce8ad27d8c6
     axios.delete('/api/removeWaitlist/' + data._id)
     .then((response) => {
       console.log(response);
