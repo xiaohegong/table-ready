@@ -196,6 +196,18 @@ app.post("/restaurant/updateReservation", (req, res) => {
     }
   );
 });
+app.post("/updateWaitlistStatus", (req, res) => {
+  Waitlist.findByIdAndUpdate(req.body._id, {
+    reserved: req.body.reserved
+  }).then(
+    user => {
+      res.send(user);
+    },
+    error => {
+      res.send({ code: 404, error });
+    }
+  );
+});
 
 app.post("/restaurant/add_employee", (req, res) => {
   // res.send("1000");
@@ -412,16 +424,6 @@ app.put("/updateWaitlist/:id", (req, res) => {
   Waitlist.findByIdAndUpdate(req.params.id, req.body, { new: true })
     .then(() => {
       res.send("Waitlist " + id + " updated");
-    })
-    .catch(err => {
-      res.status(400).json("Error: " + err);
-    });
-});
-
-app.put("/updateRestWaitlist/:id", (req, res) => {
-  Restaurant.findByIdAndUpdate(req.params.id, req.body, { new: true })
-    .then(() => {
-      res.send("Rest Waitlist " + id + " updated");
     })
     .catch(err => {
       res.status(400).json("Error: " + err);

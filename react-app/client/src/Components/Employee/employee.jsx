@@ -379,16 +379,31 @@ class Employee extends Component {
       headers: {'Accept': 'application/text',
           'Content-Type': 'application/text'
       }
-    }; 
+    };
+    console.log(this.state.to_be_reserved)
+    console.log(data._id)
+    let in_list = false;
+      this.state.to_be_reserved = this.state.to_be_reserved.filter(value => value != null)
+    this.state.to_be_reserved.forEach(element => {
+      if(element._id == data._id){
+        in_list = true;
+      }
+    });
+    if(in_list){
+      console.log("hi")
+      this.state.to_be_reserved = this.state.to_be_reserved.filter((value) => value._id !== data._id)
+    }
+    console.log(this.state.to_be_reserved)
     axios.delete('/api/removeWaitlist/' + data._id)
     .then((response) => {
       console.log(response);
     }, (error) => {
       console.log(error);
     });
+    this.state.rest_obj.reservations = this.state.rest_obj.reservations.filter(value => value != data._id)
     axios.post('/restaurant/updateReservation', {
       _id: this.state.rest_obj._id,
-      reservations: this.state.rest_obj.reservations.filter((value) => value != data._id)
+      reservations: this.state.rest_obj.reservations
     })
       .then((response) => {
         console.log(response)
@@ -402,14 +417,9 @@ class Employee extends Component {
       headers: {'Accept': 'application/text',
           'Content-Type': 'application/text'
       }
-    }; 
-    console.log(data._id)
-    axios.put('/updateWaitlist/' + data._id, {
-      id: data.id,
-      name: data.name,
-      people: data.people,
-      date_of_arrival: data.date_of_arrival,
-      estimated_time: data.estimated_time,
+    };
+    axios.post('/updateWaitlistStatus', {
+      _id: data._id,
       reserved: data.reserved
     })
     .then((response) => {
@@ -460,7 +470,7 @@ class Employee extends Component {
       }
     }
   };
-  change_menu_state = index => {
+  change_menu_state = (index) => {
     this.setState({ menu_open: !this.state.menu_open });
     let in_list = false;
     this.state.to_be_reserved.forEach(element => {
@@ -469,9 +479,11 @@ class Employee extends Component {
       }
     });
     if (in_list == false) {
-      this.state.to_be_reserved.push(this.state.items[index]);
-      this.setState({ to_be_reserved: this.state.to_be_reserved });
+      console.log(this.state.items[index])
+      this.setState({to_be_reserved: this.state.to_be_reserved.filter((value) => value != null)})
+      this.setState({ to_be_reserved: [...this.state.to_be_reserved, this.state.items[index]]});
     }
+    console.log(this.state.to_be_reserved)
 
   }
   remove_reservation_from_items = (index) => {
@@ -609,7 +621,7 @@ class Employee extends Component {
         this.state.to_be_reserved.forEach((item,index) => {
           if(item!=null){
             draggables.push(
-              <Draggable  onStart={() => this.handleStart(index)}  onStop={() => this.handleStop(index)}>
+              <Draggable onStart={() => this.handleStart(index)}  onStop={() => this.handleStop(index)}>
                 <Card id = {`usercard-${index}`} draggable = "true" style={{backgroundColor:"#f8f9fa", width: '18rem' }}>
                   <Card.Header className = "header-of-card">
                     <div className = "pic-container">
