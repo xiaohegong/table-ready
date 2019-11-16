@@ -36,7 +36,7 @@ We are working on a restaurant management web portal for Table Ready. Our web po
 - Relocate register new super admin user from signup page to super admin’s page as requested by our partner. 
 - Reformat employee page UI:
   1. Condense all the card layout. Right now the card take up too much space on the screen given how little information it contains. Our partner suggests us to make it into an excel spreadsheet style but she also like our card-like design. Therefore, we decide to condense our card layout to make it take less space.
-  2. Remove the horizontal burger menu. Right now, when seating a group of people, the user needs to click on the waitlist card to bring out a horizontal menu that contains table information. Then drag the card to the corresponding position. Our partner suggests us to remove this menu and put the table information alongside with the waitlist cards so that the users can see 
+  2. Remove the horizontal [burger menu](https://github.com/negomi/react-burger-menu). Right now, when seating a group of people, the user needs to click on the waitlist card to bring out a horizontal menu that contains table information. Then drag the card to the corresponding position. Our partner suggests us to remove this menu and put the table information alongside with the waitlist cards so that the users can see 
 - Unify styles used throughout the application for better user experience.
 
 
