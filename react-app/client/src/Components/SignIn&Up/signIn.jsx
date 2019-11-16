@@ -2,8 +2,8 @@ import React, { Component } from "react";
 import "../../Stylesheets/signIn&Up.scss";
 import Avatar from "./icon.jpg";
 import Animation from "./animation.jsx";
-// import { Redirect } from 'react-router-dom'
-import axios from 'axios';
+import { Redirect } from "react-router-dom";
+import axios from "axios";
 import Navbar from "../Navbar";
 const log = console.log;
 class SignIn extends Component {
@@ -31,9 +31,9 @@ class SignIn extends Component {
     const user = users.filter(user => user.username === this.state.username);
     if (user.length === 0) {
       alert("this user does not exist!");
-    }else if (this.state.password !== user[0].password){
-      alert("incorrect password!")
-    }else {
+    } else if (this.state.password !== user[0].password) {
+      alert("incorrect password!");
+    } else {
       const userType = user[0].accountType;
       const userId = user[0]._id;
       if (userType === "SuperAdmin") {
@@ -44,11 +44,17 @@ class SignIn extends Component {
         log("sign in successfully!");
         console.log(this.props.cookies.cookies);
         window.location.href = "/admin/" + userId;
-      }else if (userType === "Admin") {
-        this.props.cookies.setCookie("cur_user", user[0], { path: '/', expires: 0});
+      } else if (userType === "Admin") {
+        this.props.cookies.setCookie("cur_user", user[0], {
+          path: "/",
+          expires: 0
+        });
         window.location.href = "/restaurateur/" + userId;
-      }else if (userType === "Employee"){
-        this.props.cookies.setCookie("cur_user", user[0], { path: '/', expires: 0});
+      } else if (userType === "Employee") {
+        this.props.cookies.setCookie("cur_user", user[0], {
+          path: "/",
+          expires: 0
+        });
         window.location.href = "/employee/" + userId;
       }
     }
@@ -76,10 +82,19 @@ class SignIn extends Component {
   }
 
   render() {
+    if (this.props.cookies.cookies.cur_user) {
+      if (this.props.cookies.cookies.cur_user.accountType === "Admin") {
+        return (
+          <Redirect
+            to={"/restaurateur/" + this.props.cookies.cookies.cur_user._id}
+          />
+        );
+      }
+    }
     return (
       <div id="signIn-Up">
-        <Navbar cookies={this.props.cookies}/>
-        <Animation/>
+        <Navbar cookies={this.props.cookies} />
+        <Animation />
         <div id="divPage">
           <div className="container">
             <img id="avatar" src={Avatar} alt="Avatar" />
