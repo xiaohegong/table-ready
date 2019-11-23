@@ -1,11 +1,15 @@
 #signIn-Up {
+  #signin-alert-danger {
+    margin-bottom: 0;
+  }
+
   #canvasConfig {
     background-color: wheat;
     float: left;
   }
 
   #divPage {
-    position:absolute;
+    position: absolute;
     top: 20%;
     left: 25%;
     //float: left;
@@ -47,7 +51,6 @@
 
   #avatar {
     border-radius: 50%;
-
   }
   .input-group-text {
     width: 6em;
