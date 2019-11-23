@@ -9,6 +9,7 @@ const isAuth = require('../middleware/auth');
 // register
 
 router.post('/', (req, res) => {
+  console.log(req.body);
   const { accountType, username, password, email, tel } = req.body;
   if (!accountType || !username || !email || !password || !tel) {
     return res.status(400).json({ message: 'Please enter all fields' });
@@ -84,7 +85,7 @@ router.post('/login', (req, res) => {
       }
     })
     .catch(error => {
-      res.status(500).json({ message: error });
+      res.status(400).json({ message: error });
     });
 });
 

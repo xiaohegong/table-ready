@@ -123,7 +123,7 @@ class SignIn extends Component {
     //   }
     // }
     if (this.props.isAuthenticated) {
-      return this.getRedirected();
+      // return this.getRedirected();
     }
     return (
       <div id="signIn-Up">
