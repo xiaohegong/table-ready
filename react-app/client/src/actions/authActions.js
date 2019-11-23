@@ -12,31 +12,23 @@ import {
   REGISTER_FAIL
 } from './actionTypes';
 
-// Setup config/headers and token
 export const tokenConfig = getState => {
-  // Get token from localstorage
   const token = getState().auth.token;
-
-  // Headers
   const config = {
     headers: {
       'Content-type': 'application/json'
     }
   };
 
-  // If token, add to headers
   if (token) {
     config.headers['x-auth-token'] = token;
   }
-
   return config;
 };
 
-// Check token & load user
-export const loadUser = () => (dispatch, getState) => {
-  // User loading
-  dispatch({ type: USER_LOADING });
 
+export const loadUser = () => (dispatch, getState) => {
+  dispatch({ type: USER_LOADING });
   axios
     .get('/api/users/auth', tokenConfig(getState))
     .then(res =>
@@ -53,7 +45,6 @@ export const loadUser = () => (dispatch, getState) => {
     });
 };
 
-// Register User action, userd in SignUp.jsx
 export const register = ({
   accountType,
   username,
@@ -68,7 +59,6 @@ export const register = ({
     }
   };
 
-  // Request body
   const request_body = JSON.stringify({
     accountType,
     username,
@@ -95,16 +85,13 @@ export const register = ({
     });
 };
 
-// Login User
 export const login = ({ username, password }) => dispatch => {
-  // Headers
   const config = {
     headers: {
       'Content-Type': 'application/json'
     }
   };
 
-  // Request body
   const body = JSON.stringify({ username, password });
 
   axios
@@ -125,7 +112,6 @@ export const login = ({ username, password }) => dispatch => {
     });
 };
 
-// Logout
 export const logout = () => {
   return {
     type: LOGOUT_SUCCESS
