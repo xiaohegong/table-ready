@@ -274,7 +274,7 @@ class Employee extends Component {
         else{
           if (this.props.cookies.cookies.cur_user.accountType === "SuperAdmin" ){
             this.setState({loading:false, valid:true, employee_obj:user.data[0]})
-            this.fetch_data()
+            this.update_rest_waitlist(this.state.employee_obj.workFor)
           }
           else if (this.props.cookies.cookies.cur_user.accountType === "Admin"){
             this.setState({loading:false, valid:false})
@@ -286,7 +286,7 @@ class Employee extends Component {
             else{
               if (this.props.cookies.cookies.cur_user._id === user.data[0]._id){
                 this.setState({loading:false, valid:true, employee_obj: user.data[0]})
-                this.fetch_data()
+                this.update_rest_waitlist(this.state.employee_obj.workFor)
               }
               else{
                 this.setState({loading:false, valid:false})
@@ -319,7 +319,7 @@ class Employee extends Component {
           _id: this.state.rest_obj._id,
           reservations: [...this.state.rest_obj.reservations, id]
         })
-          .then(this.filter_date())
+          .then(this.update_rest_waitlist(this.state.employee_obj.workFor))
           .catch(function (error){
             console.log(error);
           })
@@ -343,36 +343,6 @@ class Employee extends Component {
         }
       })
 
-      // .then(() => {
-      //   if(this.state.rest_obj != undefined){
-      //     this.setState({
-      //       all_seats: []
-      //     })
-          // this.state.rest_obj.reservations.forEach(element => {
-          //   axios.post("/waitlist/getWaitlistById",{_id: element})
-          //     .then((res) => {
-          //       let tmp_seats = [...this.state.all_seats, res.data[0]]
-          //       let values = tmp_seats.filter(value => value.date_of_arrival == this.state.current_date)
-          //       this.setState({
-          //         all_seats: tmp_seats, items:values
-          //       })
-          //     })
-          //     .catch(function (error){
-          //       console.log(error);
-          //     })
-          // }
-
-          // );
-      // }})
-      // .catch(function (error){
-      //   console.log(error);
-    // })
-    
-    // console.log(this.state.all_seats)
-
-  }
-  fetch_data = () => {
-    this.update_rest_waitlist(this.state.employee_obj.workFor)
   }
   delete_data = (data) => {
     const header = {
@@ -561,9 +531,6 @@ class Employee extends Component {
       )
     });
   };
-  filter_date = () => {
-    this.fetch_data()
-  };
   setModalState = state => {
     this.setState({
       modal_show: state
@@ -699,7 +666,7 @@ class Employee extends Component {
             <Navbar cookies={this.props.cookies}/>
             <div id = "cal" style={{height: '80px'}}>
               <DatePicker onChange={(value)=>this.showdate(value)} showDefaultIcon></DatePicker>
-              <button id  = "date-confirm" onClick={()=>this.filter_date()}>Confirm</button>
+              <button id  = "date-confirm" onClick={()=>this.this.update_rest_waitlist(this.state.employee_obj.workFor)}>Confirm</button>
               <button id = "date-confirm" onClick={()=>this.setModalState(true)}>Add Reservation</button>
             </div>
             <CardColumns id = "content-wrapper">
