@@ -175,7 +175,7 @@
 #avaliable_seats_container{
     display: inline-block !important;
     width: 30%;;
-    margin-left:30%
+    float: right;
 }
 .accept{
     width:20px;
@@ -245,6 +245,7 @@
 
   #res-holder{
     width: 70%;
+    float: left;
   }
   
   .rese-card{

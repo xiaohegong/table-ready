@@ -644,6 +644,32 @@ class Employee extends Component {
                   draggables
                 }
               </div>
+              <div id = "avaliable_seats_container" onMouseDown = {this.removefocus}>
+                {
+                  this.state.all_table.map((item,index) => (
+                    <Card key={index} id = {`Table-${index}`} className = "tablecard" style={{backgroundColor:this.state.reservations_color[index],  width: '18rem' }}  onMouseOver = {(e) => this.handleMouseOver(index)} onMouseLeave = {() => this.resumecard(index)}>
+                      <Card.Header className = "header-of-card">
+                        <div className = "pic-container">
+                          <strong>
+                            {`Table-${index+1}`}
+                          </strong>
+                          <img className = "user-pic"src = {process.env.PUBLIC_URL + "/images/restaurant_images/table.png"}></img>
+                        </div>
+                      </Card.Header>
+                      <Card.Body>
+                        <div>
+                          <span>Capacity: {item.table_capacity}</span>
+                        </div>
+                        <div className = "user_profile_holder">
+                          <div className = "check-container">  
+                              <button className="reject-button" onClick = {(e) => this.empty_seats(index)} onMouseDown = {this.removefocus}><img src = {process.env.PUBLIC_URL + "/images/restaurant_images/no-stopping.png"}></img></button>
+                          </div>
+                        </div>
+                      </Card.Body>
+                    </Card>
+                  ))
+                  }
+                </div>
               <VerticalModal 
                 show={this.state.modal_show}
                 onHide={()=>this.setModalState(false)}
