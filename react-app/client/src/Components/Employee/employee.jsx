@@ -343,33 +343,6 @@ class Employee extends Component {
         }
       })
 
-      // .then(() => {
-      //   if(this.state.rest_obj != undefined){
-      //     this.setState({
-      //       all_seats: []
-      //     })
-          // this.state.rest_obj.reservations.forEach(element => {
-          //   axios.post("/waitlist/getWaitlistById",{_id: element})
-          //     .then((res) => {
-          //       let tmp_seats = [...this.state.all_seats, res.data[0]]
-          //       let values = tmp_seats.filter(value => value.date_of_arrival == this.state.current_date)
-          //       this.setState({
-          //         all_seats: tmp_seats, items:values
-          //       })
-          //     })
-          //     .catch(function (error){
-          //       console.log(error);
-          //     })
-          // }
-
-          // );
-      // }})
-      // .catch(function (error){
-      //   console.log(error);
-    // })
-    
-    // console.log(this.state.all_seats)
-
   }
   fetch_data = () => {
     this.update_rest_waitlist(this.state.employee_obj.workFor)
@@ -618,35 +591,40 @@ class Employee extends Component {
     if (!this.state.loading){
       if (this.state.valid === true){
         let draggables = []
-        this.state.to_be_reserved.forEach((item,index) => {
+        this.state.items.forEach((item,index) => {
           if(item!=null){
             draggables.push(
               <Draggable onStart={() => this.handleStart(index)}  onStop={() => this.handleStop(index)}>
-                <Card id = {`usercard-${index}`} draggable = "true" style={{backgroundColor:"#f8f9fa", width: '18rem' }}>
-                  <Card.Header className = "header-of-card">
-                    <div className = "pic-container">
-                      <strong>
-                        {item.name}
-                      </strong>
-                      <img className = "user-pic"src = {process.env.PUBLIC_URL + "/images/restaurant_images/boy.png"}></img>
-                    </div>
-                  </Card.Header>
-                  <Card.Body>
-                    <div>
-                      <span><img className = "info-png" src = {process.env.PUBLIC_URL + "/images/restaurant_images/calendar.png"}></img><span className = 
-                      "reservation_time">{item.estimated_time}</span><span className = "reservation_date">/{item.date_of_arrival}</span></span>
-                    </div>
-                    <div className = "num_people">
-                      <span><img className = "info-png" src = {process.env.PUBLIC_URL + "/images/restaurant_images/avatar.png"}></img><span className = "attendence">{item.people}</span></span>
-                    </div>
-                    <div className = "user_profile_holder">
-                      <div className = "check-container">  
-                        <button className="reject-button" onClick = {(e) => this.remove_from_reserved(index)} onMouseDown = {this.removefocus}><img src = {process.env.PUBLIC_URL + "/images/restaurant_images/no-stopping.png"}></img></button>
-                      </div>
-                    </div>
-                  </Card.Body>
-                </Card>
-                </Draggable>
+                    <Card key={index} className = "card border-light mb-3 rese-card" bg="light" style={{ width: '14rem' }}>
+                      <Card.Header className = "header-of-card">
+                        <div className = "pic-container">
+                          <strong>
+                            {item.name}
+                          </strong>
+                          <img className = "user-pic"src = {process.env.PUBLIC_URL + "/images/restaurant_images/boy.png"}></img>
+                          
+                        </div>
+                      </Card.Header>
+                      <Card.Body>
+                        <div>
+                          <span><img className = "info-png" src = {process.env.PUBLIC_URL + "/images/restaurant_images/calendar.png"}></img><span className = 
+                          "reservation_time">{item.estimated_time}</span><span className = "reservation_date">/{item.date_of_arrival}</span></span>
+                        </div>
+                        <div className = "num_people">
+                          <span><img className = "info-png" src = {process.env.PUBLIC_URL + "/images/restaurant_images/avatar.png"}></img><span className = "attendence">{item.people}</span></span>
+                        </div>
+                        <div>
+                        <span><img className = "info-png" src = {process.env.PUBLIC_URL + "/images/restaurant_images/receptionist.png"}></img><span className = "attendence">{item.reserved ? 'Reserved' : 'Not Reserved'}</span></span>
+                        </div>
+                        <div className = "user_profile_holder">
+                          <div className = "check-container">  
+                              {this.render_button(index)}
+                              <button className="reject-button" onClick = {(e) => this.remove_reservation_from_items(index)} onMouseDown = {this.removefocus}><img src = {process.env.PUBLIC_URL + "/images/restaurant_images/no-stopping.png"}></img></button>
+                          </div>
+                        </div>
+                      </Card.Body>
+                    </Card>
+                  </Draggable>
             )
           }
           else{
@@ -654,47 +632,6 @@ class Employee extends Component {
           }
         })
         return (
-          <div id = "outer-container" className = "card-container">
-            <Menu pageWrapId={ "page-wrap" } width = {'1000px'} outerContainerId={ "outer-container" } right disableAutoFocus customBurgerIcon={false} isOpen={this.state.menu_open}
-             onStateChange={(state) => this.handleStateChange(state)} handleMousemove = {() => handleMousemove(this)}>
-              <span id = "reservation_container" onMouseDown = {this.removefocus}>
-                {
-                  draggables.map((item,index) => (
-                    //Fix bug
-                    <div key={index}>
-                      {item}
-                    </div>
-                    
-                  ))
-                }
-              </span>
-              <span id = "avaliable_seats_container" onMouseDown = {this.removefocus}>
-                {
-                  this.state.all_table.map((item,index) => (
-                    <Card key={index} id = {`Table-${index}`} className = "tablecard" style={{backgroundColor:this.state.reservations_color[index],  width: '18rem' }}  onMouseOver = {(e) => this.handleMouseOver(index)} onMouseLeave = {() => this.resumecard(index)}>
-                      <Card.Header className = "header-of-card">
-                        <div className = "pic-container">
-                          <strong>
-                            {`Table-${index+1}`}
-                          </strong>
-                          <img className = "user-pic"src = {process.env.PUBLIC_URL + "/images/restaurant_images/table.png"}></img>
-                        </div>
-                      </Card.Header>
-                      <Card.Body>
-                        <div>
-                          <span>Capacity: {item.table_capacity}</span>
-                        </div>
-                        <div className = "user_profile_holder">
-                          <div className = "check-container">  
-                              <button className="reject-button" onClick = {(e) => this.empty_seats(index)} onMouseDown = {this.removefocus}><img src = {process.env.PUBLIC_URL + "/images/restaurant_images/no-stopping.png"}></img></button>
-                          </div>
-                        </div>
-                      </Card.Body>
-                    </Card>
-                  ))
-                  }
-                </span>
-          </Menu>
           <div id = "page-wrap">
             <Navbar cookies={this.props.cookies}/>
             <div id = "cal" style={{height: '80px'}}>
@@ -702,49 +639,18 @@ class Employee extends Component {
               <button id  = "date-confirm" onClick={()=>this.filter_date()}>Confirm</button>
               <button id = "date-confirm" onClick={()=>this.setModalState(true)}>Add Reservation</button>
             </div>
-            <CardColumns id = "content-wrapper">
-              {
-                this.state.items.map((item,index) => (
-                  <Card key={index} className = "usercard" bg="light" style={{ width: '18rem' }}>
-                    <Card.Header className = "header-of-card">
-                      <div className = "pic-container">
-                        <strong>
-                          {item.name}
-                        </strong>
-                        <img className = "user-pic"src = {process.env.PUBLIC_URL + "/images/restaurant_images/boy.png"}></img>
-                        
-                      </div>
-                    </Card.Header>
-                    <Card.Body>
-                      <div>
-                        <span><img className = "info-png" src = {process.env.PUBLIC_URL + "/images/restaurant_images/calendar.png"}></img><span className = 
-                        "reservation_time">{item.estimated_time}</span><span className = "reservation_date">/{item.date_of_arrival}</span></span>
-                      </div>
-                      <div className = "num_people">
-                        <span><img className = "info-png" src = {process.env.PUBLIC_URL + "/images/restaurant_images/avatar.png"}></img><span className = "attendence">{item.people}</span></span>
-                      </div>
-                      <div>
-                      <span><img className = "info-png" src = {process.env.PUBLIC_URL + "/images/restaurant_images/receptionist.png"}></img><span className = "attendence">{item.reserved ? 'Reserved' : 'Not Reserved'}</span></span>
-                      </div>
-                      <div className = "user_profile_holder">
-                        <div className = "check-container">  
-                            {this.render_button(index)}
-                            <button className="reject-button" onClick = {(e) => this.remove_reservation_from_items(index)} onMouseDown = {this.removefocus}><img src = {process.env.PUBLIC_URL + "/images/restaurant_images/no-stopping.png"}></img></button>
-                        </div>
-                      </div>
-                    </Card.Body>
-                  </Card>
-                ))
-              }
-              </CardColumns>
+              <div id = "res-holder">
+                {
+                  draggables
+                }
+              </div>
               <VerticalModal 
                 show={this.state.modal_show}
                 onHide={()=>this.setModalState(false)}
                 add_reservation = {this.add_reservation}
               ></VerticalModal>
             </div>
-          </div>
-        );
+          );
       }
       else{
         console.log("hi")

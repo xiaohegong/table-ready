@@ -44,6 +44,11 @@
     height:200px;
 } */
 
+.usercard{
+  width:20%
+}
+
+
 .user_profile_holder{
     display: inline-block;
     margin-left:40%
@@ -177,13 +182,14 @@
     height:20px;
    
 }
-.check-container{
- margin-left: 40px;
-}
 
 #content-wrapper{
     margin-top:1%;
-    margin-left:4%
+    margin-left:4%;
+    height:100%
+}
+.card-group{
+  flex-flow: column;
 }
 /* CSS for sidebar*/
 /* Position and sizing of burger button */
@@ -236,7 +242,19 @@
   .bm-morph-shape {
     fill: #373a47;
   }
+
+  #res-holder{
+    width: 70%;
+  }
   
+  .rese-card{
+    display: inline-block;
+    margin-left:3px;
+  }
+  #page-wrap{
+    height: 100%;
+  }
+
   /* Wrapper for item list */
   .bm-item-list {
     color: #b8b7ad;
