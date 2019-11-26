@@ -5,7 +5,7 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const { MongoClient, ObjectID } = require("mongodb");
 const MenuItem = require("./MenuItem.js");
-const Table = require("./Table.js");
+const Table = require("./table.js");
 
 const RestaurantSchema = new Schema({
   owner: {
