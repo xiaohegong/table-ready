@@ -334,7 +334,6 @@ class Employee extends Component {
   create_table = (capacity) => {
     axios.post("/waitlist/CreateNewTable", {
       rest_id: this.state.employee_obj.workFor,
-      date: this.state.current_date,
       table_occupied: false,
       table_capacity: capacity
     })
@@ -351,7 +350,6 @@ class Employee extends Component {
   }
   get_table = () => {
     axios.post("/waitlist/GetTableForRestaurant", {
-      date: this.state.current_date,
       rest_id: this.state.employee_obj.workFor
     })
       .then(res => {
@@ -615,23 +613,6 @@ class Employee extends Component {
   // Normally you would want to split things out into separate components.
   // But in this example everything is just done in one place for simplicity
   render() {
-    let size = 0
-    const popover = (
-      <Popover id="popover-basic">
-        <Popover.Content>
-          <Form>
-            <Form.Label>How many people?</Form.Label>
-            <input type='text' onChange={(e) => {size = e.target.value}}></input>
-            <Button onClick={() => this.create_table(size)}>Add</Button>
-          </Form>
-        </Popover.Content>
-      </Popover>
-    );
-    const Example = () => (
-      <OverlayTrigger trigger="click" placement="right" overlay={popover} >
-        <Button variant="success">Click me to see</Button>
-      </OverlayTrigger>
-    );
     if (!this.state.loading){
       if (this.state.valid === true){
         let draggables = []
@@ -714,7 +695,6 @@ class Employee extends Component {
           </Menu>
           <div id = "page-wrap">
             <Navbar cookies={this.props.cookies}/>
-            <Example></Example>
             <div id = "cal" style={{height: '80px'}}>
               <DatePicker onChange={(value)=>this.showdate(value)} showDefaultIcon></DatePicker>
               <button id  = "date-confirm" onClick={()=>this.update_rest_waitlist(this.state.employee_obj.workFor)}>Confirm</button>

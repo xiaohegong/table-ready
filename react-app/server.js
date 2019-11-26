@@ -56,7 +56,6 @@ app.post("/user/signup", (req, res) => {
 app.post("/waitlist/CreateNewTable", (req, res) => {
   const table = new Table({
     rest_id: req.body.rest_id,
-    date: req.body.date,
     table_occupied: req.body.table_occupied,
     table_capacity: req.body.table_capacity
   })
@@ -370,7 +369,7 @@ app.get("/api/users", (req, res) => {
   });
 });
 app.post("/waitlist/GetTableForRestaurant", (req, res) => {
-  Table.find({date: req.body.date, rest_id: req.body.rest_id})
+  Table.find({rest_id: req.body.rest_id})
     .then(table => {
       res.send(table)
     })
