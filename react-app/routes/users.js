@@ -89,6 +89,37 @@ router.post('/login', (req, res) => {
     });
 });
 
+// change setting of a user
+router.patch('/setting/:id', (req, res) => {
+  const { email, tel, old_password, new_password } = req.body;
+  User.findById(req.params.id)
+    .then(user => {
+      if (!user) {
+        res.status(404).send("User doesn't exist");
+      }
+      User.findByUsernamePassword(user.username, old_password)
+        .then(user => {
+          // at this point, old password is also verified, can update setting now
+          if (new_password && new_password !== '') {
+            user.password = new_password;
+          }
+          user.email = email;
+          user.tel = tel;
+          user.save().then(user => {
+            res.send(user);
+          });
+        })
+        .catch(err => {
+          // password incorrect
+          res.status(400).send(err);
+        });
+    })
+    .catch(err => {
+      res.status(500).send(err);
+    });
+});
+
+// delete a user
 router.delete('/:id', (req, res) => {
   const id = req.params.id;
   User.findByIdAndDelete(id)

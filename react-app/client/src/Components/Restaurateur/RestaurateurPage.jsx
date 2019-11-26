@@ -8,6 +8,7 @@ import Navbar from '../Navbar';
 import axios from 'axios';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import RestaurateurSettingModal from './RestaurateurSettingModal';
 import { stat } from 'fs';
 
 class RestaurateurPage extends Component {
@@ -73,7 +74,7 @@ class RestaurateurPage extends Component {
       console.log(
         'redirecting to signin since not authenticated in RestaurateurPage'
       );
-      return <div></div>;
+      return <Redirect to="/SignIn" />;
     } else {
       if (
         this.props.current_user.accountType !== 'SuperAdmin' &&
@@ -107,6 +108,9 @@ class RestaurateurPage extends Component {
                     <strong>Email: </strong>
                     {this.state.current_user.email}
                   </li>
+                  <li className="list-group-item">
+                    <RestaurateurSettingModal user={this.state.current_user} />
+                  </li>
                 </ul>
               </div>
 
@@ -125,6 +129,13 @@ class RestaurateurPage extends Component {
                 </Link>
                 <div className="restaurants-display">
                   <div className="list-group">
+                    {this.state.restaurants.length === 0 ? (
+                      <React.Fragment>
+                        <br />
+                        <p>You don't have any restaurant.</p>
+                        <p>Please click Add New Button to add Restaurant</p>
+                      </React.Fragment>
+                    ) : null}
                     {this.state.restaurants.map(restaurant => (
                       <Link
                         key={restaurant._id}
