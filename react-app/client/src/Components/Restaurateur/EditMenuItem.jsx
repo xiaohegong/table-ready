@@ -4,7 +4,7 @@ import "../../Stylesheets/restaurateur_page.scss";
 import { withRouter } from "react-router-dom";
 import { Redirect } from "react-router-dom";
 
-class AddNewMenuItem extends Component {
+class EditMenuItem extends Component {
   constructor(props) {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -12,53 +12,47 @@ class AddNewMenuItem extends Component {
   state = { redirect: false };
   handleSubmit(event) {
     event.preventDefault();
-    if(!event.target.name.value) {
-      alert("menu name required")
-    }else if(!event.target.price.value){
-      alert("menu price required")
-    }else{
-      const header = {
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json"
+
+    const header = {
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      }
+    };
+
+    axios
+      .put(
+        "/restaurant/EditMenuItem",
+        {
+          id: this.props.location.state.id,
+          name: event.target.name.value,
+          price: event.target.price.value,
+          ingredients: event.target.ingredients.value,
+          calories: event.target.calories.value
+        },
+        header
+      )
+      .then(
+        response => {
+          this.setState({ redirect: true });
+          console.log(response);
+        },
+        error => {
+          console.log(error);
         }
-      };
-
-      axios
-        .post(
-          "/restaurant/newMenuItem",
-          {
-            restaurant: this.props.location.state.id,
-            name: event.target.name.value,
-            price: event.target.price.value,
-            ingredients: event.target.ingredients.value,
-            calories: event.target.calories.value
-          },
-          header
-        )
-        .then(
-          response => {
-            this.setState({ redirect: true });
-            console.log(response);
-          },
-          error => {
-            console.log(error);
-          }
-        );
-    }
-
+      );
   }
   render() {
     const { redirect } = this.state;
 
     if (redirect) {
-      return <Redirect to={`/restaurateur2/${this.props.location.state.id}`} />;
+      return <Redirect to={`/restaurateur2/${this.props.location.state.res_id}`} />;
     }
     return (
       <div className="new-restaurant-page">
         <div className="container">
           <div className="form-container mx-auto">
-            <h2>Add A Menu Item</h2>
+            <h2>Edit This Menu Item</h2>
             <form onSubmit={this.handleSubmit} className="">
               <div className="input-group mb-3">
                 <div className="input-group-prepend">
@@ -69,6 +63,7 @@ class AddNewMenuItem extends Component {
                 <input
                   type="text"
                   className="form-control"
+                  defaultValue= {this.props.location.state.name}
                   placeholder="Item Name"
                   id="name"
                   name="name"
@@ -85,6 +80,7 @@ class AddNewMenuItem extends Component {
                   className="form-control"
                   placeholder="price"
                   type="number"
+                  defaultValue= {this.props.location.state.price}
                   id="price"
                   name="price"
                 />
@@ -99,6 +95,7 @@ class AddNewMenuItem extends Component {
                   type="text"
                   className="form-control"
                   placeholder="ingredients"
+                  defaultValue= {this.props.location.state.ingredients}
                   id="ingredients"
                   name="ingredients"
                 />
@@ -114,6 +111,7 @@ class AddNewMenuItem extends Component {
                   className="form-control"
                   placeholder="calories"
                   id="calories"
+                  defaultValue= {this.props.location.state.calories}
                   type="number"
                   name="calories"
                 />
@@ -133,4 +131,4 @@ class AddNewMenuItem extends Component {
   }
 }
 
-export default withRouter(AddNewMenuItem);
+export default withRouter(EditMenuItem);

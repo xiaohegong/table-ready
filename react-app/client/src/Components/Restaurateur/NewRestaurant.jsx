@@ -12,56 +12,44 @@ class NewRestaurant extends Component {
   state = {redirect: false};
   handleSubmit(event) {
     event.preventDefault();
-
-    const header = {
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json"
-      }
-    };
-
-    axios
-      .post(
-        "/restaurant/newRestaurant",
-        {
-          owner: this.props.cookies.cookies.cur_user._id,
-          name: event.target.name.value,
-          phoneNumber: event.target.phoneNumber.value,
-          cuisine: event.target.cuisine.value,
-          location: event.target.location.value,
-          hours: event.target.hours.value
-        },
-        header
-      )
-      .then(
-        response => {
-          this.setState({ redirect: true });
-          console.log(response);
-        },
-        error => {
-          console.log(error);
+    if(!event.target.name.value) {
+      alert("restaurant name required")
+    }else if(!event.target.phoneNumber.value){
+      alert("restaurant phone number required")
+    }else{
+      const header = {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json"
         }
-      );
+      };
 
-    // fetch('http://localhost:3000/restaurant/newRestaurant', {
-    //     method: 'POST',
-    //     headers: {
-    //         'Accept': 'application/json',
-    //         'Content-Type': 'application/json',
-    //     },
-    //     body: JSON.stringify({
-    //         owner: "Heddy",
-    //         name: event.target.name.value,
-    //         phoneNumber: event.target.phoneNumber.value,
-    //         cuisine: event.target.cuisine.value,
-    //         location:event.target.location.value
-    //     })
-    // }).then(restaurant => {
-    //     console.log("restaurant " + restaurant.name + " saved to database");
-    // })
-    //     .catch(err => {
-    //         console.log(400);
-    //     });
+      axios
+        .post(
+          "/restaurant/newRestaurant",
+          {
+            owner: this.props.cookies.cookies.cur_user._id,
+            name: event.target.name.value,
+            phoneNumber: event.target.phoneNumber.value,
+            cuisine: event.target.cuisine.value,
+            location: event.target.location.value,
+            hours: event.target.hours.value
+          },
+          header
+        )
+        .then(
+          response => {
+            this.setState({ redirect: true });
+            console.log(response);
+          },
+          error => {
+            console.log(error);
+          }
+        );
+    }
+
+
+
   }
   render() {
     const { redirect } = this.state;

@@ -45,13 +45,14 @@ class Menu extends Component {
     const menuItem = this.state.menuItem;
     for (let i = 0; i < menuItem.length; i++) {
       if (menuItem[i]._id === id) {
-        menuItem.splice(i, 1);
         axios
-          .post('/restaurant/deleteMenuItem', {
+          .delete("/restaurant/deleteMenuItem/" + id, {
             restaurant_id: this.props.res_id,
             menu_id: id
           })
           .then(msg => {
+            menuItem.splice(i, 1);
+            this.setState({ menuItem: menuItem });
             console.log(msg);
           })
           .catch(err => {
@@ -83,11 +84,13 @@ class Menu extends Component {
             return (
               <MenuItem
                 key={uid()}
+                res_id={this.props.res_id}
                 image={menuItem.image}
                 name={menuItem.name}
                 price={menuItem.price}
                 id={menuItem._id}
                 ingredients={menuItem.ingredients}
+                calories = {menuItem.calories}
                 deleteItem={this.deleteItem}
               />
             );

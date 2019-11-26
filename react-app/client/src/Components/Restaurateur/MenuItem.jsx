@@ -1,13 +1,13 @@
 import React, {Component} from 'react';
+import {Link} from "react-router-dom";
 
 class MenuItem extends Component {
     state = {  };
     render() {
         const { deleteItem, id } = this.props;
         return (
-          <button
-            type="button"
-            className="employee-list-item-component list-group-item list-group-item-action employee-list-item"
+          <div
+            className="list-group-item list-group-item-action restaurant-menu-item"
           >
               <div className="row">
                   <div className="col col-md-4">
@@ -26,18 +26,43 @@ class MenuItem extends Component {
                               <strong>Ingredients: </strong>
                               {this.props.ingredients}
                           </p>
+                        <p>
+                          <strong>Calories: </strong>
+                          {this.props.calories}
+                        </p>
                       </div>
                   </div>
                   <div className="col col-md-2">
-            <span
-              className="btn btn-sm btn-outline-danger"
-              onClick={deleteItem.bind(this, id)}
-            >
-              Delete
-            </span>
+
+                    <Link
+                      to={{
+                        pathname: "/editMenuItem",
+                        state: { id: this.props.id,
+                          res_id: this.props.res_id,
+                          name: this.props.name,
+                          price: this.props.price,
+                          ingredients: this.props.ingredients,
+                          calories : this.props.calories
+                      }
+                      }}
+                    >
+                      <div
+                        style={{marginBottom: "5px"}}
+                        className="btn btn-sm btn-outline-success"
+                        onClick={deleteItem.bind(this, id)}
+                      >
+                        Edit
+                      </div>
+                    </Link>
+                    <div
+                      className="btn btn-sm btn-outline-danger"
+                      onClick={deleteItem.bind(this, id)}
+                    >
+                      Delete
+                    </div>
                   </div>
               </div>
-          </button>
+          </div>
         );
     }
 }

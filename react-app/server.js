@@ -127,9 +127,9 @@ app.post('/restaurant/findMenuByRestaurant', (req, res) => {
   );
 });
 
-app.post('/restaurant/deleteMenuItem', (req, res) => {
+app.delete("/restaurant/deleteMenuItem/?:id", (req, res) => {
   // const restaurant_id = req.body.restaurant_id;
-  const menu_id = req.body.menu_id;
+  const menu_id = req.params.id;
   if (menu_id) {
     MenuItem.findByIdAndDelete(menu_id).then(
       users => {
@@ -142,7 +142,27 @@ app.post('/restaurant/deleteMenuItem', (req, res) => {
   }
 });
 
-app.post('/restaurant/findRestaurantByOwner', (req, res) => {
+app.put("/restaurant/EditMenuItem", (req, res) => {
+  // const restaurant_id = req.body.restaurant_id;
+  const id = req.body.id;
+  if (id) {
+    MenuItem.findByIdAndUpdate(id, {
+      name: req.body.name,
+      price: req.body.price,
+      ingredients: req.body.ingredients,
+      calories: req.body.calories
+    }).then(
+      users => {
+        res.send(users);
+      },
+      error => {
+        res.send({ code: 404, error });
+      }
+    );
+  }
+});
+
+app.post("/restaurant/findRestaurantByOwner", (req, res) => {
   Restaurant.find({ owner: req.body.owner }).then(
     restaurant => {
       console.log(restaurant);
@@ -252,7 +272,6 @@ app.post('/restaurant/findRestaurant', (req, res) => {
       num_reserv.forEach(element => {
         tmp.push(element);
       });
-      console.log(tmp);
       Waitlist.find({
         _id: { $in: tmp }
       })
@@ -354,9 +373,11 @@ app.get('/api/restaurants', (req, res) => {
 
 app.delete('/api/users/:id', (req, res) => {
   const id = req.params.id;
-  User.findByIdAndDelete(id)
-    .then(() => {
-      res.send('User ' + id + ' deleted.');
+  User.findById(id)
+    .then((user) => {
+      user.remove().then(()=>{
+        res.send("User " + id + " deleted.");
+      })
     })
     .catch(err => {
       res.status(400).json('Error: ' + err);
@@ -365,9 +386,11 @@ app.delete('/api/users/:id', (req, res) => {
 
 app.delete('/api/restaurants/:id', (req, res) => {
   const id = req.params.id;
-  Restaurant.findByIdAndDelete(id)
-    .then(() => {
-      res.send('Restaurant ' + id + ' deleted.');
+  Restaurant.findById(id)
+    .then((rest) => {
+      rest.remove();
+      res.send("res " + id + " deleted.");
+
     })
     .catch(err => {
       res.status(400).json('Error: ' + err);
