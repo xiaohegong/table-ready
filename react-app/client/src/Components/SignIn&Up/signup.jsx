@@ -8,6 +8,9 @@ import PropTypes from 'prop-types';
 import { register } from '../../actions/authActions';
 import { clearErrors } from '../../actions/errorActions';
 import { REGISTER_FAIL } from '../../actions/actionTypes';
+import Navbar from "../Navbar";
+import Animation from "./animation.jsx";
+
 
 const log = console.log;
 
@@ -80,6 +83,7 @@ class SignUp extends Component {
       });
     }
   };
+
 
   // handleEmailChange(event) {
   //   this.setState({ email: event.target.value });
@@ -197,7 +201,12 @@ class SignUp extends Component {
             {this.state.message}
           </div>
         ) : null}
+
+        <Navbar cookies={this.props.cookies} />
+        <Animation />
+
         <div id="divPage">
+          <header className="center header-style">SIGN UP HERE: </header>
           <form action="" onSubmit={this.signUp}>
             <div className="input-group mb-3">
               <div className="input-group-prepend">
@@ -213,7 +222,6 @@ class SignUp extends Component {
                 value={this.state.accountType}
                 onChange={this.handleTypeChange}
               >
-                <option value="SuperAdmin">SuperAdmin</option>
                 <option value="Admin">Admin</option>
                 <option value="Employee">Employee</option>
               </select>
@@ -254,27 +262,6 @@ class SignUp extends Component {
                 onChange={this.onChange}
               />
             </div>
-            {/*{!this.state.Super ?*/}
-            {/*  (<div>*/}
-            {/*    <div className="input-group mb-3">*/}
-            {/*      <div className="input-group-prepend">*/}
-            {/*            <span*/}
-            {/*              className="input-group-text"*/}
-            {/*              id="inputGroup-sizing-default"*/}
-            {/*            >*/}
-            {/*              Manager*/}
-            {/*            </span>*/}
-            {/*      </div>*/}
-            {/*      <input*/}
-            {/*        name="manager"*/}
-            {/*        type="text"*/}
-            {/*        className="form-control"*/}
-            {/*        aria-label="Sizing example input"*/}
-            {/*        aria-describedby="inputGroup-sizing-default"*/}
-            {/*        onChange = {this.handleManagerChange}*/}
-            {/*      />*/}
-            {/*    </div>*/}
-            {/*  </div>): null}*/}
             <div className="input-group mb-3">
               <div className="input-group-prepend">
                 <span
@@ -329,9 +316,11 @@ class SignUp extends Component {
                 onChange={this.onChange}
               />
             </div>
+
             <button type="submit" className="btn btn-danger">
               Register
             </button>
+
           </form>
         </div>
       </div>
