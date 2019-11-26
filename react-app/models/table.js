@@ -7,7 +7,11 @@ const Schema = mongoose.Schema;
 const {MongoClient, ObjectID} = require('mongodb');
 // Todo: Jiatao
 const TableSchema = new Schema({
-    id:{
+    rest_id:{
+        type: String,
+        required: true
+    },
+    date:{
         type: String,
         required: true
     },

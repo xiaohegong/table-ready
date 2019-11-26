@@ -10,6 +10,7 @@ const User = require("./models/user.js");
 const Restaurant = require("./models/restaurant.js");
 const MenuItem = require("./models/MenuItem.js");
 const Waitlist = require("./models/waitlist.js");
+const Table = require("./models/table");
 const path = require("path");
 
 /* Use statements for the server */
@@ -52,6 +53,23 @@ app.post("/user/signup", (req, res) => {
       res.status(400).send(err);
     });
 });
+app.post("/waitlist/CreateNewTable", (req, res) => {
+  const table = new Table({
+    rest_id: req.body.rest_id,
+    date: req.body.date,
+    table_occupied: req.body.table_occupied,
+    table_capacity: req.body.table_capacity
+  })
+  table
+    .save()
+    .then(table => {
+      res.send("table" + table.id + " created")
+    })
+    .catch(err => {
+      log(err);
+      res.send({code:404, err})
+    })
+})
 
 app.post("/restaurant/newRestaurant", (req, res) => {
   const restaurant = new Restaurant({
@@ -241,6 +259,19 @@ app.post("/restaurant/delete_employee", (req, res) => {
   }
 });
 
+app.delete("/waitlist/DeleteTableByID", (req, res) => {
+  const id = req.body.id;
+  Table.findByIdAndDelete(id)
+    .then(res => console.log(res))
+    .catch(err => console.log(err))
+})
+app.put("/waitlist/ModifyTableStatus", (req, res) => {
+  const status = req.body.status;
+  const id = req.body.id
+  Table.findByIdAndUpdate(id, {table_occupied: status})
+    .then(res => console.log(res))
+    .catch(err => console.log(err))
+})
 app.post("/restaurant/findRestaurant", (req, res) => {
   Restaurant.find({ _id: req.body._id }).then(
     user => {
@@ -338,7 +369,13 @@ app.get("/api/users", (req, res) => {
     res.send(users);
   });
 });
-
+app.post("/waitlist/GetTableForRestaurant", (req, res) => {
+  Table.find({date: req.body.date, rest_id: req.body.rest_id})
+    .then(table => {
+      res.send(table)
+    })
+    .catch(err => console.log(err))
+})
 app.get("/api/restaurants", (req, res) => {
   Restaurant.find({}, function(err, restaurants) {
     if (err) {

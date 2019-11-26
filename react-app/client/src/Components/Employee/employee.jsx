@@ -24,8 +24,11 @@ import Draggable, {DraggableCore} from 'react-draggable';
 import { withRouter } from "react-router-dom";
 import VerticalModal from './verticalModal';
 import axios from 'axios';
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
+import Popover from 'react-bootstrap/Popover';
 import HeaderSubHeader from "semantic-ui-react/dist/commonjs/elements/Header/HeaderSubheader";
 import {Redirect} from 'react-router-dom'
+import Form from "react-bootstrap/Form";
 // fake data generator
 
 // a little function to help us with reordering the result
@@ -237,6 +240,7 @@ const initial_color = (() => {
 class Employee extends Component {
   constructor(props) {
     super(props);
+    this.myRef = React.createRef()
     console.log(this.props.cookies.cookies)
     this.state = {
       all_seats: [],
@@ -246,8 +250,7 @@ class Employee extends Component {
       current_date: null,
       draggin:false,
       menu_open:false,
-      current_table:null,
-      all_table:all_table.tables,
+      all_table:[],
       reservations_color:initial_color,
       user_obj: 0,
       changed: false,
@@ -327,11 +330,42 @@ class Employee extends Component {
       .catch((error) => {
         console.log(error);
       })
-    
-
+  }
+  create_table = (capacity) => {
+    axios.post("/waitlist/CreateNewTable", {
+      rest_id: this.state.employee_obj.workFor,
+      date: this.state.current_date,
+      table_occupied: false,
+      table_capacity: capacity
+    })
+      .then(res => console.log(res))
+      .catch(err => console.log(err))
+  }
+  modify_table = (table, status) => {
+    axios.put("/waitlist/ModifyTableStatus", {
+      id: table._id,
+      status: status
+    })
+      .then(res => console.log(res))
+      .catch(err => console.log(err))
+  }
+  get_table = () => {
+    axios.post("/waitlist/GetTableForRestaurant", {
+      date: this.state.current_date,
+      rest_id: this.state.employee_obj.workFor
+    })
+      .then(res => {
+        console.log(res.data)
+        this.setState({
+          all_table: res.data
+        })
+      })
+      .catch(err => console.log(err))
   }
   update_rest_waitlist = (rest_id) => { 
-    console.log("hiii")
+    this.setState({
+      to_be_reserved: []
+    })
     axios.post("/restaurant/findRestaurant", {_id: rest_id})
       .then(res => {
         this.setState({rest_obj: res.data[1][0]})
@@ -448,6 +482,7 @@ class Employee extends Component {
         in_list = true;
       }
     });
+    this.get_table()
     if (in_list == false) {
       console.log(this.state.items[index])
       this.setState({to_be_reserved: this.state.to_be_reserved.filter((value) => value != null)})
@@ -461,9 +496,6 @@ class Employee extends Component {
     this.setState({
       items: this.state.items.filter(i => i.id != this.state.items[index].id)
     });
-  };
-  info = e => {
-    // console.log("hi")
   };
   removefocus = e => {
     e.preventDefault();
@@ -521,6 +553,7 @@ class Employee extends Component {
     if (this.state.all_table[index].table_occupied == true) {
       this.state.all_table[index].table_occupied = false;
       this.resumecard(index);
+      this.modify_table(this.state.all_table[index], false)
     }
   };
   remove_from_reserved = index => {
@@ -582,6 +615,23 @@ class Employee extends Component {
   // Normally you would want to split things out into separate components.
   // But in this example everything is just done in one place for simplicity
   render() {
+    let size = 0
+    const popover = (
+      <Popover id="popover-basic">
+        <Popover.Content>
+          <Form>
+            <Form.Label>How many people?</Form.Label>
+            <input type='text' onChange={(e) => {size = e.target.value}}></input>
+            <Button onClick={() => this.create_table(size)}>Add</Button>
+          </Form>
+        </Popover.Content>
+      </Popover>
+    );
+    const Example = () => (
+      <OverlayTrigger trigger="click" placement="right" overlay={popover} >
+        <Button variant="success">Click me to see</Button>
+      </OverlayTrigger>
+    );
     if (!this.state.loading){
       if (this.state.valid === true){
         let draggables = []
@@ -622,7 +672,7 @@ class Employee extends Component {
         })
         return (
           <div id = "outer-container" className = "card-container">
-            <Menu pageWrapId={ "page-wrap" } width = {'1000px'} outerContainerId={ "outer-container" } right disableAutoFocus customBurgerIcon={false} isOpen={this.state.menu_open}
+            <Menu pageWrapId={ "page-wrap" }  width = {'1000px'} outerContainerId={ "outer-container" } right disableAutoFocus customBurgerIcon={false} isOpen={this.state.menu_open}
              onStateChange={(state) => this.handleStateChange(state)} handleMousemove = {() => handleMousemove(this)}>
               <span id = "reservation_container" onMouseDown = {this.removefocus}>
                 {
@@ -635,7 +685,7 @@ class Employee extends Component {
                   ))
                 }
               </span>
-              <span id = "avaliable_seats_container" onMouseDown = {this.removefocus}>
+              <span id = "avaliable_seats_container" onMouseDown = {this.removefocus} ref={this.myRef}>
                 {
                   this.state.all_table.map((item,index) => (
                     <Card key={index} id = {`Table-${index}`} className = "tablecard" style={{backgroundColor:this.state.reservations_color[index],  width: '18rem' }}  onMouseOver = {(e) => this.handleMouseOver(index)} onMouseLeave = {() => this.resumecard(index)}>
@@ -664,9 +714,10 @@ class Employee extends Component {
           </Menu>
           <div id = "page-wrap">
             <Navbar cookies={this.props.cookies}/>
+            <Example></Example>
             <div id = "cal" style={{height: '80px'}}>
               <DatePicker onChange={(value)=>this.showdate(value)} showDefaultIcon></DatePicker>
-              <button id  = "date-confirm" onClick={()=>this.this.update_rest_waitlist(this.state.employee_obj.workFor)}>Confirm</button>
+              <button id  = "date-confirm" onClick={()=>this.update_rest_waitlist(this.state.employee_obj.workFor)}>Confirm</button>
               <button id = "date-confirm" onClick={()=>this.setModalState(true)}>Add Reservation</button>
             </div>
             <CardColumns id = "content-wrapper">
