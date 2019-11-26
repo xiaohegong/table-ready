@@ -41,10 +41,11 @@
         display: flex;
         width: max-content;
         height: max-content;
-        min-width: 40%;
+        min-width: 45%;
         margin: 3%;
         margin-top: 5%;
         margin-bottom: 10%;
+        margin-left: 20%;
       }
 
       .btn {
@@ -94,9 +95,22 @@
 
       .manage-content {
         .left-content {
-          padding-right: 12%;
+          padding-right: 1%;
         }
       }
+    }
+
+    .newAdmin {
+
+      .card {
+        min-width: 40%;
+        width: 170%;
+      }
+      .alert {
+        margin-left: 2%;
+        width: 170%;
+      }
+
     }
   }
 
