@@ -10,7 +10,6 @@ import PropTypes from 'prop-types';
 import { login } from '../../actions/authActions';
 import { clearErrors } from '../../actions/errorActions';
 
-const log = console.log;
 class SignIn extends Component {
   state = {
     username: '',
@@ -20,9 +19,7 @@ class SignIn extends Component {
 
   static propTypes = {
     isAuthenticated: PropTypes.bool,
-    error: PropTypes.object.isRequired,
-    login: PropTypes.func.isRequired,
-    clearErrors: PropTypes.func.isRequired
+    error: PropTypes.object.isRequired
   };
 
   // handleChange(event) {
@@ -39,6 +36,9 @@ class SignIn extends Component {
         this.setState({ message: null });
       }
     }
+    if (this.props.isAuthenticated !== prevProps.isAuthenticated) {
+      this.redirectUser();
+    }
   }
 
   handleSignIn = event => {
@@ -51,6 +51,10 @@ class SignIn extends Component {
     // Attempt to login
     this.props.clearErrors();
     this.props.login(user);
+    this.redirectUser();
+  };
+
+  redirectUser = () => {
     if (this.props.isAuthenticated) {
       const accountType = this.props.current_user.accountType;
       const user_id = this.props.current_user._id;

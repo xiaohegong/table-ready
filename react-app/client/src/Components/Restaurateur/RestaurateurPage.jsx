@@ -13,7 +13,6 @@ class RestaurateurPage extends Component {
   state = { restaurants: [] };
   static propTypes = {
     isAuthenticated: PropTypes.bool,
-    error: PropTypes.object.isRequired,
     clearErrors: PropTypes.func.isRequired
   };
   componentDidMount() {
@@ -45,6 +44,9 @@ class RestaurateurPage extends Component {
 
   render() {
     if (!this.props.isAuthenticated) {
+      console.log(
+        'redirecting to signin since not authenticated in RestaurateurPage'
+      );
       return <Redirect to="/SignIn" />;
     }
     return (
