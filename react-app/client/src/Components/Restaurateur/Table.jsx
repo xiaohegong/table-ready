@@ -10,6 +10,7 @@ class Table extends Component {
     constructor(props) {
         super(props);
         this.fetchTable = this.fetchTable.bind(this);
+        this.addTable = this.addTable.bind(this)
         // this.test1 = this.test1.bind(this);
     }
     componentDidMount() {
@@ -47,9 +48,9 @@ class Table extends Component {
             if (tableItem[i]._id === id) {
                 tableItem.splice(i, 1);
                 axios
-                  .post("/restaurant/deleteMenuItem", {
+                  .post("/restaurant/deleteTableItem", {
                       restaurant_id: this.props.res_id,
-                      menu_id: id
+                      table_id: id
                   })
                   .then(msg => {
                       console.log(msg);
@@ -62,31 +63,45 @@ class Table extends Component {
         this.setState({ tableItem: tableItem });
     };
 
+    addTable = () =>{
+      const header = {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json"
+        }
+      };
+      axios
+        .post(
+          "/resetaurant/newTable",
+          {
+            restaurant_id: this.props.res_id
+          },
+          header
+        )
+        .then(
+          this.fetchTable()
+        )
+        .catch(err => {
+          console.log(400);
+        });
+    }
+
     render() {
         return (
           <>
-              <h2 style={{ display: "inline" }}>Menu</h2>
-              <Link
-                to={{
-                    pathname: "/addNewMenuItem",
-                    state: { id: this.props.res_id }
-                }}
-              >
-                  <button className="addNewButton btn btn-outline-success btn-sm">
-                      {" "}
-                      Add New{" "}
-                  </button>
-              </Link>
+              <h2 style={{ display: "inline" }}>Tables</h2>
+            <button onClick={this.addTable} className="addNewButton btn btn-outline-success btn-sm">
+              {" "}
+              Add New{" "}
+            </button>
 
               <div className="list-group employee-list">
                   {this.state.tableItem.map(tableItem => {
                       return (
                         <TableItem
                           key={uid()}
-                          name={tableItem.name}
-                          price={tableItem.price}
-                          id={tableItem._id}
-                          ingredients={tableItem.ingredients}
+                          id = {tableItem._id}
+                          capacity = {tableItem.table_capacity}
                           deleteItem={this.deleteItem}
                         />
                       );

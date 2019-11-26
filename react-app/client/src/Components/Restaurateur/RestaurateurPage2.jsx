@@ -36,7 +36,7 @@ class RestaurateurPage2 extends Component {
       {
         id: 4,
         title: "Table",
-        model: <Table />
+        model: <Table res_id={this.props.match.params.id}/>
       }
     ]
   };

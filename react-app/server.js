@@ -100,6 +100,34 @@ app.post("/restaurant/newRestaurant", (req, res) => {
     });
 });
 
+app.post("/resetaurant/newTable", (req,res)=>{
+  const table = new Table({
+    rest_id: req.body.restaurant_id,
+  });
+  table.save()
+    .then(table =>{
+      log("NEW TABLE CREATED");
+      res.send(table);
+    })
+    .catch(err => {
+    log(err);
+    res.send({code:400,err})
+  })
+});
+
+app.post("/restaurant/updateTable", (req,res)=>{
+  console.log("WHAT")
+  Table.findByIdAndUpdate(req.body._id, {
+    table_capacity: req.body.tableNum
+  }).then(table =>{
+      res.send(table);
+    })
+    .catch(err => {
+      log(err);
+      res.send({code:400,err})
+    })
+});
+
 app.post("/restaurant/updateRestaurant", (req, res) => {
   Restaurant.findByIdAndUpdate(req.body._id, {
     name: req.body.name,
@@ -153,7 +181,7 @@ app.post("/restaurant/findMenuByRestaurant", (req, res) => {
 
 app.post("/restaurant/findTableByRestaurant", (req, res) => {
   const restaurant_id = req.body.restaurant_id;
-  Table.find({ restaurant: restaurant_id }).then(
+  Table.find({ rest_id: restaurant_id }).then(
     table => {
       res.send(table);
     },
@@ -170,6 +198,21 @@ app.post("/restaurant/deleteMenuItem", (req, res) => {
     MenuItem.findByIdAndDelete(menu_id).then(
       users => {
         res.send(users);
+      },
+      error => {
+        res.send({ code: 404, error });
+      }
+    );
+  }
+});
+
+app.post("/restaurant/deleteTableItem", (req, res) => {
+  // const restaurant_id = req.body.restaurant_id;
+  const table_id = req.body.table_id;
+  if (table_id) {
+    Table.findByIdAndDelete(table_id).then(
+      table => {
+        res.send(table);
       },
       error => {
         res.send({ code: 404, error });
