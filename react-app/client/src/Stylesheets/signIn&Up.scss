@@ -3,6 +3,11 @@
     margin-bottom: 0;
   }
 
+  #header{
+    margin: 10%;
+    font-size: 20px;
+  }
+
   #canvasConfig {
     background-color: wheat;
     float: left;
@@ -15,7 +20,6 @@
     //float: left;
     //display: block;
     margin-left: 15%;
-    margin-top: 5%;
   }
   .container {
     position: relative;

@@ -103,7 +103,7 @@ class SignIn extends Component {
             {this.state.message}
           </div>
         ) : null}
-        <Animation />
+        {/*<Animation />*/}
         <div id="divPage">
           <div className="container">
             <img id="avatar" src={Avatar} alt="Avatar" />
