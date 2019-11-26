@@ -1,66 +1,100 @@
-import React, { Component } from "react";
-import "../../Stylesheets/restaurateur_page.scss";
-import RestaurantListItem from "./RestaurantListItem";
-import { withRouter } from "react-router-dom";
-import { Redirect } from "react-router-dom";
-import { Link } from "react-router-dom";
-import Navbar from "../Navbar";
-import axios from "axios";
+import React, { Component } from 'react';
+import '../../Stylesheets/restaurateur_page.scss';
+import RestaurantListItem from './RestaurantListItem';
+import { withRouter } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import Navbar from '../Navbar';
+import axios from 'axios';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import { stat } from 'fs';
 
 class RestaurateurPage extends Component {
-  state = { restaurants: [] };
-
+  state = {
+    restaurants: [],
+    current_user: {},
+    restaurateur_id: this.props.match.params.id
+  };
+  static propTypes = {
+    isAuthenticated: PropTypes.bool
+  };
   componentDidMount() {
+    console.log('restaurateurPage Did Mount');
     const header = {
       headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json"
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
       }
     };
     axios
       .post(
-        "/restaurant/findRestaurantByOwner",
+        '/restaurant/findRestaurantByOwner',
         {
           owner: this.props.match.params.id
         },
         header
       )
-
       .then(restaurants =>
         this.setState({ restaurants: restaurants.data }, () =>
-          console.log("Customers fetched...", this.state.restaurants)
+          console.log('Customers fetched...', this.state.restaurants)
         )
       )
       .catch(err => {
-        console.log(400);
+        console.log(err);
+      });
+    console.log(this.props.auth);
+    axios
+      .get('/api/users/auth/' + this.props.match.params.id, this.tokenConfig())
+      .then(res => {
+        console.log(res);
+        this.setState({ current_user: res.data });
+      })
+      .catch(err => {
+        console.log(err);
       });
   }
 
-  is_authenticated = () => {
-    const cur_user = this.props.cookies.cookies.cur_user;
-    if (cur_user.accountType !== "Employee") {
-      return true;
+  tokenConfig = () => {
+    const token = this.props.auth.token;
+    const config = {
+      headers: {
+        'Content-type': 'application/json'
+      }
+    };
+
+    if (token) {
+      config.headers['x-auth-token'] = token;
     }
-    return false;
+    return config;
   };
 
   render() {
-    if (!this.is_authenticated()) {
-      return <Redirect to="/error" />;
+    if (!this.props.isAuthenticated) {
+      console.log(
+        'redirecting to signin since not authenticated in RestaurateurPage'
+      );
+      return <div></div>;
+    } else {
+      if (
+        this.props.current_user.accountType !== 'SuperAdmin' &&
+        this.props.current_user._id !== this.props.match.params.id
+      ) {
+        return <Redirect to="/signin" />;
+      }
     }
+
     return (
       <div>
-        <Navbar cookies={this.props.cookies}/>
+        <Navbar />
         <div className="restaurateur-page">
           <div className="container">
             <div className="row">
               <div className="col-md-3 info">
-                <h2 className="">
-                  {this.props.cookies.cookies.cur_user.username}
-                </h2>
+                <h2 className="">{this.state.current_user.username}</h2>
                 <div>
                   <img
-                    src={process.env.PUBLIC_URL + "/images/avatar_sample.png"}
+                    src={'/images/avatar_sample.png'}
                     alt=""
                     className="avatar"
                   />
@@ -68,24 +102,25 @@ class RestaurateurPage extends Component {
                 <ul className="list-group">
                   <li className="list-group-item">
                     <strong>Telephone: </strong>
-                    {this.props.cookies.cookies.cur_user.tel}
+                    {this.state.current_user.tel}
                   </li>
                   <li className="list-group-item">
                     <strong>Email: </strong>
-                    {this.props.cookies.cookies.cur_user.email}
+                    {this.state.current_user.email}
                   </li>
                 </ul>
               </div>
 
               <div className="col-md-9">
-                <h2 style={{ display: "inline" }}>Your Restaurants</h2>
-                <Link to={{
-                  pathname: "/addNewRestaurant",
-                  state: {id: this.props.match.params.id}
-                }}>
+                <h2 style={{ display: 'inline' }}>Your Restaurants</h2>
+                <Link
+                  to={{
+                    pathname: '/addNewRestaurant',
+                    state: { id: this.props.match.params.id }
+                  }}
+                >
                   <button className="addNewButton btn btn-outline-success btn-sm">
-                    {" "}
-                    Add New{" "}
+                    Add New
                   </button>
                 </Link>
                 <div className="restaurants-display">
@@ -94,7 +129,7 @@ class RestaurateurPage extends Component {
                       <Link
                         key={restaurant._id}
                         to={{
-                          pathname: "/restaurateur2",
+                          pathname: '/restaurateur2',
                           state: {
                             restaurant_id: restaurant._id
                           }
@@ -106,7 +141,7 @@ class RestaurateurPage extends Component {
                           telephone={restaurant.phoneNumber}
                           image={
                             process.env.PUBLIC_URL +
-                            "/images/restaurant_images/restaurant1.jpeg"
+                            '/images/restaurant_images/restaurant1.jpeg'
                           }
                           _id={restaurant._id}
                         />
@@ -122,5 +157,12 @@ class RestaurateurPage extends Component {
     );
   }
 }
+// getting from reducers (error and auth reducers)
+const mapStateToProps = state => ({
+  isAuthenticated: state.auth.isAuthenticated,
+  error: state.error,
+  current_user: state.auth.user,
+  auth: state.auth
+});
 
-export default withRouter(RestaurateurPage);
+export default connect(mapStateToProps)(withRouter(RestaurateurPage));

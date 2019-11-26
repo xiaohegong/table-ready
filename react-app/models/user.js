@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 // const TypeId = mongoose.Types.ObjectId;
 const Schema = mongoose.Schema;
 // const {MongoClient, ObjectID} = require('mongodb');
+const Restaurant = require('./restaurant.js');
 const bcrypt = require('bcrypt');
 
 const UserSchema = new Schema({
@@ -57,6 +58,23 @@ UserSchema.pre('save', function(next) {
   }
 });
 
+UserSchema.pre('remove', function(next) {
+  const userID = this._id;
+  console.log('USER DELETE');
+  Restaurant.find({ owner: userID }).then(
+    res => {
+      res.forEach(re => {
+        re.remove();
+        console.log(re.name);
+      });
+    },
+    error => {
+      console.log('FAILED', error);
+    }
+  );
+  next();
+});
+
 // A static method on the document model.
 // Allows us to find a User document by comparing the hashed password
 //  to a given one, for example when logging in.
@@ -66,7 +84,7 @@ UserSchema.statics.findByUsernamePassword = function(username, password) {
   // First find the user by their email
   return User.findOne({ username: username }).then(user => {
     if (!user) {
-      return Promise.reject(); // a rejected promise
+      return Promise.reject("User doesn't exist"); // a rejected promise
     }
     // if the user exists, make sure their password is correct
     return new Promise((resolve, reject) => {

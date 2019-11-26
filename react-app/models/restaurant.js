@@ -1,12 +1,11 @@
-"use strict";
 const log = console.log;
 const mongoose = require("mongoose");
 // const ObjectId = mongoose.Schema.Types.ObjectId;
 // const TypeId = mongoose.Types.ObjectId;
 const Schema = mongoose.Schema;
 const { MongoClient, ObjectID } = require("mongodb");
+const MenuItem = require("./MenuItem.js");
 
-// Todo: Jiatao
 const RestaurantSchema = new Schema({
   owner: {
     type: String,
@@ -24,8 +23,7 @@ const RestaurantSchema = new Schema({
   },
   phoneNumber: {
     type: String,
-    required: true,
-    minlength: 4
+    required: true
   },
   image: {
     type: String,
@@ -56,6 +54,21 @@ const RestaurantSchema = new Schema({
     required: false,
     default: []
   }
+});
+
+RestaurantSchema.pre('remove', { document: true },function (next) {
+  const restaurant_id = this._id;
+  console.log("rest_id",restaurant_id);
+  MenuItem.deleteMany(
+    {restaurant:restaurant_id}).then(
+    res => {
+      console.log("deleted",res)
+    },
+    error => {
+      console.log("FAILED", error)
+    }
+  );
+  next();
 });
 
 module.exports = mongoose.model("Restaurant", RestaurantSchema);
