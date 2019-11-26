@@ -8,10 +8,12 @@ import Navbar from '../Navbar';
 import axios from 'axios';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { stat } from 'fs';
 
 class RestaurateurPage extends Component {
   state = {
     restaurants: [],
+    current_user: {},
     restaurateur_id: this.props.match.params.id
   };
   static propTypes = {
@@ -41,7 +43,31 @@ class RestaurateurPage extends Component {
       .catch(err => {
         console.log(err);
       });
+    console.log(this.props.auth);
+    axios
+      .get('/api/users/auth/' + this.props.match.params.id, this.tokenConfig())
+      .then(res => {
+        console.log(res);
+        this.setState({ current_user: res.data });
+      })
+      .catch(err => {
+        console.log(err);
+      });
   }
+
+  tokenConfig = () => {
+    const token = this.props.auth.token;
+    const config = {
+      headers: {
+        'Content-type': 'application/json'
+      }
+    };
+
+    if (token) {
+      config.headers['x-auth-token'] = token;
+    }
+    return config;
+  };
 
   render() {
     if (!this.props.isAuthenticated) {
@@ -57,6 +83,7 @@ class RestaurateurPage extends Component {
         return <Redirect to="/signin" />;
       }
     }
+
     return (
       <div>
         <Navbar />
@@ -64,7 +91,7 @@ class RestaurateurPage extends Component {
           <div className="container">
             <div className="row">
               <div className="col-md-3 info">
-                <h2 className="">{this.props.current_user.username}</h2>
+                <h2 className="">{this.state.current_user.username}</h2>
                 <div>
                   <img
                     src={'/images/avatar_sample.png'}
@@ -75,11 +102,11 @@ class RestaurateurPage extends Component {
                 <ul className="list-group">
                   <li className="list-group-item">
                     <strong>Telephone: </strong>
-                    {this.props.current_user.tel}
+                    {this.state.current_user.tel}
                   </li>
                   <li className="list-group-item">
                     <strong>Email: </strong>
-                    {this.props.current_user.email}
+                    {this.state.current_user.email}
                   </li>
                 </ul>
               </div>
@@ -134,7 +161,8 @@ class RestaurateurPage extends Component {
 const mapStateToProps = state => ({
   isAuthenticated: state.auth.isAuthenticated,
   error: state.error,
-  current_user: state.auth.user
+  current_user: state.auth.user,
+  auth: state.auth
 });
 
 export default connect(mapStateToProps)(withRouter(RestaurateurPage));

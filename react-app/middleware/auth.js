@@ -36,7 +36,6 @@ function isSuperAdmin(req, res, next) {
       req.isSuperAdmin = true;
     } else {
       req.isSuperAdmin = false;
-      res.status(401).send('Not Authorized!');
     }
     next();
   });

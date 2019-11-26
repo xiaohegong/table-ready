@@ -4,7 +4,7 @@ const User = require('../models/user');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const config = require('config');
-const { isAuth } = require('../middleware/auth');
+const { isAuth, isSuperAdmin } = require('../middleware/auth');
 
 // register
 
@@ -104,6 +104,18 @@ router.delete('/:id', (req, res) => {
 router.get('/auth', isAuth, (req, res) => {
   console.log('debug: \n\n', req.user, '\n\n\n\n\n');
   User.findById(req.user.id)
+    .select('-password')
+    .then(user => {
+      res.json(user);
+    });
+});
+
+router.get('/auth/:id', isAuth, isSuperAdmin, (req, res) => {
+  console.log('debug: \n\n', req.user, '\n\n\n\n\n');
+  if (!req.user.isSuperAdmin && req.user.id !== req.params.id) {
+    res.status(401).send('NOT AUTHORIZED!!');
+  }
+  User.findById(req.params.id)
     .select('-password')
     .then(user => {
       res.json(user);
