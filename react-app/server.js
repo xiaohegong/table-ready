@@ -79,9 +79,18 @@ app.post("/restaurant/newRestaurant", (req, res) => {
     operationHour: req.body.hours,
     owner: req.body.owner
   });
+
   restaurant
     .save()
     .then(restaurant => {
+      for(let i = 0; i < req.body.tables;i++){
+        let table = new Table({
+            rest_id: restaurant._id,
+        });
+        table.save().catch(err => {
+          log(err)
+        })
+      }
       res.send("restaurant " + restaurant.name + " saved to database");
     })
     .catch(err => {
@@ -132,8 +141,20 @@ app.post("/restaurant/newMenuItem", (req, res) => {
 app.post("/restaurant/findMenuByRestaurant", (req, res) => {
   const restaurant_id = req.body.restaurant_id;
   MenuItem.find({ restaurant: restaurant_id }).then(
-    users => {
-      res.send(users);
+    menus => {
+      res.send(menus);
+    },
+    error => {
+      res.send({ code: 404, error });
+    }
+  );
+});
+
+app.post("/restaurant/findTableByRestaurant", (req, res) => {
+  const restaurant_id = req.body.restaurant_id;
+  Table.find({ restaurant: restaurant_id }).then(
+    table => {
+      res.send(table);
     },
     error => {
       res.send({ code: 404, error });
