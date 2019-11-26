@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import '../Stylesheets/navbar.scss';
+import { Redirect, withRouter } from 'react-router-dom';
 import $ from 'jquery';
 import { connect } from 'react-redux';
 import { logout } from '../actions/authActions';
@@ -54,7 +55,15 @@ class Navbar extends React.Component {
   render() {
     return (
       <nav className="navbar-page navbar navbar-expand-lg navbar-dark bg-dark">
-        <Link to="/">Home</Link>
+        <button
+          class="nav-link btn home-btn"
+          onClick={() => {
+            console.log('hi');
+            window.location.href = '/';
+          }}
+        >
+          <strong>Home</strong>
+        </button>
 
         <button
           className="navbar-toggler"
@@ -149,4 +158,4 @@ const mapStateToProps = state => ({
   current_user: state.auth.user
 });
 
-export default connect(mapStateToProps, { logout })(Navbar);
+export default connect(mapStateToProps, { logout })(withRouter(Navbar));
