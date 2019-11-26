@@ -240,7 +240,7 @@ app.post('/restaurant/add_employee', (req, res) => {
   if (username && restaurant_id) {
     User.findOneAndUpdate(
       { username: username },
-      { workFor: restaurant_id }
+      { restaurantInvitation: restaurant_id }
     ).then(user => {
       res.send(user);
     });

@@ -12,6 +12,7 @@ import DressCode from "./DressCode";
 import uid from "uid";
 import axios from "axios";
 import EditRestaurant from "./EditRestaurant";
+import {connect} from "react-redux";
 
 class RestaurateurPage2 extends Component {
   state = {
@@ -41,12 +42,18 @@ class RestaurateurPage2 extends Component {
     ]
   };
 
-  is_authenticated = () => {
-    const cur_user = this.props.cookies.cookies.cur_user;
-    if (cur_user.accountType !== "Employee") {
-      return true;
+  tokenConfig = () => {
+    const token = this.props.auth.token;
+    const config = {
+      headers: {
+        'Content-type': 'application/json'
+      }
+    };
+
+    if (token) {
+      config.headers['x-auth-token'] = token;
     }
-    return false;
+    return config;
   };
 
   componentDidMount() {
@@ -56,8 +63,23 @@ class RestaurateurPage2 extends Component {
       })
       .then(response => {
         console.log(response);
-        this.setState({ info: response.data }, () =>
+        this.setState({ info: response.data }, () =>{
+          if (!this.props.isAuthenticated) {
+            console.log(
+              'redirecting to signin since not authenticated in RestaurateurPage'
+            );
+            return <div></div>;
+          } else {
+            if (
+              this.props.current_user.accountType !== 'SuperAdmin' &&
+              this.props.current_user._id !== this.state.info.owner
+            ) {
+              // return <Redirect to="/signin" />;
+            }
+          }
           console.log("Customers fetched...", this.state.info)
+          }
+
         );
       })
       .catch(function(error) {
@@ -72,10 +94,7 @@ class RestaurateurPage2 extends Component {
   };
 
   render() {
-    console.log(this.state.info);
-    if (!this.is_authenticated()) {
-      return <Redirect to="/error" />;
-    }
+
     return (
       <div>
         <Navbar cookies={this.props.cookies} />
@@ -143,4 +162,13 @@ class RestaurateurPage2 extends Component {
   }
 }
 
-export default withRouter(RestaurateurPage2);
+// getting from reducers (error and auth reducers)
+const mapStateToProps = state => ({
+  isAuthenticated: state.auth.isAuthenticated,
+  error: state.error,
+  current_user: state.auth.user,
+  auth: state.auth
+});
+
+
+export default connect(mapStateToProps)(withRouter(RestaurateurPage2));

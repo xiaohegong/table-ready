@@ -23,12 +23,11 @@ class NewRestaurant extends Component {
           'Content-Type': 'application/json'
         }
       };
-
       axios
         .post(
           '/restaurant/newRestaurant',
           {
-            owner: this.props.cookies.cookies.cur_user._id,
+            owner: this.props.location.state.owner_id,
             name: event.target.name.value,
             phoneNumber: event.target.phoneNumber.value,
             cuisine: event.target.cuisine.value,
