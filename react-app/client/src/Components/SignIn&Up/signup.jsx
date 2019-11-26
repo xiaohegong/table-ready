@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 import { register } from '../../actions/authActions';
 import { clearErrors } from '../../actions/errorActions';
 import { REGISTER_FAIL } from '../../actions/actionTypes';
-import Animation from './animation.jsx';
+// import Animation from './animation.jsx';
 
 const log = console.log;
 
@@ -198,10 +198,10 @@ class SignUp extends Component {
             {this.state.message}
           </div>
         ) : null}
-        <Animation />
+        {/*<Animation />*/}
 
         <div id="divPage">
-          <header className="center header-style">SIGN UP HERE: </header>
+          <header className="center header-style" id="header">Join Table Ready Today!</header>
           <form action="" onSubmit={this.signUp}>
             <div className="input-group mb-3">
               <div className="input-group-prepend">
@@ -312,7 +312,7 @@ class SignUp extends Component {
               />
             </div>
 
-            <button type="submit" className="btn btn-danger">
+            <button type="submit" className="btn btn-block btn-danger center">
               Register
             </button>
           </form>
