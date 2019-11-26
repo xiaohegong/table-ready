@@ -198,8 +198,6 @@ class SignUp extends Component {
             {this.state.message}
           </div>
         ) : null}
-
-        <Navbar cookies={this.props.cookies} />
         <Animation />
 
         <div id="divPage">

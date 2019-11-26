@@ -10,10 +10,12 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 class RestaurateurPage extends Component {
-  state = { restaurants: [] };
+  state = {
+    restaurants: [],
+    restaurateur_id: this.props.match.params.id
+  };
   static propTypes = {
-    isAuthenticated: PropTypes.bool,
-    clearErrors: PropTypes.func.isRequired
+    isAuthenticated: PropTypes.bool
   };
   componentDidMount() {
     console.log('restaurateurPage Did Mount');
@@ -31,14 +33,13 @@ class RestaurateurPage extends Component {
         },
         header
       )
-
       .then(restaurants =>
         this.setState({ restaurants: restaurants.data }, () =>
           console.log('Customers fetched...', this.state.restaurants)
         )
       )
       .catch(err => {
-        console.log(400);
+        console.log(err);
       });
   }
 
@@ -47,7 +48,14 @@ class RestaurateurPage extends Component {
       console.log(
         'redirecting to signin since not authenticated in RestaurateurPage'
       );
-      return <Redirect to="/SignIn" />;
+      return <div></div>;
+    } else {
+      if (
+        this.props.current_user.accountType !== 'SuperAdmin' &&
+        this.props.current_user._id !== this.props.match.params.id
+      ) {
+        return <Redirect to="/signin" />;
+      }
     }
     return (
       <div>

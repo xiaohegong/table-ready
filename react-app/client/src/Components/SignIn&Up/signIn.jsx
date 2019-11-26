@@ -51,7 +51,6 @@ class SignIn extends Component {
     // Attempt to login
     this.props.clearErrors();
     this.props.login(user);
-    this.redirectUser();
   };
 
   redirectUser = () => {
@@ -89,6 +88,9 @@ class SignIn extends Component {
   };
 
   render() {
+    if (this.isAuthenticated) {
+      this.getRedirected();
+    }
     return (
       <div id="signIn-Up">
         <Navbar />

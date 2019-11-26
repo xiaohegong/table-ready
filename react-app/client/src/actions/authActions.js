@@ -103,9 +103,6 @@ export const login = ({ username, password }) => dispatch => {
       })
     )
     .catch(err => {
-      console.dir(err);
-      console.log(err.status);
-      console.log(err.message);
       dispatch(
         returnErrors(err.response.data, err.response.status, 'LOGIN_FAIL')
       );
