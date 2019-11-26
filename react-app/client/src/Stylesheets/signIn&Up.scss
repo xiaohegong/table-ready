@@ -24,8 +24,20 @@
     height: auto;
   }
 
+  .center {
+    display: block;
+    margin: auto;
+  }
+
+  .header-style {
+    font-size: large;
+    font-weight: bold;
+  }
+
   .container .btn {
-    position: absolute;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -43,10 +55,16 @@
 
   .container .btn:hover {
     background-color: beige;
+    display: block;
+    margin-right: auto;
+    margin-left: auto;
   }
 
   #avatar {
     border-radius: 50%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
 
   }
   .input-group-text {

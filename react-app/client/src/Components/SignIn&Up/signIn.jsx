@@ -10,19 +10,13 @@ class SignIn extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      // accountType: "employee",
       username: "",
       password: ""
     };
-    // this.handleChange = this.handleChange.bind(this);
     this.handleSignIn = this.handleSignIn.bind(this);
     this.handleUsername = this.handleUsername.bind(this);
     this.handlePassword = this.handlePassword.bind(this);
   }
-
-  // handleChange(event) {
-  //   this.setState({ accountType: event.target.value });
-  // }
 
   handleSignIn(event) {
     event.preventDefault();
@@ -102,22 +96,6 @@ class SignIn extends Component {
           </div>{" "}
           <br />
           <br />
-          {/*<div className="input-group mb-3">*/}
-          {/*  <div className="input-group-prepend">*/}
-          {/*    <span className="input-group-text" id="inputGroup-sizing-default">*/}
-          {/*      Type*/}
-          {/*    </span>*/}
-          {/*  </div>*/}
-          {/*  <select*/}
-          {/*    className="form-control"*/}
-          {/*    value={this.state.accountType}*/}
-          {/*    onChange={this.handleChange}*/}
-          {/*  >*/}
-          {/*    <option value="SuperAdmin">SuperAdmin</option>*/}
-          {/*    <option value="Admin">Admin</option>*/}
-          {/*    <option value="Employee">Employee</option>*/}
-          {/*  </select>*/}
-          {/*</div>*/}
           <div className="input-group mb-3">
             <div className="input-group-prepend">
               <span className="input-group-text" id="inputGroup-sizing-default">
@@ -148,13 +126,15 @@ class SignIn extends Component {
               onChange={this.handlePassword}
             />
           </div>
-          <button
-            type="button"
-            className="btn btn-danger"
-            onClick={this.handleSignIn}
-          >
-            Log In
-          </button>
+          <div className="input-group mb-3">
+            <button
+              type="button"
+              className="btn btn-danger center"
+              onClick={this.handleSignIn}
+            >
+              Log In
+            </button>
+          </div>
         </div>
       </div>
     );
