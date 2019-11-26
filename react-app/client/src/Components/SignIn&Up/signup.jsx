@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import '../../Stylesheets/signIn&Up.scss';
-import { Redirect } from 'react-router-dom';
+import { Redirect, withRouter } from 'react-router-dom';
 import Navbar from '../Navbar';
 import axios from 'axios';
 import { connect } from 'react-redux';
@@ -8,9 +8,7 @@ import PropTypes from 'prop-types';
 import { register } from '../../actions/authActions';
 import { clearErrors } from '../../actions/errorActions';
 import { REGISTER_FAIL } from '../../actions/actionTypes';
-import Navbar from "../Navbar";
-import Animation from "./animation.jsx";
-
+import Animation from './animation.jsx';
 
 const log = console.log;
 
@@ -36,7 +34,7 @@ class SignUp extends Component {
   // }
 
   state = {
-    accountType: 'SuperAdmin',
+    accountType: 'Admin',
     username: '',
     password: '',
     email: '',
@@ -83,7 +81,6 @@ class SignUp extends Component {
       });
     }
   };
-
 
   // handleEmailChange(event) {
   //   this.setState({ email: event.target.value });
@@ -320,7 +317,6 @@ class SignUp extends Component {
             <button type="submit" className="btn btn-danger">
               Register
             </button>
-
           </form>
         </div>
       </div>
@@ -334,4 +330,6 @@ const mapStateToProps = state => ({
   current_user: state.auth.user
 });
 
-export default connect(mapStateToProps, { register, clearErrors })(SignUp);
+export default connect(mapStateToProps, { register, clearErrors })(
+  withRouter(SignUp)
+);

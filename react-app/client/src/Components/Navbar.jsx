@@ -8,6 +8,9 @@ import PropTypes from 'prop-types';
 
 class Navbar extends React.Component {
   state = {};
+  static propTypes = {
+    logout: PropTypes.func.isRequired
+  };
   componentDidMount() {
     $(document).ready(function() {
       // Get click event, assign button to var, and get values from that var

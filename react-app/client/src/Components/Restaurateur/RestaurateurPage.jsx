@@ -1,25 +1,32 @@
-import React, { Component } from "react";
-import "../../Stylesheets/restaurateur_page.scss";
-import RestaurantListItem from "./RestaurantListItem";
-import { withRouter } from "react-router-dom";
-import { Redirect } from "react-router-dom";
-import { Link } from "react-router-dom";
-import Navbar from "../Navbar";
-import axios from "axios";
+import React, { Component } from 'react';
+import '../../Stylesheets/restaurateur_page.scss';
+import RestaurantListItem from './RestaurantListItem';
+import { withRouter } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import Navbar from '../Navbar';
+import axios from 'axios';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
 class RestaurateurPage extends Component {
   state = { restaurants: [] };
-
+  static propTypes = {
+    isAuthenticated: PropTypes.bool,
+    error: PropTypes.object.isRequired,
+    clearErrors: PropTypes.func.isRequired
+  };
   componentDidMount() {
+    console.log('restaurateurPage Did Mount');
     const header = {
       headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json"
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
       }
     };
     axios
       .post(
-        "/restaurant/findRestaurantByOwner",
+        '/restaurant/findRestaurantByOwner',
         {
           owner: this.props.match.params.id
         },
@@ -28,7 +35,7 @@ class RestaurateurPage extends Component {
 
       .then(restaurants =>
         this.setState({ restaurants: restaurants.data }, () =>
-          console.log("Customers fetched...", this.state.restaurants)
+          console.log('Customers fetched...', this.state.restaurants)
         )
       )
       .catch(err => {
@@ -36,31 +43,21 @@ class RestaurateurPage extends Component {
       });
   }
 
-  is_authenticated = () => {
-    const cur_user = this.props.cookies.cookies.cur_user;
-    if (cur_user.accountType !== "Employee") {
-      return true;
-    }
-    return false;
-  };
-
   render() {
-    if (!this.is_authenticated()) {
-      return <Redirect to="/error" />;
+    if (!this.props.isAuthenticated) {
+      return <Redirect to="/SignIn" />;
     }
     return (
       <div>
-        <Navbar cookies={this.props.cookies}/>
+        <Navbar />
         <div className="restaurateur-page">
           <div className="container">
             <div className="row">
               <div className="col-md-3 info">
-                <h2 className="">
-                  {this.props.cookies.cookies.cur_user.username}
-                </h2>
+                <h2 className="">{this.props.current_user.username}</h2>
                 <div>
                   <img
-                    src={process.env.PUBLIC_URL + "/images/avatar_sample.png"}
+                    src={'/images/avatar_sample.png'}
                     alt=""
                     className="avatar"
                   />
@@ -68,24 +65,25 @@ class RestaurateurPage extends Component {
                 <ul className="list-group">
                   <li className="list-group-item">
                     <strong>Telephone: </strong>
-                    {this.props.cookies.cookies.cur_user.tel}
+                    {this.props.current_user.tel}
                   </li>
                   <li className="list-group-item">
                     <strong>Email: </strong>
-                    {this.props.cookies.cookies.cur_user.email}
+                    {this.props.current_user.email}
                   </li>
                 </ul>
               </div>
 
               <div className="col-md-9">
-                <h2 style={{ display: "inline" }}>Your Restaurants</h2>
-                <Link to={{
-                  pathname: "/addNewRestaurant",
-                  state: {id: this.props.match.params.id}
-                }}>
+                <h2 style={{ display: 'inline' }}>Your Restaurants</h2>
+                <Link
+                  to={{
+                    pathname: '/addNewRestaurant',
+                    state: { id: this.props.match.params.id }
+                  }}
+                >
                   <button className="addNewButton btn btn-outline-success btn-sm">
-                    {" "}
-                    Add New{" "}
+                    Add New
                   </button>
                 </Link>
                 <div className="restaurants-display">
@@ -94,7 +92,7 @@ class RestaurateurPage extends Component {
                       <Link
                         key={restaurant._id}
                         to={{
-                          pathname: "/restaurateur2",
+                          pathname: '/restaurateur2',
                           state: {
                             restaurant_id: restaurant._id
                           }
@@ -106,7 +104,7 @@ class RestaurateurPage extends Component {
                           telephone={restaurant.phoneNumber}
                           image={
                             process.env.PUBLIC_URL +
-                            "/images/restaurant_images/restaurant1.jpeg"
+                            '/images/restaurant_images/restaurant1.jpeg'
                           }
                           _id={restaurant._id}
                         />
@@ -122,5 +120,11 @@ class RestaurateurPage extends Component {
     );
   }
 }
+// getting from reducers (error and auth reducers)
+const mapStateToProps = state => ({
+  isAuthenticated: state.auth.isAuthenticated,
+  error: state.error,
+  current_user: state.auth.user
+});
 
-export default withRouter(RestaurateurPage);
+export default connect(mapStateToProps)(withRouter(RestaurateurPage));

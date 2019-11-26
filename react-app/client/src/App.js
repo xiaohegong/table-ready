@@ -19,9 +19,11 @@ import AddNewMenuItem from './Components/Restaurateur/AddNewMenuItem';
 import { Provider } from 'react-redux';
 import store from './store';
 import { loadUser } from './actions/authActions';
+import EditMenuItem from './Components/Restaurateur/EditMenuItem';
 class App extends React.Component {
   state = {};
   componentDidMount() {
+    console.log('component did mount, APP.js, loading user');
     store.dispatch(loadUser());
   }
   render() {
@@ -36,12 +38,12 @@ class App extends React.Component {
             <Route
               exact
               path="/restaurateur/:id"
-              render={() => <RestaurateurPage />}
+              component={() => <RestaurateurPage />}
             />
             <Route
               exact
               path="/restaurateur2/:id"
-              render={() => <RestaurateurPage2 />}
+              component={() => <RestaurateurPage2 />}
             />
             <Route exact path="/dashboard" render={() => <Dashboard />} />
             <Route exact path="/admin/:id" render={() => <Admin />} />
@@ -52,13 +54,7 @@ class App extends React.Component {
               path="/addNewMenuItem"
               render={() => <AddNewMenuItem />}
             />
-            <Route
-              exact
-              path="/editMenuItem"
-              render={() => (
-                <EditMenuItem />
-              )}
-            />
+            <Route exact path="/editMenuItem" render={() => <EditMenuItem />} />
             <Route
               exact
               path="/addNewRestaurant"
