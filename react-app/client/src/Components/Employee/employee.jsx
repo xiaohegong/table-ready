@@ -245,7 +245,6 @@ class Employee extends Component {
       checkedG:false,
       current_date: null,
       draggin:false,
-      menu_open:false,
       current_table:null,
       all_table:all_table.tables,
       reservations_color:initial_color,
@@ -255,7 +254,8 @@ class Employee extends Component {
       rest_obj: null,
       modal_show: false,
       loading:true,
-      valid:false
+      valid:false,
+      reload:false
     };
   }
   componentDidMount() {
@@ -356,7 +356,7 @@ class Employee extends Component {
     console.log(this.state.to_be_reserved)
     console.log(data._id)
     let in_list = false;
-      this.state.to_be_reserved = this.state.to_be_reserved.filter(value => value != null)
+    this.state.to_be_reserved = this.state.to_be_reserved.filter(value => value != null)
     this.state.to_be_reserved.forEach(element => {
       if(element._id == data._id){
         in_list = true;
@@ -407,29 +407,27 @@ class Employee extends Component {
     this.setState({ checkedG: !this.state.checkedG });
   };
   handleStart = (index) => {
-    let tmp = this.state.to_be_reserved[index]
+    let tmp = this.state.items[index]
     this.setState({user_obj:tmp})
     this.setState({draggin:true})
   }
   handleStop = (index) => {
     this.setOccupied()
-    const i = this.state.items.indexOf(this.state.to_be_reserved[index])
-    
     if(this.state.changed){
-      this.state.items[i].reserved = true
-      this.update_data(this.state.items[i])
-      let tmp = []
-      this.state.to_be_reserved.forEach((item) => {
-        if(item == this.state.user_obj){
-          tmp.push(null)
-        }
-        else{
-          tmp.push(item)
-        }
-      });
-      this.setState({
-        to_be_reserved: tmp
-      })
+      this.state.items[index].reserved = true
+      this.update_data(this.state.items[index])
+      // let tmp = []
+      // this.state.to_be_reserved.forEach((item) => {
+      //   if(item == this.state.user_obj){
+      //     tmp.push(null)
+      //   }
+      //   else{
+      //     tmp.push(item)
+      //   }
+      // });
+      // this.setState({
+      //   to_be_reserved: tmp
+      // })
     }
     this.setState({
       changed: false,
@@ -443,22 +441,21 @@ class Employee extends Component {
       }
     }
   };
-  change_menu_state = (index) => {
-    this.setState({ menu_open: !this.state.menu_open });
-    let in_list = false;
-    this.state.to_be_reserved.forEach(element => {
-      if (element == this.state.items[index]) {
-        in_list = true;
-      }
-    });
-    if (in_list == false) {
-      console.log(this.state.items[index])
-      this.setState({to_be_reserved: this.state.to_be_reserved.filter((value) => value != null)})
-      this.setState({ to_be_reserved: [...this.state.to_be_reserved, this.state.items[index]]});
-    }
-    console.log(this.state.to_be_reserved)
-
-  }
+  // change_menu_state = (index) => {
+  //   this.setState({ menu_open: !this.state.menu_open });
+  //   let in_list = false;
+  //   this.state.to_be_reserved.forEach(element => {
+  //     if (element == this.state.items[index]) {
+  //       in_list = true;
+  //     }
+  //   });
+  //   if (in_list == false) {
+  //     console.log(this.state.items[index])
+  //     this.setState({to_be_reserved: this.state.to_be_reserved.filter((value) => value != null)})
+  //     this.setState({ to_be_reserved: [...this.state.to_be_reserved, this.state.items[index]]});
+  //   }
+  //   console.log(this.state.to_be_reserved)
+  // }
   remove_reservation_from_items = (index) => {
     this.delete_data(this.state.items[index])
     this.setState({
@@ -477,6 +474,7 @@ class Employee extends Component {
     // const cur_table = document.getElementById(`Table-${index}`)
     // this.setState({current_table:cur_table})
     const cur_table_obj = this.state.all_table[index];
+    console.log(this.state.all_table)
     if (this.state.draggin) {
       if (
         cur_table_obj.table_capacity >= this.state.user_obj.people &&
@@ -526,14 +524,6 @@ class Employee extends Component {
       this.resumecard(index);
     }
   };
-  remove_from_reserved = index => {
-    this.setState({
-      //TODO: Backend handle
-      to_be_reserved: this.state.to_be_reserved.filter(
-        i => i.id != this.state.to_be_reserved[index].id
-      )
-    });
-  };
   filter_date = () => {
     this.fetch_data()
   };
@@ -572,7 +562,7 @@ class Employee extends Component {
       return null
     }
     else{
-      return <button className="accept-button" onClick = {(e) => this.change_menu_state(index)} onMouseDown = {this.removefocus}><img src = {process.env.PUBLIC_URL + "/images/restaurant_images/done-tick.png"}></img></button>
+      return <button className="accept-button" onMouseDown = {this.removefocus}><img src = {process.env.PUBLIC_URL + "/images/restaurant_images/done-tick.png"}></img></button>
     }
   }
 
@@ -679,7 +669,6 @@ class Employee extends Component {
           );
       }
       else{
-        console.log("hi")
         return(
           <Redirect to = "/error"></Redirect>
         ) 
