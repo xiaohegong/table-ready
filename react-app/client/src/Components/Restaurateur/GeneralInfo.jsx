@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import DetailedInfo from "./DetailedInfo";
 import Menu from "./Menu";
-import Pay from "./Pay";
+import Pay from "./Table";
 
 
 class GeneralInfo extends Component {

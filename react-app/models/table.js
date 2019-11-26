@@ -11,18 +11,15 @@ const TableSchema = new Schema({
         type: String,
         required: true
     },
-    date:{
-        type: String,
-        required: true
-    },
     table_occupied:{
         type: Boolean,
-        required: true,
+        required: false,
         default: false
     },
     table_capacity:{
         type: Number,
-        required: true
+        required: false,
+        default: 2
     }
     
 });

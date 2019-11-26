@@ -5,7 +5,7 @@ import "../../Stylesheets/restaurateur_page_2.scss";
 // import GeneralInfo from "./GeneralInfo";
 import { Redirect } from "react-router-dom";
 import Employees from "./Employees";
-import Pay from "./Pay";
+import Table from "./Table";
 import Menu from "./Menu";
 import Navbar from "../Navbar";
 import DressCode from "./DressCode";
@@ -35,8 +35,8 @@ class RestaurateurPage2 extends Component {
       },
       {
         id: 4,
-        title: "Payment",
-        model: <Pay />
+        title: "Table",
+        model: <Table />
       }
     ]
   };
