@@ -1,9 +1,9 @@
 /* server.js*/
-"use strict";
+'use strict';
 
 const log = console.log;
-const express = require("express");
-const bodyParser = require("body-parser"); // middleware for parsing HTTP body
+const express = require('express');
+const bodyParser = require('body-parser'); // middleware for parsing HTTP body
 const app = express();
 const { ObjectID } = require("mongodb");
 const User = require("./models/user.js");
@@ -14,26 +14,29 @@ const Table = require("./models/table");
 const path = require("path");
 
 /* Use statements for the server */
-app.use(express.static(path.join(__dirname, "client", "build")));
+app.use(express.static(path.join(__dirname, 'client', 'build')));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-require("./mongoose").connect();
+require('./mongoose').connect();
 
-app.get("/", (req, res) => {
-  res.send("Hello World");
+const usersRouter = require('./routes/users');
+app.use('/api/users', usersRouter);
+
+app.get('/', (req, res) => {
+  res.send('Hello World');
 });
 
-app.get("/api/customers", (req, res) => {
+app.get('/api/customers', (req, res) => {
   const customers = [
-    { id: 1, firstName: "John", lastName: "Doe" },
-    { id: 2, firstName: "Brad", lastName: "Traversy" },
-    { id: 3, firstName: "Mary", lastName: "Swanson" }
+    { id: 1, firstName: 'John', lastName: 'Doe' },
+    { id: 2, firstName: 'Brad', lastName: 'Traversy' },
+    { id: 3, firstName: 'Mary', lastName: 'Swanson' }
   ];
 
   res.json(customers);
 });
 
-app.post("/user/signup", (req, res) => {
+app.post('/user/signup', (req, res) => {
   log(req.body);
   const user = new User({
     accountType: req.body.accountType,
@@ -46,7 +49,7 @@ app.post("/user/signup", (req, res) => {
   user
     .save()
     .then(user => {
-      res.send("user " + user.username + " saved to database");
+      res.send('user ' + user.username + ' saved to database');
     })
     .catch(err => {
       log(err);
@@ -71,7 +74,7 @@ app.post("/waitlist/CreateNewTable", (req, res) => {
     })
 })
 
-app.post("/restaurant/newRestaurant", (req, res) => {
+app.post('/restaurant/newRestaurant', (req, res) => {
   const restaurant = new Restaurant({
     name: req.body.name,
     phoneNumber: req.body.phoneNumber,
@@ -84,6 +87,7 @@ app.post("/restaurant/newRestaurant", (req, res) => {
   restaurant
     .save()
     .then(restaurant => {
+      res.send('restaurant ' + restaurant.name + ' saved to database');
       for(let i = 0; i < req.body.tables;i++){
         let table = new Table({
             rest_id: restaurant._id,
@@ -137,7 +141,7 @@ app.post("/restaurant/updateRestaurant", (req, res) => {
     operationHour: req.body.hours
   })
     .then(restaurant => {
-      res.send("restaurant " + restaurant.name + " updated to database");
+      res.send('restaurant ' + restaurant.name + ' updated to database');
     })
     .catch(err => {
       log(err);
@@ -145,7 +149,7 @@ app.post("/restaurant/updateRestaurant", (req, res) => {
     });
 });
 
-app.post("/restaurant/newMenuItem", (req, res) => {
+app.post('/restaurant/newMenuItem', (req, res) => {
   const menuItem = new MenuItem({
     name: req.body.name,
     price: req.body.price,
@@ -156,7 +160,7 @@ app.post("/restaurant/newMenuItem", (req, res) => {
   menuItem
     .save()
     .then(menuItem => {
-      res.send("menuItem " + menuItem.name + " saved to database");
+      res.send('menuItem ' + menuItem.name + ' saved to database');
     })
     .catch(err => {
       log(err);
@@ -167,7 +171,7 @@ app.post("/restaurant/newMenuItem", (req, res) => {
   // });
 });
 
-app.post("/restaurant/findMenuByRestaurant", (req, res) => {
+app.post('/restaurant/findMenuByRestaurant', (req, res) => {
   const restaurant_id = req.body.restaurant_id;
   MenuItem.find({ restaurant: restaurant_id }).then(
     menus => {
@@ -191,9 +195,9 @@ app.post("/restaurant/findTableByRestaurant", (req, res) => {
   );
 });
 
-app.post("/restaurant/deleteMenuItem", (req, res) => {
+app.delete("/restaurant/deleteMenuItem/?:id", (req, res) => {
   // const restaurant_id = req.body.restaurant_id;
-  const menu_id = req.body.menu_id;
+  const menu_id = req.params.id;
   if (menu_id) {
     MenuItem.findByIdAndDelete(menu_id).then(
       users => {
@@ -221,6 +225,26 @@ app.post("/restaurant/deleteTableItem", (req, res) => {
   }
 });
 
+app.put("/restaurant/EditMenuItem", (req, res) => {
+  // const restaurant_id = req.body.restaurant_id;
+  const id = req.body.id;
+  if (id) {
+    MenuItem.findByIdAndUpdate(id, {
+      name: req.body.name,
+      price: req.body.price,
+      ingredients: req.body.ingredients,
+      calories: req.body.calories
+    }).then(
+      users => {
+        res.send(users);
+      },
+      error => {
+        res.send({ code: 404, error });
+      }
+    );
+  }
+});
+
 app.post("/restaurant/findRestaurantByOwner", (req, res) => {
   Restaurant.find({ owner: req.body.owner }).then(
     restaurant => {
@@ -236,9 +260,9 @@ app.post("/restaurant/findRestaurantByOwner", (req, res) => {
   // });
 });
 
-app.post("/restaurant/findEmployeesByRestaurant", (req, res) => {
+app.post('/restaurant/findEmployeesByRestaurant', (req, res) => {
   const restaurant_id = req.body.restaurant_id;
-  console.log("restaurant_id:   --- ", restaurant_id);
+  console.log('restaurant_id:   --- ', restaurant_id);
   User.find({ workFor: restaurant_id }).then(
     users => {
       res.send(users);
@@ -253,7 +277,7 @@ app.post("/restaurant/findEmployeesByRestaurant", (req, res) => {
   // });
 });
 
-app.post("/restaurant/updateDressCode", (req, res) => {
+app.post('/restaurant/updateDressCode', (req, res) => {
   Restaurant.findByIdAndUpdate(req.body._id, {
     DressCode: req.body.dressCode
   }).then(
@@ -266,7 +290,7 @@ app.post("/restaurant/updateDressCode", (req, res) => {
   );
 });
 
-app.post("/restaurant/updateReservation", (req, res) => {
+app.post('/restaurant/updateReservation', (req, res) => {
   Restaurant.findByIdAndUpdate(req.body._id, {
     reservations: req.body.reservations
   }).then(
@@ -278,7 +302,7 @@ app.post("/restaurant/updateReservation", (req, res) => {
     }
   );
 });
-app.post("/updateWaitlistStatus", (req, res) => {
+app.post('/updateWaitlistStatus', (req, res) => {
   Waitlist.findByIdAndUpdate(req.body._id, {
     reserved: req.body.reserved
   }).then(
@@ -291,32 +315,32 @@ app.post("/updateWaitlistStatus", (req, res) => {
   );
 });
 
-app.post("/restaurant/add_employee", (req, res) => {
+app.post('/restaurant/add_employee', (req, res) => {
   // res.send("1000");
   const username = req.body.username;
   const restaurant_id = req.body.restaurant_id;
-  console.log("username:", username);
+  console.log('username:', username);
   if (username && restaurant_id) {
     User.findOneAndUpdate(
       { username: username },
-      { workFor: restaurant_id }
+      { restaurantInvitation: restaurant_id }
     ).then(user => {
       res.send(user);
     });
   }
 });
 
-app.post("/restaurant/delete_employee", (req, res) => {
+app.post('/restaurant/delete_employee', (req, res) => {
   // const restaurant_id = req.body.restaurant_id;
   const user_id = req.body.user_id;
-  console.log("\n\n\n/restaurant/delete_employee\n\n\n");
+  console.log('\n\n\n/restaurant/delete_employee\n\n\n');
   if (user_id) {
-    User.findByIdAndUpdate(user_id, { workFor: "" }, (err, user) => {
+    User.findByIdAndUpdate(user_id, { workFor: '' }, (err, user) => {
       if (err) {
         console.log(err);
         res.send(err);
       }
-      console.log("user deleted from restaurant");
+      console.log('user deleted from restaurant');
       console.log(user);
       res.send(user);
     });
@@ -344,7 +368,6 @@ app.post("/restaurant/findRestaurant", (req, res) => {
       num_reserv.forEach(element => {
         tmp.push(element);
       });
-      console.log(tmp);
       Waitlist.find({
         _id: { $in: tmp }
       })
@@ -360,8 +383,8 @@ app.post("/restaurant/findRestaurant", (req, res) => {
   );
 });
 
-app.post("/restaurant/findRestaurantById", (req, res) => {
-  console.log("\n\n\n\n\n\ntest\n\n");
+app.post('/restaurant/findRestaurantById', (req, res) => {
+  console.log('\n\n\n\n\n\ntest\n\n');
   Restaurant.findById(req.body._id)
     .then(restaurant => {
       console.log(restaurant);
@@ -376,7 +399,7 @@ app.post("/restaurant/findRestaurantById", (req, res) => {
 
 // app.post("/restaurant/")
 
-app.post("/waitlist/newWaitlist", (req, res) => {
+app.post('/waitlist/newWaitlist', (req, res) => {
   const waitlist = new Waitlist({
     id: req.body.id,
     name: req.body.name,
@@ -395,7 +418,7 @@ app.post("/waitlist/newWaitlist", (req, res) => {
     });
 });
 
-app.post("/waitlist/getWaitlist", (req, res) => {
+app.post('/waitlist/getWaitlist', (req, res) => {
   Waitlist.find().then(
     waitlist => {
       res.send(waitlist);
@@ -409,7 +432,7 @@ app.post("/waitlist/getWaitlist", (req, res) => {
   // });
 });
 
-app.post("/waitlist/getWaitlistById", (req, res) => {
+app.post('/waitlist/getWaitlistById', (req, res) => {
   Waitlist.find({ _id: req.body._id }).then(
     waitlist => {
       res.send(waitlist);
@@ -423,7 +446,7 @@ app.post("/waitlist/getWaitlistById", (req, res) => {
   // });
 });
 
-app.get("/api/users", (req, res) => {
+app.get('/api/users', (req, res) => {
   User.find({}, function(err, users) {
     if (err) {
       log(err);
@@ -450,49 +473,53 @@ app.get("/api/restaurants", (req, res) => {
   });
 });
 
-app.delete("/api/users/:id", (req, res) => {
+app.delete('/api/users/:id', (req, res) => {
   const id = req.params.id;
-  User.findByIdAndDelete(id)
-    .then(() => {
-      res.send("User " + id + " deleted.");
+  User.findById(id)
+    .then((user) => {
+      user.remove().then(()=>{
+        res.send("User " + id + " deleted.");
+      })
     })
     .catch(err => {
-      res.status(400).json("Error: " + err);
+      res.status(400).json('Error: ' + err);
     });
 });
 
-app.delete("/api/restaurants/:id", (req, res) => {
+app.delete('/api/restaurants/:id', (req, res) => {
   const id = req.params.id;
-  Restaurant.findByIdAndDelete(id)
-    .then(() => {
-      res.send("Restaurant " + id + " deleted.");
+  Restaurant.findById(id)
+    .then((rest) => {
+      rest.remove();
+      res.send("res " + id + " deleted.");
+
     })
     .catch(err => {
-      res.status(400).json("Error: " + err);
+      res.status(400).json('Error: ' + err);
     });
 });
 
-app.delete("/api/removeWaitlist/:id", (req, res) => {
+app.delete('/api/removeWaitlist/:id', (req, res) => {
   const id = req.params.id;
   console.log(id);
   Waitlist.findByIdAndDelete(id)
     .then(() => {
-      res.send("Waitlist " + id + " deleted");
+      res.send('Waitlist ' + id + ' deleted');
     })
     .catch(err => {
-      res.status(400).json("Error: " + err);
+      res.status(400).json('Error: ' + err);
     });
 });
 
-app.get("/user/info", (req, res) => {
+app.get('/user/info', (req, res) => {
   User.find()
     .then(users => res.json(users))
-    .catch(error => res.status(400).json("Err " + error));
+    .catch(error => res.status(400).json('Err ' + error));
 });
 
-app.get("/api/employee/:id", (req, res) => {
+app.get('/api/employee/:id', (req, res) => {
   const employee_id = req.params.id;
-  console.log("hii");
+  console.log('hii');
   User.find({ _id: ObjectID(employee_id) }, function(err, single_user) {
     if (err) {
       console.log(err);
@@ -503,9 +530,9 @@ app.get("/api/employee/:id", (req, res) => {
 });
 
 // update the information of the user specified by the id.
-app.put("/user/:id", (req, res) => {
-  log("this body is: " + req.body.email);
-  log("this body is: " + req.body.password);
+app.put('/user/:id', (req, res) => {
+  log('this body is: ' + req.body.email);
+  log('this body is: ' + req.body.password);
   User.findByIdAndUpdate(
     req.params.id,
     req.body,
@@ -521,33 +548,33 @@ app.put("/user/:id", (req, res) => {
   );
 });
 
-app.put("/updateWaitlist/:id", (req, res) => {
+app.put('/updateWaitlist/:id', (req, res) => {
   Waitlist.findByIdAndUpdate(req.params.id, req.body, { new: true })
     .then(() => {
-      res.send("Waitlist " + id + " updated");
+      res.send('Waitlist ' + id + ' updated');
     })
     .catch(err => {
-      res.status(400).json("Error: " + err);
+      res.status(400).json('Error: ' + err);
     });
 });
 
-app.get("/user/:id", (req, res) => {
-  log("The server side got id is: ");
+app.get('/user/:id', (req, res) => {
+  log('The server side got id is: ');
   log(req.params.id);
   User.findById(req.params.id)
     .then(user => {
-      console.log("this is from server side");
+      console.log('this is from server side');
       log(user);
       res.json(user);
     })
-    .catch(error => res.status(400).json("Err " + error));
+    .catch(error => res.status(400).json('Err ' + error));
 });
 
-app.get("/*", function(req, res) {
-  res.sendFile(path.join(__dirname, "client", "build", "index.html"));
+app.get('/*', function(req, res) {
+  res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'));
 });
 
 const port = process.env.PORT || 5000;
 app.listen(port, () => {
-  log("Listening on port 5000...");
+  log('Listening on port 5000...');
 });

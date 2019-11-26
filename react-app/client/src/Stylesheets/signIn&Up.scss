@@ -1,17 +1,25 @@
 #signIn-Up {
+  #signin-alert-danger {
+    margin-bottom: 0;
+  }
+
+  #header{
+    margin: 10%;
+    font-size: 20px;
+  }
+
   #canvasConfig {
     background-color: wheat;
     float: left;
   }
 
   #divPage {
-    position:absolute;
+    position: absolute;
     top: 20%;
     left: 25%;
     //float: left;
     //display: block;
     margin-left: 15%;
-    margin-top: 5%;
   }
   .container {
     position: relative;
@@ -24,8 +32,20 @@
     height: auto;
   }
 
+  .center {
+    display: block;
+    margin: auto;
+  }
+
+  .header-style {
+    font-size: large;
+    font-weight: bold;
+  }
+
   .container .btn {
-    position: absolute;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -43,11 +63,16 @@
 
   .container .btn:hover {
     background-color: beige;
+    display: block;
+    margin-right: auto;
+    margin-left: auto;
   }
 
   #avatar {
     border-radius: 50%;
-
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
   }
   .input-group-text {
     width: 6em;

@@ -96,39 +96,57 @@ class Users extends Component {
         );
     }
 
+    search = () => {
+        let val = document.getElementById("searchInput").value;
+        val = val.trim().toLowerCase();
+        this.setState(() => ({query: val}));
+    };
+
 
     render() {
         return (
-            <div className="animated fadeIn mx-auto">
-                <Row>
-                    <Col xl={6}>
-                        <Card>
-                            <CardHeader>
-                                <i className="fa fa-align-justify"></i> Users
-                            </CardHeader>
-                            <CardBody>
-                                <Table responsive hover>
-                                    <thead>
-                                    <tr>
-                                        <th scope="col">Username</th>
-                                        {/*<th scope="col">Name</th>*/}
-                                        <th scope="col">Phone Number</th>
-                                        {/*TODO (xiaohegong) add name, date registered*/}
-                                        {/*<th scope="col">registered</th>*/}
-                                        <th scope="col">Role</th>
-                                        <th scope="col">Action</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    {
-                                        this.userList()
-                                    }
-                                    </tbody>
-                                </Table>
-                            </CardBody>
-                        </Card>
-                    </Col>
-                </Row>
+            <div>
+                <div className="input-group mb-3">
+                    <input type="text" className="form-control" id="searchInput"
+                           placeholder="Search username..."
+                           aria-label="username" aria-describedby="button-addon2"/>
+                    <div className="input-group-append">
+                        <button className="btn btn-outline-secondary" type="button"
+                                id="button-addon2" onClick={this.search}>Search
+                        </button>
+                    </div>
+                </div>
+                <div className="animated fadeIn mx-auto">
+                    <Row>
+                        <Col xl={6}>
+                            <Card>
+                                <CardHeader>
+                                    <i className="fa fa-align-justify"></i> Users of Table Ready
+                                </CardHeader>
+                                <CardBody>
+                                    <Table responsive hover>
+                                        <thead>
+                                        <tr>
+                                            <th scope="col">Username</th>
+                                            {/*<th scope="col">Name</th>*/}
+                                            <th scope="col">Phone Number</th>
+                                            {/*TODO (xiaohegong) add name, date registered*/}
+                                            {/*<th scope="col">registered</th>*/}
+                                            <th scope="col">Role</th>
+                                            <th scope="col">Action</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {
+                                            this.userList()
+                                        }
+                                        </tbody>
+                                    </Table>
+                                </CardBody>
+                            </Card>
+                        </Col>
+                    </Row>
+                </div>
             </div>
         );
     }

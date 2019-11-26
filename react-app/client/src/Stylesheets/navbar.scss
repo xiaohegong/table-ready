@@ -3,16 +3,20 @@
     background-color: black;
   }
 
+  .home-btn {
+    color: white;
+  }
+
   .btn-group {
     margin-right: 1em;
   }
   #shareEx-logo-text {
     color: white !important;
     font-weight: bold;
-    font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
   }
 
-  input[type="search"] {
+  input[type='search'] {
     margin-left: 20px;
   }
 }
