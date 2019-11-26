@@ -337,6 +337,7 @@ app.post("/waitlist/newWaitlist", (req, res) => {
     id: req.body.id,
     name: req.body.name,
     people: req.body.people,
+    type: req.body.type,
     date_of_arrival: req.body.date_of_arrival,
     estimated_time: req.body.estimated_time
   });

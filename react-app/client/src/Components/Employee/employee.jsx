@@ -312,6 +312,7 @@ class Employee extends Component {
       id: new_wl.id,
       name: new_wl.name,
       people: new_wl.people,
+      type: new_wl.type,
       date_of_arrival: new_wl.date_of_arrival,
       estimated_time: new_wl.estimated_time
     },header)
@@ -460,6 +461,7 @@ class Employee extends Component {
         to_be_reserved: tmp
       })
     }
+    
     this.setState({
       changed: false,
       draggin: false
@@ -469,6 +471,7 @@ class Employee extends Component {
     for (let i = 0; i < this.state.reservations_color.length; i++) {
       if (this.state.reservations_color[i] == "green") {
         this.state.all_table[i].table_occupied = true;
+        this.modify_table(this.state.all_table[i], true)
       }
     }
   };
@@ -567,11 +570,12 @@ class Employee extends Component {
       modal_show: state
     });
   };
-  add_reservation = (name, ppl_num, date, time) => {
+  add_reservation = (name, ppl_num, date, time, type) => {
     const new_wl = {
       id: Math.random().toString(36).substr(2, 9),
       name: name,
       people: ppl_num,
+      type: type,
       date_of_arrival: date,
       estimated_time: time
     }
