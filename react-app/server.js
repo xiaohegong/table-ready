@@ -11,12 +11,23 @@ const Restaurant = require('./models/restaurant.js');
 const MenuItem = require('./models/MenuItem.js');
 const Waitlist = require('./models/waitlist.js');
 const path = require('path');
+const config = require('config');
+const cloudinary = require('cloudinary').v2;
 
 /* Use statements for the server */
 app.use(express.static(path.join(__dirname, 'client', 'build')));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 require('./mongoose').connect();
+
+
+// setup cloudinary
+cloudinary.config({
+  cloud_name: config.get('cloud_name'),
+  api_key: config.get('api_key'),
+  api_secret: config.get('api_secret')
+});
+
 
 const usersRouter = require('./routes/users');
 app.use('/api/users', usersRouter);
