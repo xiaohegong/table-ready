@@ -12,7 +12,7 @@ import DressCode from "./DressCode";
 import uid from "uid";
 import axios from "axios";
 import EditRestaurant from "./EditRestaurant";
-import {connect} from "react-redux";
+import { connect } from "react-redux";
 
 class RestaurateurPage2 extends Component {
   state = {
@@ -34,11 +34,6 @@ class RestaurateurPage2 extends Component {
         id: 3,
         title: "Menu",
         model: <Menu res_id={this.props.match.params.id} />
-      },
-      {
-        id: 4,
-        title: "Payment",
-        model: <Pay />
       }
     ]
   };
@@ -63,26 +58,26 @@ class RestaurateurPage2 extends Component {
         _id: this.props.match.params.id
       })
       .then(response => {
-        this.setState({ info: response.data }, () =>{
+        this.setState({ info: response.data }, () => {
           if (!this.props.isAuthenticated) {
             console.log(
               'redirecting to signin since not authenticated in RestaurateurPage'
             );
-            this.setState({access: false})
+            this.setState({ access: false })
           } else {
             if (
               this.props.current_user.accountType !== 'SuperAdmin' &&
               this.props.current_user._id !== this.state.info.owner
             ) {
-              this.setState({access: false})
+              this.setState({ access: false })
             }
           }
           console.log("Customers fetched...", this.state.info)
-          }
+        }
 
         );
       })
-      .catch(function(error) {
+      .catch(function (error) {
         console.log(error);
       });
   }
@@ -94,7 +89,7 @@ class RestaurateurPage2 extends Component {
   };
 
   render() {
-    if(!this.state.access){
+    if (!this.state.access) {
       return <Redirect to="/signin" />;
     }
     return (
