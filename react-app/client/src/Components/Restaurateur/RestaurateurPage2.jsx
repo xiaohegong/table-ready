@@ -17,6 +17,7 @@ import {connect} from "react-redux";
 class RestaurateurPage2 extends Component {
   state = {
     info: [],
+    access: true,
     curState: <Employees res_id={this.props.match.params.id} />,
     functions: [
       {
@@ -62,19 +63,18 @@ class RestaurateurPage2 extends Component {
         _id: this.props.match.params.id
       })
       .then(response => {
-        console.log(response);
         this.setState({ info: response.data }, () =>{
           if (!this.props.isAuthenticated) {
             console.log(
               'redirecting to signin since not authenticated in RestaurateurPage'
             );
-            return <div></div>;
+            this.setState({access: false})
           } else {
             if (
               this.props.current_user.accountType !== 'SuperAdmin' &&
               this.props.current_user._id !== this.state.info.owner
             ) {
-              // return <Redirect to="/signin" />;
+              this.setState({access: false})
             }
           }
           console.log("Customers fetched...", this.state.info)
@@ -94,7 +94,9 @@ class RestaurateurPage2 extends Component {
   };
 
   render() {
-
+    if(!this.state.access){
+      return <Redirect to="/signin" />;
+    }
     return (
       <div>
         <Navbar cookies={this.props.cookies} />
