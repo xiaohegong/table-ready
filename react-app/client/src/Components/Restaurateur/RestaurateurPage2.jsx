@@ -109,8 +109,7 @@ class RestaurateurPage2 extends Component {
                     />
                   )}
                 >
-                  {" "}
-                  Edit{" "}
+                  Edit
                 </button>
                 <h2>Restaurant Info</h2>
                 <ul className="list-group list-group-flush">

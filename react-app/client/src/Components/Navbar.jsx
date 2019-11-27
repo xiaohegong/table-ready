@@ -13,9 +13,9 @@ class Navbar extends React.Component {
     logout: PropTypes.func.isRequired
   };
   componentDidMount() {
-    $(document).ready(function() {
+    $(document).ready(function () {
       // Get click event, assign button to var, and get values from that var
-      $('#theme-btn-group button').on('click', function() {
+      $('#theme-btn-group button').on('click', function () {
         const btn_clicked = $(this);
         btn_clicked
           .addClass('active')
@@ -56,7 +56,7 @@ class Navbar extends React.Component {
     return (
       <nav className="navbar-page navbar navbar-expand-lg navbar-dark bg-dark">
         <button
-          class="nav-link btn home-btn"
+          className="nav-link btn home-btn"
           onClick={() => {
             console.log('hi');
             window.location.href = '/';
@@ -136,15 +136,15 @@ class Navbar extends React.Component {
               </button>
             </div>
           ) : (
-            <div className="btn-group">
-              <Link to="/SignIn">
-                <button className="btn btn-primary btn-sm">Sign In</button>
-              </Link>
-              <Link to="/SignUp">
-                <button className="btn btn-success btn-sm">Sign Up</button>
-              </Link>
-            </div>
-          )}
+              <div className="btn-group">
+                <Link to="/SignIn">
+                  <button className="btn btn-primary btn-sm">Sign In</button>
+                </Link>
+                <Link to="/SignUp">
+                  <button className="btn btn-success btn-sm">Sign Up</button>
+                </Link>
+              </div>
+            )}
         </div>
       </nav>
     );
