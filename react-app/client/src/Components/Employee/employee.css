@@ -260,6 +260,10 @@
     display: inline-block;
   }
 
+  .Button-container{
+    margin-left:10%
+  }
+
   .rese-card{
     display: inline-block;
     margin-left:3px;
@@ -272,6 +276,10 @@
   .bm-item-list {
     color: #b8b7ad;
     padding: 0.8em;
+  }
+
+  .cap-word{
+    margin-left:5%
   }
   
   /* Individual item */
