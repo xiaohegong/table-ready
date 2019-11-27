@@ -13,6 +13,7 @@ const Waitlist = require('./models/waitlist.js');
 const path = require('path');
 const config = require('config');
 const cloudinary = require('cloudinary').v2;
+const formData = require('express-form-data');
 
 /* Use statements for the server */
 app.use(express.static(path.join(__dirname, 'client', 'build')));
@@ -20,20 +21,30 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 require('./mongoose').connect();
 
-
 // setup cloudinary
+app.use(formData.parse());
 cloudinary.config({
   cloud_name: config.get('cloud_name'),
   api_key: config.get('api_key'),
   api_secret: config.get('api_secret')
 });
 
-
 const usersRouter = require('./routes/users');
 app.use('/api/users', usersRouter);
 
 app.get('/', (req, res) => {
   res.send('Hello World');
+});
+
+app.post('/upload', (req, res) => {
+  console.log(req.files);
+  const values = Object.values(req.files);
+  console.log(values);
+  const promises = values.map(image => cloudinary.uploader.upload(image.path));
+
+  Promise.all(promises)
+    .then(results => res.json(results))
+    .catch(err => res.status(400).json(err));
 });
 
 app.get('/api/customers', (req, res) => {
@@ -138,7 +149,7 @@ app.post('/restaurant/findMenuByRestaurant', (req, res) => {
   );
 });
 
-app.delete("/restaurant/deleteMenuItem/?:id", (req, res) => {
+app.delete('/restaurant/deleteMenuItem/?:id', (req, res) => {
   // const restaurant_id = req.body.restaurant_id;
   const menu_id = req.params.id;
   if (menu_id) {
@@ -153,7 +164,7 @@ app.delete("/restaurant/deleteMenuItem/?:id", (req, res) => {
   }
 });
 
-app.put("/restaurant/EditMenuItem", (req, res) => {
+app.put('/restaurant/EditMenuItem', (req, res) => {
   // const restaurant_id = req.body.restaurant_id;
   const id = req.body.id;
   if (id) {
@@ -173,7 +184,7 @@ app.put("/restaurant/EditMenuItem", (req, res) => {
   }
 });
 
-app.post("/restaurant/findRestaurantByOwner", (req, res) => {
+app.post('/restaurant/findRestaurantByOwner', (req, res) => {
   Restaurant.find({ owner: req.body.owner }).then(
     restaurant => {
       console.log(restaurant);
@@ -362,7 +373,7 @@ app.post('/waitlist/getWaitlistById', (req, res) => {
 });
 
 app.get('/api/users', (req, res) => {
-  User.find({}, function (err, users) {
+  User.find({}, function(err, users) {
     if (err) {
       log(err);
       return err;
@@ -373,7 +384,7 @@ app.get('/api/users', (req, res) => {
 });
 
 app.get('/api/restaurants', (req, res) => {
-  Restaurant.find({}, function (err, restaurants) {
+  Restaurant.find({}, function(err, restaurants) {
     if (err) {
       log(err);
       return err;
@@ -385,10 +396,10 @@ app.get('/api/restaurants', (req, res) => {
 app.delete('/api/users/:id', (req, res) => {
   const id = req.params.id;
   User.findById(id)
-    .then((user) => {
+    .then(user => {
       user.remove().then(() => {
-        res.send("User " + id + " deleted.");
-      })
+        res.send('User ' + id + ' deleted.');
+      });
     })
     .catch(err => {
       res.status(400).json('Error: ' + err);
@@ -398,10 +409,9 @@ app.delete('/api/users/:id', (req, res) => {
 app.delete('/api/restaurants/:id', (req, res) => {
   const id = req.params.id;
   Restaurant.findById(id)
-    .then((rest) => {
+    .then(rest => {
       rest.remove();
-      res.send("res " + id + " deleted.");
-
+      res.send('res ' + id + ' deleted.');
     })
     .catch(err => {
       res.status(400).json('Error: ' + err);
@@ -429,7 +439,7 @@ app.get('/user/info', (req, res) => {
 app.get('/api/employee/:id', (req, res) => {
   const employee_id = req.params.id;
   console.log('hii');
-  User.find({ _id: ObjectID(employee_id) }, function (err, single_user) {
+  User.find({ _id: ObjectID(employee_id) }, function(err, single_user) {
     if (err) {
       console.log(err);
       return err;
@@ -479,7 +489,7 @@ app.get('/user/:id', (req, res) => {
     .catch(error => res.status(400).json('Err ' + error));
 });
 
-app.get('/*', function (req, res) {
+app.get('/*', function(req, res) {
   res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'));
 });
 
