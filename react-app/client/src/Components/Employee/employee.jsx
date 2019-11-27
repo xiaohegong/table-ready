@@ -301,6 +301,14 @@ class Employee extends Component {
       
     })
   }
+  remove_from_reserved = index => {
+    this.setState({
+      //TODO: Backend handle
+      to_be_reserved: this.state.to_be_reserved.filter(
+        i => i.id != this.state.to_be_reserved[index].id
+      )
+    });
+  };
   change_menu_state = index => {
     this.setState({ menu_open: !this.state.menu_open });
     let in_list = false;
@@ -371,7 +379,6 @@ class Employee extends Component {
           })
         }
       })
-
   }
   fetch_data = () => {
     this.update_rest_waitlist(this.state.employee_obj.workFor)
@@ -445,18 +452,18 @@ class Employee extends Component {
     if(this.state.changed){
       this.state.items[index].reserved = true
       this.update_data(this.state.items[index])
-      // let tmp = []
-      // this.state.to_be_reserved.forEach((item) => {
-      //   if(item == this.state.user_obj){
-      //     tmp.push(null)
-      //   }
-      //   else{
-      //     tmp.push(item)
-      //   }
-      // });
-      // this.setState({
-      //   to_be_reserved: tmp
-      // })
+      let tmp = []
+      this.state.to_be_reserved.forEach((item) => {
+        if(item == this.state.user_obj){
+          tmp.push(null)
+        }
+        else{
+          tmp.push(item)
+        }
+      });
+      this.setState({
+        to_be_reserved: tmp
+      })
     }
     this.setState({
       changed: false,
@@ -606,69 +613,87 @@ class Employee extends Component {
 
   // Normally you would want to split things out into separate components.
   // But in this example everything is just done in one place for simplicity
-  render() {
-    if (!this.state.loading){
-      if (this.state.valid === true){
-        let draggables = []
-        this.state.items.forEach((item,index) => {
-          if(item!=null){
-            draggables.push(
-          //     <div className = "check-container">  
-          //     {this.render_button(index)}
-          //     <button className="reject-button" onClick = {(e) => this.remove_reservation_from_items(index)} onMouseDown = {this.removefocus}><img src = {process.env.PUBLIC_URL + "/images/restaurant_images/no-stopping.png"}></img></button>
-          // </div>
-                    <OverlayTrigger
-                    trigger="click"
-                    key={"top"}
-                    placement={"down"}
-                    overlay={
-                        <Popover id={`popover-positioned-${"down"}`}>
-                            <Popover.Content>
-                              <div>
-                                        <span><img className = "info-png" src = {process.env.PUBLIC_URL + "/images/restaurant_images/calendar.png"}></img><span className = 
-                                        "reservation_time">{item.estimated_time}</span><span className = "reservation_date">/{item.date_of_arrival}</span></span>
-                                      </div>
-                                      <div className = "num_people">
-                                        <span><img className = "info-png" src = {process.env.PUBLIC_URL + "/images/restaurant_images/avatar.png"}></img><span className = "attendence">{item.people}</span></span>
-                                      </div>
-                                      <div>
-                                      <span><img className = "info-png" src = {process.env.PUBLIC_URL + "/images/restaurant_images/receptionist.png"}></img><span className = "attendence">{item.reserved ? 'Reserved' : 'Not Reserved'}</span></span>
-                                      </div>
-                                      <div className = "user_profile_holder">
-                                      </div>
-                                
-                            </Popover.Content>
-                        </Popover>
-                    }>
-                     <Card key={index} className = "card border-light mb-3 rese-card" bg="light" style={{ width: '18rem' }}>
-                       <Card.Header className = "header-of-card">
-                         <div className = "pic-container">
-                           <strong>
-                             {item.name}
-                           </strong>
-                        </div>
-                        <span><span className = "attendence">{`${item.people} people`}</span></span>
-                        <span className = "Button-container">
-                        {this.render_button(index)}
-                        <button
-                            className="reject-button"
-                            onClick={e =>
-                              this.remove_reservation_from_items(index)
-                            }
-                            onMouseDown={this.removefocus}
-                          >
-                            <img src = {process.env.PUBLIC_URL + "/images/restaurant_images/no-stopping.png"}></img>
-                          </button>
-                          </span>
-                      </Card.Header>
-                    </Card>
-                </OverlayTrigger>
-            )
-          }
-          else{
-            draggables.push(null)
-          }
-        })
+  render() {   if (!this.state.loading) {
+    if (this.state.valid === true) {
+      let draggables = [];
+      this.state.to_be_reserved.forEach((item, index) => {
+        if (item != null) {
+          draggables.push(
+            <Draggable
+              onStart={() => this.handleStart(index)}
+              onStop={() => this.handleStop(index)}
+            >
+              <Card
+                id={`usercard-${index}`}
+                draggable="true"
+                style={{ backgroundColor: '#f8f9fa', width: '18rem' }}
+              >
+                <Card.Header className="header-of-card">
+                  <div className="pic-container">
+                    <strong>{item.name}</strong>
+                    <img
+                      className="user-pic"
+                      src={
+                        process.env.PUBLIC_URL +
+                        '/images/restaurant_images/boy.png'
+                      }
+                    ></img>
+                  </div>
+                </Card.Header>
+                <Card.Body>
+                  <div>
+                    <span>
+                      <img
+                        className="info-png"
+                        src={
+                          process.env.PUBLIC_URL +
+                          '/images/restaurant_images/calendar.png'
+                        }
+                      ></img>
+                      <span className="reservation_time">
+                        {item.estimated_time}
+                      </span>
+                      <span className="reservation_date">
+                        /{item.date_of_arrival}
+                      </span>
+                    </span>
+                  </div>
+                  <div className="num_people">
+                    <span>
+                      <img
+                        className="info-png"
+                        src={
+                          process.env.PUBLIC_URL +
+                          '/images/restaurant_images/avatar.png'
+                        }
+                      ></img>
+                      <span className="attendence">{item.people}</span>
+                    </span>
+                  </div>
+                  <div className="user_profile_holder">
+                    <div className="check-container">
+                      <button
+                        className="reject-button"
+                        onClick={e => this.remove_from_reserved(index)}
+                        onMouseDown={this.removefocus}
+                      >
+                        <img
+                          src={
+                            process.env.PUBLIC_URL +
+                            '/images/restaurant_images/no-stopping.png'
+                          }
+                        ></img>
+                      </button>
+                    </div>
+                  </div>
+                </Card.Body>
+              </Card>
+            </Draggable>
+          );
+        } else {
+          draggables.push(null);
+        }
+      });
         return (
           <div id="outer-container" className="card-container">
              <Menu
@@ -750,15 +775,54 @@ class Employee extends Component {
             </div>
               <div id = "res-holder">
                <strong id = "reserv-header">Reservations</strong>
-                {
-                  draggables
-                }
-              </div>
-              <div id = "waitlist-cont">
-                <strong id = "waitlist-header">Waitlists</strong>
-                {
-                  draggables
-                }
+               {this.state.items.map((item, index) => (
+                 <OverlayTrigger
+                 trigger="click"
+                 key={"top"}
+                 placement={"down"}
+                  overlay={
+                     <Popover id={`popover-positioned-${"down"}`}>
+                         <Popover.Content>
+                           <div>
+                                     <span><img className = "info-png" src = {process.env.PUBLIC_URL + "/images/restaurant_images/calendar.png"}></img><span className = 
+                                     "reservation_time">{item.estimated_time}</span><span className = "reservation_date">/{item.date_of_arrival}</span></span>
+                                   </div>
+                                   <div className = "num_people">
+                                     <span><img className = "info-png" src = {process.env.PUBLIC_URL + "/images/restaurant_images/avatar.png"}></img><span className = "attendence">{item.people}</span></span>
+                                   </div>
+                                   <div>
+                                   <span><img className = "info-png" src = {process.env.PUBLIC_URL + "/images/restaurant_images/receptionist.png"}></img><span className = "attendence">{item.reserved ? 'Reserved' : 'Not Reserved'}</span></span>
+                                   </div>
+                                   <div className = "user_profile_holder">
+                                   </div>
+                             
+                         </Popover.Content>
+                     </Popover>
+                 }>
+                  <Card key={index} className = "card border-light mb-3 rese-card" bg="light" style={{ width: '18rem' }}>
+                    <Card.Header className = "header-of-card">
+                      <div className = "pic-container">
+                        <strong>
+                          {item.name}
+                        </strong>
+                     </div>
+                     <span><span className = "attendence">{`${item.people} people`}</span></span>
+                     <span className = "Button-container">
+                     {this.render_button(index)}
+                     <button
+                         className="reject-button"
+                         onClick={e =>
+                           this.remove_reservation_from_items(index)
+                         }
+                         onMouseDown={this.removefocus}
+                       >
+                         <img src = {process.env.PUBLIC_URL + "/images/restaurant_images/no-stopping.png"}></img>
+                       </button>
+                       </span>
+                   </Card.Header>
+                 </Card>
+             </OverlayTrigger>
+               ))}
               </div>
               <div id = "avaliable_seats_container" onMouseDown = {this.removefocus}>
                 {
