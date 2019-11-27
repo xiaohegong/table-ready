@@ -8,6 +8,8 @@ import {
     Button
 } from 'reactstrap';
 import {Route, Redirect} from 'react-router';
+import {connect} from 'react-redux';
+import {logout} from '../../actions/authActions';
 import Navbar from "../Navbar";
 import {withRouter} from "react-router-dom";
 
@@ -17,12 +19,7 @@ const log = console.log;
 class Admin extends Component {
     state = {
         // default view
-        page: 'overview'
-    };
-
-    chooseOverview = (e) => {
-        this.setState({page: 'overview'});
-        this.setActive(e);
+        page: 'manage'
     };
 
     chooseManage = (e) => {
@@ -37,32 +34,24 @@ class Admin extends Component {
 
     showContent = () => {
         log(this.state.page);
-        if (this.state.page === 'overview') {
-            return (
-                <Overview/>
-            );
-        } else if (this.state.page === 'manage') {
+        if (this.state.page === 'manage') {
             return (
                 <Manage/>
             );
         } else if (this.state.page === 'setting') {
             return (
-                <Setting cookies={this.props.cookies} id={this.props.match.params.id}/>
+                <Setting id={this.props.match.params.id}/>
             );
         }
     };
 
     is_authenticated = () => {
-        const user = this.props.cookies.cookies.cur_user;
-        if (user.accountType === "SuperAdmin") {
-            return true;
-        } else {
-            return false;
-        }
+        log(this.props);
+        return this.props.current_user.accountType === "SuperAdmin" && this.props.isAuthenticated;
     };
 
     setActive = (e) => {
-        for (let i = 0; i < 3; i++) {
+        for (let i = 0; i < 2; i++) {
             let btn = e.target.parentNode.childNodes[i];
             btn.classList.remove("active");
         }
@@ -71,16 +60,20 @@ class Admin extends Component {
 
     render() {
         log(this.props);
+        if (!this.props.isAuthenticated) {
+            console.log(
+                'redirecting to signin since not authenticated in admin page'
+            );
+            return <Redirect to="/SignIn"/>;
+        }
         if (this.is_authenticated()) {
             return (
                 <div className='admin-page'>
-                    <Navbar cookies={this.props.cookies}/>
+                    <Navbar/>
                     <div className="row menu-bar">
                         <div className="col-sm-8 menu d-flex justify-content-lg-center">
                             <ButtonGroup size={"lg"}>
-                                <Button outline color="danger" active={true} size="lg" onClick={this.chooseOverview}>Overview
-                                </Button>
-                                <Button outline color="danger" size="lg" onClick={this.chooseManage}>Manage
+                                <Button outline color="danger" active={true} size="lg" onClick={this.chooseManage}>Manage
                                 </Button>
                                 <Button outline color="danger" size="lg" onClick={this.chooseSetting}>Setting
                                 </Button>
@@ -99,4 +92,13 @@ class Admin extends Component {
 
 }
 
-export default withRouter(Admin);
+//
+// getting from reducers (error and auth reducers)
+const mapStateToProps = state => ({
+    isAuthenticated: state.auth.isAuthenticated,
+    error: state.error,
+    current_user: state.auth.user
+});
+//
+export default connect(mapStateToProps, {logout})(withRouter(Admin));
+// export default ( withRouter(Admin));
