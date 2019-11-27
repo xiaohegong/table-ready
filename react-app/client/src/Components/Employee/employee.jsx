@@ -26,6 +26,8 @@ import VerticalModal from './verticalModal';
 import axios from 'axios';
 import HeaderSubHeader from "semantic-ui-react/dist/commonjs/elements/Header/HeaderSubheader";
 import {Redirect} from 'react-router-dom'
+import Popover from 'react-bootstrap/Popover'
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
 // fake data generator
 
 // a little function to help us with reordering the result
@@ -584,37 +586,46 @@ class Employee extends Component {
         this.state.items.forEach((item,index) => {
           if(item!=null){
             draggables.push(
-              <Draggable onStart={() => this.handleStart(index)}  onStop={() => this.handleStop(index)}>
-                    <Card key={index} className = "card border-light mb-3 rese-card" bg="light" style={{ width: '14rem' }}>
-                      <Card.Header className = "header-of-card">
-                        <div className = "pic-container">
-                          <strong>
-                            {item.name}
-                          </strong>
-                          <img className = "user-pic"src = {process.env.PUBLIC_URL + "/images/restaurant_images/boy.png"}></img>
-                          
+          //     <div className = "check-container">  
+          //     {this.render_button(index)}
+          //     <button className="reject-button" onClick = {(e) => this.remove_reservation_from_items(index)} onMouseDown = {this.removefocus}><img src = {process.env.PUBLIC_URL + "/images/restaurant_images/no-stopping.png"}></img></button>
+          // </div>
+                    <OverlayTrigger
+                    trigger="click"
+                    key={"top"}
+                    placement={"down"}
+                    overlay={
+                        <Popover id={`popover-positioned-${"down"}`}>
+                            <Popover.Content>
+                              <div>
+                                        <span><img className = "info-png" src = {process.env.PUBLIC_URL + "/images/restaurant_images/calendar.png"}></img><span className = 
+                                        "reservation_time">{item.estimated_time}</span><span className = "reservation_date">/{item.date_of_arrival}</span></span>
+                                      </div>
+                                      <div className = "num_people">
+                                        <span><img className = "info-png" src = {process.env.PUBLIC_URL + "/images/restaurant_images/avatar.png"}></img><span className = "attendence">{item.people}</span></span>
+                                      </div>
+                                      <div>
+                                      <span><img className = "info-png" src = {process.env.PUBLIC_URL + "/images/restaurant_images/receptionist.png"}></img><span className = "attendence">{item.reserved ? 'Reserved' : 'Not Reserved'}</span></span>
+                                      </div>
+                                      <div className = "user_profile_holder">
+
+                                      </div>
+                                
+                            </Popover.Content>
+                        </Popover>
+                    }>
+                     <Card key={index} className = "card border-light mb-3 rese-card" bg="light" style={{ width: '14rem' }}>
+                       <Card.Header className = "header-of-card">
+                         <div className = "pic-container">
+                           <strong>
+                             {item.name}
+                           </strong>
+                           
                         </div>
+                        <span><span className = "attendence">{`${item.people} people`}</span></span>
                       </Card.Header>
-                      <Card.Body>
-                        <div>
-                          <span><img className = "info-png" src = {process.env.PUBLIC_URL + "/images/restaurant_images/calendar.png"}></img><span className = 
-                          "reservation_time">{item.estimated_time}</span><span className = "reservation_date">/{item.date_of_arrival}</span></span>
-                        </div>
-                        <div className = "num_people">
-                          <span><img className = "info-png" src = {process.env.PUBLIC_URL + "/images/restaurant_images/avatar.png"}></img><span className = "attendence">{item.people}</span></span>
-                        </div>
-                        <div>
-                        <span><img className = "info-png" src = {process.env.PUBLIC_URL + "/images/restaurant_images/receptionist.png"}></img><span className = "attendence">{item.reserved ? 'Reserved' : 'Not Reserved'}</span></span>
-                        </div>
-                        <div className = "user_profile_holder">
-                          <div className = "check-container">  
-                              {this.render_button(index)}
-                              <button className="reject-button" onClick = {(e) => this.remove_reservation_from_items(index)} onMouseDown = {this.removefocus}><img src = {process.env.PUBLIC_URL + "/images/restaurant_images/no-stopping.png"}></img></button>
-                          </div>
-                        </div>
-                      </Card.Body>
                     </Card>
-                  </Draggable>
+                </OverlayTrigger>
             )
           }
           else{
@@ -630,6 +641,13 @@ class Employee extends Component {
               <button id = "date-confirm" onClick={()=>this.setModalState(true)}>Add Reservation</button>
             </div>
               <div id = "res-holder">
+               <strong id = "reserv-header">Reservations</strong>
+                {
+                  draggables
+                }
+              </div>
+              <div id = "waitlist-cont">
+                <strong id = "waitlist-header">Waitlists</strong>
                 {
                   draggables
                 }

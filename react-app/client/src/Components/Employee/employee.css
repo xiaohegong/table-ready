@@ -243,11 +243,23 @@
     fill: #373a47;
   }
 
-  #res-holder{
-    width: 70%;
-    float: left;
+  #reserv-header{
+    margin-left: 15%;
+
   }
-  
+  #res-holder{
+    width: 24%;
+    float: left;
+    margin-left:10px;
+  }
+  #waitlist-header{
+    margin-left: 22%;
+  }
+  #waitlist-cont{
+    width:22%;
+    display: inline-block;
+  }
+
   .rese-card{
     display: inline-block;
     margin-left:3px;
