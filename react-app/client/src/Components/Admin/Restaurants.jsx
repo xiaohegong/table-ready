@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
 import {Button, Card, CardBody, CardHeader, Col, Row, Table} from 'reactstrap';
 import axios from 'axios';
+import {confirmAlert} from "react-confirm-alert";
+import 'react-confirm-alert/src/react-confirm-alert.css';
 
 const log = console.log;
 
@@ -70,15 +72,35 @@ class Restaurants extends Component {
     }
 
     deleteRest(id) {
-        axios.delete('api/restaurants/' + id)
-            .then(res => {
-                this.setState({
-                    rest: this.state.rest.filter(el => el._id !== id)
-                });
-            })
-            .catch(err => {
-                log(err);
-            });
+        const restaurant = this.state.rest.filter(el => el._id === id)[0];
+
+        confirmAlert({
+            title: 'Delete Restaurant',
+            message: 'Are you sure you want to remove restaurant ' + restaurant.name + '?',
+            buttons: [
+                {
+                    label: 'Yes',
+                    onClick: () => {
+                        axios.delete('api/restaurants/' + id)
+                            .then(res => {
+                                this.setState({
+                                    rest: this.state.rest.filter(el => el._id !== id)
+                                });
+                            })
+                            .catch(err => {
+                                log(err);
+                            });
+                    }
+                },
+                {
+                    label: 'No',
+                    onClick: () => {
+                        return;
+                    }
+                }
+            ]
+        });
+
     }
 
 

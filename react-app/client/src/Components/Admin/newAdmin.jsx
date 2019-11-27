@@ -15,9 +15,15 @@ const log = console.log;
 class AddAdmin extends Component {
     constructor(props) {
         super(props);
+
+        this.confirm = this.confirm.bind(this);
         this.state = {
-            error: null
+            error: false
         };
+    }
+
+    componentWillReceiveProps(nextProp) {
+        this.setState(nextProp);
     }
 
     confirm = (e) => {
@@ -41,22 +47,37 @@ class AddAdmin extends Component {
             .then(res => {
                     log(res);
                     log("Successfully added new super admin!");
+                    log(this.state);
+                    this.setState({
+                        message: "Successfully added new super admin user " + res.data.user.username + "!",
+                        error: false
+                    });
+
                     return res;
                 }
             )
             .catch(err => {
-                // log(err.response.data.message)
-
-                this.setState({message: err.response.data.message});
+                log(err);
+                log(err.response);
+                this.setState({
+                    message: err.response.data.message || err.response.data.err.message,
+                    error: true
+                });
                 return err;
+
             });
     };
 
     render() {
         return (
             <div className="newAdmin">
-                {this.state.message ? (
+                {this.state.message && this.state.error ? (
                     <div className="alert alert-danger" role="alert">
+                        {this.state.message}
+                    </div>
+                ) : null}
+                {this.state.message && !this.state.error ? (
+                    <div className="alert alert-success" role="alert">
                         {this.state.message}
                     </div>
                 ) : null}
