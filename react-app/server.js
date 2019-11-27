@@ -11,12 +11,23 @@ const Restaurant = require('./models/restaurant.js');
 const MenuItem = require('./models/MenuItem.js');
 const Waitlist = require('./models/waitlist.js');
 const path = require('path');
+const config = require('config');
+const cloudinary = require('cloudinary').v2;
 
 /* Use statements for the server */
 app.use(express.static(path.join(__dirname, 'client', 'build')));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 require('./mongoose').connect();
+
+
+// setup cloudinary
+cloudinary.config({
+  cloud_name: config.get('cloud_name'),
+  api_key: config.get('api_key'),
+  api_secret: config.get('api_secret')
+});
+
 
 const usersRouter = require('./routes/users');
 app.use('/api/users', usersRouter);
@@ -240,7 +251,7 @@ app.post('/restaurant/add_employee', (req, res) => {
   if (username && restaurant_id) {
     User.findOneAndUpdate(
       { username: username },
-      { workFor: restaurant_id }
+      { $addToSet: { restaurantInvitation: restaurant_id } }
     ).then(user => {
       res.send(user);
     });
@@ -351,7 +362,7 @@ app.post('/waitlist/getWaitlistById', (req, res) => {
 });
 
 app.get('/api/users', (req, res) => {
-  User.find({}, function(err, users) {
+  User.find({}, function (err, users) {
     if (err) {
       log(err);
       return err;
@@ -362,7 +373,7 @@ app.get('/api/users', (req, res) => {
 });
 
 app.get('/api/restaurants', (req, res) => {
-  Restaurant.find({}, function(err, restaurants) {
+  Restaurant.find({}, function (err, restaurants) {
     if (err) {
       log(err);
       return err;
@@ -375,7 +386,7 @@ app.delete('/api/users/:id', (req, res) => {
   const id = req.params.id;
   User.findById(id)
     .then((user) => {
-      user.remove().then(()=>{
+      user.remove().then(() => {
         res.send("User " + id + " deleted.");
       })
     })
@@ -418,7 +429,7 @@ app.get('/user/info', (req, res) => {
 app.get('/api/employee/:id', (req, res) => {
   const employee_id = req.params.id;
   console.log('hii');
-  User.find({ _id: ObjectID(employee_id) }, function(err, single_user) {
+  User.find({ _id: ObjectID(employee_id) }, function (err, single_user) {
     if (err) {
       console.log(err);
       return err;
@@ -468,7 +479,7 @@ app.get('/user/:id', (req, res) => {
     .catch(error => res.status(400).json('Err ' + error));
 });
 
-app.get('/*', function(req, res) {
+app.get('/*', function (req, res) {
   res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'));
 });
 

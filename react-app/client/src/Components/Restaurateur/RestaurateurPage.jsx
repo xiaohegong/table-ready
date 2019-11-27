@@ -21,7 +21,6 @@ class RestaurateurPage extends Component {
     isAuthenticated: PropTypes.bool
   };
   componentDidMount() {
-    console.log('restaurateurPage Did Mount');
     const header = {
       headers: {
         Accept: 'application/json',
@@ -120,7 +119,8 @@ class RestaurateurPage extends Component {
                 <Link
                   to={{
                     pathname: '/addNewRestaurant',
-                    state: { id: this.props.match.params.id }
+                    state: { id: this.props.match.params.id,
+                            owner_id: this.props.current_user._id}
                   }}
                 >
                   <button className="addNewButton btn btn-outline-success btn-sm">

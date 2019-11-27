@@ -75,21 +75,10 @@ class SignIn extends Component {
     this.setState({ password: event.target.value });
   };
 
-  getRedirected = () => {
-    const { accountType } = this.props.current_user;
-    const user_id = this.props.current_user._id;
-    if (accountType === 'SuperAdmin') {
-      window.location.href = '/admin/' + user_id;
-    } else if (accountType === 'Admin') {
-      window.location.href = '/restaurateur/' + user_id;
-    } else if (accountType === 'Employee') {
-      window.location.href = '/employee/' + user_id;
-    }
-  };
-
   render() {
     if (this.isAuthenticated) {
-      this.getRedirected();
+      console.log('redirecting in signin page');
+      this.redirectUser();
     }
     return (
       <div id="signIn-Up">
@@ -103,7 +92,7 @@ class SignIn extends Component {
             {this.state.message}
           </div>
         ) : null}
-        <Animation />
+        {/*<Animation />*/}
         <div id="divPage">
           <div className="container">
             <img id="avatar" src={Avatar} alt="Avatar" />

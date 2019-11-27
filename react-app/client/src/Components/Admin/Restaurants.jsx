@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
 import {Button, Card, CardBody, CardHeader, Col, Row, Table} from 'reactstrap';
 import axios from 'axios';
+import {confirmAlert} from "react-confirm-alert";
+import 'react-confirm-alert/src/react-confirm-alert.css';
 
 const log = console.log;
 
@@ -11,7 +13,7 @@ function RestRow(props) {
     const restLink = `/restaurateur2/${rest._id}`;
     const ownerLink = `/restaurateur/${rest.owner}`;
 
-    log(rest)
+    log(rest);
 
     return (
         <tr key={rest._id.toString()}>
@@ -70,15 +72,35 @@ class Restaurants extends Component {
     }
 
     deleteRest(id) {
-        axios.delete('api/restaurants/' + id)
-            .then(res => {
-                this.setState({
-                    rest: this.state.rest.filter(el => el._id !== id)
-                });
-            })
-            .catch(err => {
-                log(err);
-            });
+        const restaurant = this.state.rest.filter(el => el._id === id)[0];
+
+        confirmAlert({
+            title: 'Delete Restaurant',
+            message: 'Are you sure you want to remove restaurant ' + restaurant.name + '?',
+            buttons: [
+                {
+                    label: 'Yes',
+                    onClick: () => {
+                        axios.delete('api/restaurants/' + id)
+                            .then(res => {
+                                this.setState({
+                                    rest: this.state.rest.filter(el => el._id !== id)
+                                });
+                            })
+                            .catch(err => {
+                                log(err);
+                            });
+                    }
+                },
+                {
+                    label: 'No',
+                    onClick: () => {
+                        return;
+                    }
+                }
+            ]
+        });
+
     }
 
 
@@ -93,56 +115,75 @@ class Restaurants extends Component {
 
         return res.map((rest, index) => {
                 log(rest);
-                log(this.state.users)
+                log(this.state.users);
                 let owner = this.state.users.find((user) => {
-                    log(user._id)
+                    log(user._id);
                     return user._id === rest.owner;
                 });
 
                 rest.owner_name = "";
-                if (owner){
+                if (owner) {
                     rest.owner_name = owner.username;
-                } else{
-                    rest.owner_name = "No Name"
+                } else {
+                    rest.owner_name = "No Name";
                 }
-                log(rest)
+                log(rest);
                 return <RestRow key={index} rest={rest} delete={this.deleteRest}/>;
             }
         );
     }
 
+    search = () => {
+        let val = document.getElementById("searchInput").value;
+        val = val.trim().toLowerCase();
+        this.setState(() => ({query: val}));
+    };
+
 
     render() {
         return (
-            <div className="animated fadeIn mx-auto">
-                <Row>
-                    <Col xl={6}>
-                        <Card>
-                            <CardHeader>
-                                <i className="fa fa-align-justify"></i> Restaurants
-                            </CardHeader>
-                            <CardBody>
-                                <Table responsive hover>
-                                    <thead>
-                                    <tr>
-                                        <th scope="col">Name</th>
-                                        <th scope="col">Owner</th>
-                                        <th scope="col">Location</th>
-                                        {/*<th scope="col">registered</th>*/}
-                                        {/*<th scope="col">Role</th>*/}
-                                        <th scope="col">Action</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    {
-                                        this.restList()
-                                    }
-                                    </tbody>
-                                </Table>
-                            </CardBody>
-                        </Card>
-                    </Col>
-                </Row>
+            <div>
+                <div className="input-group mb-3">
+                    <input type="text" className="form-control" id="searchInput"
+                           placeholder="Search restaurant name..."
+                           aria-label="username" aria-describedby="button-addon2"/>
+                    <div className="input-group-append">
+                        <button className="btn btn-outline-secondary" type="button"
+                                id="button-addon2" onClick={this.search}>Search
+                        </button>
+                    </div>
+                </div>
+
+                <div className="animated fadeIn mx-auto">
+                    <Row>
+                        <Col xl={6}>
+                            <Card>
+                                <CardHeader>
+                                    <i className="fa fa-align-justify"></i> Restaurants at Table Ready
+                                </CardHeader>
+                                <CardBody>
+                                    <Table responsive hover>
+                                        <thead>
+                                        <tr>
+                                            <th scope="col">Name</th>
+                                            <th scope="col">Owner</th>
+                                            <th scope="col">Location</th>
+                                            {/*<th scope="col">registered</th>*/}
+                                            {/*<th scope="col">Role</th>*/}
+                                            <th scope="col">Action</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {
+                                            this.restList()
+                                        }
+                                        </tbody>
+                                    </Table>
+                                </CardBody>
+                            </Card>
+                        </Col>
+                    </Row>
+                </div>
             </div>
         );
     }
