@@ -20,6 +20,11 @@ const TableSchema = new Schema({
         type: Number,
         required: false,
         default: 2
+    },
+    name:{
+        type:String,
+        required: false,
+        default: "Table"
     }
     
 });

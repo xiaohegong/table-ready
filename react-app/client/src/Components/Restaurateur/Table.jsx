@@ -102,6 +102,7 @@ class Table extends Component {
                           key={uid()}
                           id = {tableItem._id}
                           capacity = {tableItem.table_capacity}
+                          name = {tableItem.name}
                           deleteItem={this.deleteItem}
                         />
                       );
