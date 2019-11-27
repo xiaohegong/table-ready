@@ -6,7 +6,8 @@ class ImageUpload extends Component {
     filename: '',
     progress: 0,
     url: '',
-    file_type: ''
+    file_type: '',
+    msg: ''
   };
 
   onChange = e => {
@@ -26,7 +27,7 @@ class ImageUpload extends Component {
     e.preventDefault();
     const input_element = document.getElementById('file-input');
     if (!input_element.files || !input_element.files[0]) {
-      console.log('No file chosen');
+      this.setMessage('No file chosen');
       return;
     }
     const file = input_element.files[0];
@@ -36,7 +37,7 @@ class ImageUpload extends Component {
       !file_type.includes('jpg') &&
       !file_type.includes('pdf')
     ) {
-      console.log('File must be jpg, png or pdf file');
+      this.setMessage('File must be jpg, png or pdf file');
       return;
     }
     const formData = new FormData();
@@ -63,14 +64,14 @@ class ImageUpload extends Component {
 
       // setUploadedFile({ fileName, filePath });
 
-      console.log('File Uploaded');
+      this.setMessage('File Uploaded');
       console.log(res.data[0]);
-      this.setState({ url: res.data[0].url });
+      this.set({ url: res.data[0].url });
     } catch (err) {
       if (err.response.status === 500) {
-        console.log('There was a problem with the server');
+        this.setMessage('There was a problem with the server');
       } else {
-        console.log(err.response.data.msg);
+        this.setMessage(err.response.data.msg);
       }
       console.log(err);
     }
@@ -102,10 +103,22 @@ class ImageUpload extends Component {
     }
   };
 
+  setMessage = msg => {
+    this.setState({ msg });
+    setTimeout(() => {
+      this.setState({ msg: '' });
+    }, 2000);
+  };
+
   render() {
     const buttonCSS = { padding: 0, border: 'none', background: 'none' };
     return (
       <div className="container mt-5">
+        {this.state.msg ? (
+          <div className="alert alert-info" role="alert">
+            {this.state.msg}
+          </div>
+        ) : null}
         <div className="input-group mb-3">
           <div className="custom-file">
             <input
@@ -113,6 +126,7 @@ class ImageUpload extends Component {
               className="custom-file-input"
               id="file-input"
               onChange={this.onChange}
+              multiple
             />
             <label className="custom-file-label" htmlFor="inputGroupFile02">
               {this.state.filename ? this.state.filename : 'Choose file'}
