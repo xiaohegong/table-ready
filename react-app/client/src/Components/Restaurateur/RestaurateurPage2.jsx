@@ -1,8 +1,6 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
-// import EmployeeListItem from "./EmployeeListItem";
 import "../../Stylesheets/restaurateur_page_2.scss";
-// import GeneralInfo from "./GeneralInfo";
 import { Redirect } from "react-router-dom";
 import Employees from "./Employees";
 import Table from "./Table";

@@ -1,21 +1,13 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { withStyles, ThemeProvider } from '@material-ui/core/styles';
 import { green } from '@material-ui/core/colors';
 import './employee.css';
 import Card from 'react-bootstrap/Card';
-import CardDeck from 'react-bootstrap/CardDeck';
 import Navbar from '../Navbar.jsx';
-import CardGroup from 'react-bootstrap/CardGroup';
 import CardColumns from 'react-bootstrap/CardColumns';
-import reservations_manager from './dummy_data_for_drag.jsx';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
-import Favorite from '@material-ui/icons/Favorite';
-import FavoriteBorder from '@material-ui/icons/FavoriteBorder';
 import Button from 'react-bootstrap/Button';
-import CheckIcon from '@material-ui/icons/Check';
 import '@y0c/react-datepicker/assets/styles/calendar.scss';
 import { DatePicker } from '@y0c/react-datepicker';
 import { slide as Menu } from 'react-burger-menu';
@@ -28,7 +20,7 @@ import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
 import Popover from 'react-bootstrap/Popover';
 import {Redirect} from 'react-router-dom'
 import Form from "react-bootstrap/Form";
-import HeaderSubHeader from 'semantic-ui-react/dist/commonjs/elements/Header/HeaderSubheader';
+import {connect} from "react-redux";
 // fake data generator
 
 // a little function to help us with reordering the result
@@ -237,7 +229,6 @@ class Employee extends Component {
   constructor(props) {
     super(props);
     this.myRef = React.createRef()
-    console.log(this.props.cookies.cookies)
     this.state = {
       all_seats: [],
       items: [],
@@ -257,42 +248,31 @@ class Employee extends Component {
       valid: false
     };
   }
+
+  tokenConfig = () => {
+    const token = this.props.auth.token;
+    const config = {
+      headers: {
+        'Content-type': 'application/json'
+      }
+    };
+
+    if (token) {
+      config.headers['x-auth-token'] = token;
+    }
+    return config;
+  };
+
   componentDidMount() {
     axios.get(`/api/employee/${this.props.match.params.id}`).then(user => {
       console.log(user)
-      if (user.data.length === 0){
-        this.setState({loading:false, valid:false})
-      } else{
-        if (user.data[0].accountType !== "Employee"){
-          this.setState({loading:false, valid:false})
+      if (user.data.length !== 0){
+        this.setState({loading:false, validate_user:user.data[0]})
+        this.setState({valid:true, employee_obj:this.state.validate_user})
+        this.update_rest_waitlist(this.state.validate_user.workFor)
+
         }
-        else if (user.data[0].accountType === "Employee" && user.data[0].workFor === ""){
-          this.setState({loading:false, valid:false})
-        }
-        else{
-          if (this.props.cookies.cookies.cur_user.accountType === "SuperAdmin" ){
-            this.setState({loading:false, valid:true, employee_obj:user.data[0]})
-            this.update_rest_waitlist(this.state.employee_obj.workFor)
-          }
-          else if (this.props.cookies.cookies.cur_user.accountType === "Admin"){
-            this.setState({loading:false, valid:false})
-          }
-          else {
-            if (user.data[0].workFor === ""){
-              this.setState({loading:false, valid:false})
-            }
-            else{
-              if (this.props.cookies.cookies.cur_user._id === user.data[0]._id){
-                this.setState({loading:false, valid:true, employee_obj: user.data[0]})
-                this.update_rest_waitlist(this.state.employee_obj.workFor)
-              }
-              else{
-                this.setState({loading:false, valid:false})
-              }
-            }
-          } 
-        }
-      }
+
       
     })
   }
@@ -650,7 +630,20 @@ class Employee extends Component {
       </OverlayTrigger>
     );
     if (!this.state.loading){
-      if (this.state.valid === true){
+      if (!this.props.isAuthenticated) {
+        console.log(
+          'redirecting to signin since not authenticated in RestaurateurPage'
+        );
+        return <Redirect to="/SignIn" />;
+      } else{
+        if (this.props.current_user.accountType !== "SuperAdmin" && this.state.validate_user.workFor === ""){
+          console.log(this.props.current_user.accountType)
+          return <Redirect to="/SignIn" />;
+        }
+
+      }
+
+
         let draggables = []
         this.state.to_be_reserved.forEach((item,index) => {
           if(item!=null){
@@ -868,14 +861,19 @@ class Employee extends Component {
             </div>
           </div>
         );
-      } else {
-        console.log('hi');
-        return <Redirect to="/error"></Redirect>;
-      }
+      
     } else {
       return null;
     }
   }
 }
 
-export default withRouter(Employee);
+// getting from reducers (error and auth reducers)
+const mapStateToProps = state => ({
+  isAuthenticated: state.auth.isAuthenticated,
+  error: state.error,
+  current_user: state.auth.user,
+  auth: state.auth
+});
+
+export default connect(mapStateToProps)(withRouter(Employee));
