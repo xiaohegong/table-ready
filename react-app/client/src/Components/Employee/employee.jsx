@@ -335,6 +335,7 @@ class Employee extends Component {
           all_table: res.data
         })
       })
+      this.setOccupied()
       .catch(err => console.log(err))
   }
   update_rest_waitlist = (rest_id) => {
@@ -446,6 +447,8 @@ class Employee extends Component {
           tmp.push(item);
         }
       });
+      this.setOccupiedState()
+      this.get_table()
       this.setState({
         to_be_reserved: tmp
       });
@@ -464,6 +467,13 @@ class Employee extends Component {
       }
     }
   };
+  setOccupiedState = () => {
+    for (let i = 0; i < this.state.reservations_color.length; i++) {
+      if (this.state.reservations_color[i] === 'green') {
+        this.modify_table(this.state.all_table[i], true)
+      }
+    }
+  }
   change_menu_state = index => {
     this.setState({ menu_open: !this.state.menu_open });
     let in_list = false;
