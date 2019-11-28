@@ -1,3 +1,6 @@
 {
-  "jwtSecret": "jwt_table_ready_csc301_secret"
+  "jwtSecret": "jwt_table_ready_csc301_secret",
+  "cloud_name": "huakun",
+  "api_key": "454177563293312",
+  "api_secret": "3ZUh5CPpyFtqNM_sjyYggwLhpdw"
 }
