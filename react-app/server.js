@@ -323,6 +323,7 @@ app.post('/restaurant/add_employee', (req, res) => {
     User.findOneAndUpdate(
       { username: username },
       { workFor: restaurant_id }
+      //{ $addToSet: { restaurantInvitation: restaurant_id } }
     ).then(user => {
       res.send(user);
     });
@@ -447,7 +448,7 @@ app.post('/waitlist/getWaitlistById', (req, res) => {
 });
 
 app.get('/api/users', (req, res) => {
-  User.find({}, function(err, users) {
+  User.find({}, function (err, users) {
     if (err) {
       log(err);
       return err;
@@ -477,7 +478,7 @@ app.delete('/api/users/:id', (req, res) => {
   const id = req.params.id;
   User.findById(id)
     .then((user) => {
-      user.remove().then(()=>{
+      user.remove().then(() => {
         res.send("User " + id + " deleted.");
       })
     })
@@ -520,7 +521,7 @@ app.get('/user/info', (req, res) => {
 app.get('/api/employee/:id', (req, res) => {
   const employee_id = req.params.id;
   console.log('hii');
-  User.find({ _id: ObjectID(employee_id) }, function(err, single_user) {
+  User.find({ _id: ObjectID(employee_id) }, function (err, single_user) {
     if (err) {
       console.log(err);
       return err;
@@ -570,7 +571,7 @@ app.get('/user/:id', (req, res) => {
     .catch(error => res.status(400).json('Err ' + error));
 });
 
-app.get('/*', function(req, res) {
+app.get('/*', function (req, res) {
   res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'));
 });
 
