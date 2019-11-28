@@ -1,41 +1,48 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import "../Stylesheets/navbar.scss";
-import $ from "jquery";
+import React from 'react';
+import { Link } from 'react-router-dom';
+import '../Stylesheets/navbar.scss';
+import { Redirect, withRouter } from 'react-router-dom';
+import $ from 'jquery';
+import { connect } from 'react-redux';
+import { logout } from '../actions/authActions';
+import PropTypes from 'prop-types';
 
 class Navbar extends React.Component {
   state = {};
+  static propTypes = {
+    logout: PropTypes.func.isRequired
+  };
   componentDidMount() {
-    $(document).ready(function() {
+    $(document).ready(function () {
       // Get click event, assign button to var, and get values from that var
-      $("#theme-btn-group button").on("click", function() {
+      $('#theme-btn-group button').on('click', function () {
         const btn_clicked = $(this);
         btn_clicked
-          .addClass("active")
+          .addClass('active')
           .siblings()
-          .removeClass("active");
+          .removeClass('active');
         var btnValue = btn_clicked.val();
-        console.log("Color theme - ", btnValue);
+        console.log('Color theme - ', btnValue);
 
-        if (btnValue === "light") {
+        if (btnValue === 'light') {
           trans();
-          document.documentElement.setAttribute("theme", "light");
-          $(".btn-light")
-            .removeClass("btn-light")
-            .addClass("btn-primary");
-        } else if (btnValue === "dark") {
+          document.documentElement.setAttribute('theme', 'light');
+          $('.btn-light')
+            .removeClass('btn-light')
+            .addClass('btn-primary');
+        } else if (btnValue === 'dark') {
           trans();
-          document.documentElement.setAttribute("theme", "dark");
-          $(".btn-primary")
-            .removeClass("btn-primary")
-            .addClass("btn-light");
+          document.documentElement.setAttribute('theme', 'dark');
+          $('.btn-primary')
+            .removeClass('btn-primary')
+            .addClass('btn-light');
         }
       });
       let trans = () => {
-        document.documentElement.classList.add("transition");
+        document.documentElement.classList.add('transition');
         // $("*").addClass("transition");
         window.setTimeout(() => {
-          document.documentElement.classList.remove("transition");
+          document.documentElement.classList.remove('transition');
           // $("*").removeClass("transition");
         }, 760);
       };
@@ -45,42 +52,18 @@ class Navbar extends React.Component {
     });
   }
 
-  getButton() {
-    // console.log(this.props.cookies);
-    if (!this.props.cookies.cookies.cur_user) {
-      return (
-        <div className="btn-group">
-          <Link to="/SignIn">
-            <button className="btn btn-primary btn-sm">Sign In</button>
-          </Link>
-          <Link to="/SignUp">
-            <button className="btn btn-success btn-sm">Sign Up</button>
-          </Link>
-        </div>
-      );
-    } else {
-      return (
-        <div>
-          <button
-            className="btn btn-outline-danger btn-sm logout-btn"
-            onClick={this.logout.bind(this)}
-          >
-            Logout
-          </button>
-        </div>
-      );
-    }
-  }
-
-  logout() {
-    this.props.cookies.removeCookie("cur_user", { path: "/" });
-    window.location.href = "/SignIn";
-  }
-
   render() {
     return (
       <nav className="navbar-page navbar navbar-expand-lg navbar-dark bg-dark">
-        <Link to="/">Home</Link>
+        <button
+          className="nav-link btn home-btn"
+          onClick={() => {
+            console.log('hi');
+            window.location.href = '/';
+          }}
+        >
+          <strong>Home</strong>
+        </button>
 
         <button
           className="navbar-toggler"
@@ -142,11 +125,37 @@ class Navbar extends React.Component {
             {/*</div>*/}
             {/*</li>*/}
           </ul>
-          {this.getButton()}
+          {/* {this.getButton()} */}
+          {this.props.isAuthenticated ? (
+            <div>
+              <button
+                className="btn btn-outline-danger btn-sm logout-btn"
+                onClick={this.props.logout}
+              >
+                Logout
+              </button>
+            </div>
+          ) : (
+              <div className="btn-group">
+                <Link to="/SignIn">
+                  <button className="btn btn-primary btn-sm">Sign In</button>
+                </Link>
+                <Link to="/SignUp">
+                  <button className="btn btn-success btn-sm">Sign Up</button>
+                </Link>
+              </div>
+            )}
         </div>
       </nav>
     );
   }
 }
 
-export default Navbar;
+// getting from reducers (error and auth reducers)
+const mapStateToProps = state => ({
+  isAuthenticated: state.auth.isAuthenticated,
+  error: state.error,
+  current_user: state.auth.user
+});
+
+export default connect(mapStateToProps, { logout })(withRouter(Navbar));

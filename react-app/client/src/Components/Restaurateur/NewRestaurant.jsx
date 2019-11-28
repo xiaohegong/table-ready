@@ -1,73 +1,58 @@
-import React, { Component } from "react";
-import axios from "axios";
-import "../../Stylesheets/restaurateur_page.scss";
+import React, { Component } from 'react';
+import axios from 'axios';
+import '../../Stylesheets/restaurateur_page.scss';
 import { Redirect } from 'react-router-dom';
-import { withRouter } from "react-router-dom";
+import { withRouter } from 'react-router-dom';
 
 class NewRestaurant extends Component {
   constructor(props) {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
-  state = {redirect: false};
+  state = { redirect: false };
   handleSubmit(event) {
     event.preventDefault();
-
-    const header = {
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json"
-      }
-    };
-
-    axios
-      .post(
-        "/restaurant/newRestaurant",
-        {
-          owner: this.props.cookies.cookies.cur_user._id,
-          name: event.target.name.value,
-          phoneNumber: event.target.phoneNumber.value,
-          cuisine: event.target.cuisine.value,
-          location: event.target.location.value,
-          hours: event.target.hours.value
-        },
-        header
-      )
-      .then(
-        response => {
-          this.setState({ redirect: true });
-          console.log(response);
-        },
-        error => {
-          console.log(error);
+    if (!event.target.name.value) {
+      alert('restaurant name required');
+    } else if (!event.target.phoneNumber.value) {
+      alert('restaurant phone number required');
+    } else {
+      const header = {
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json'
         }
-      );
-
-    // fetch('http://localhost:3000/restaurant/newRestaurant', {
-    //     method: 'POST',
-    //     headers: {
-    //         'Accept': 'application/json',
-    //         'Content-Type': 'application/json',
-    //     },
-    //     body: JSON.stringify({
-    //         owner: "Heddy",
-    //         name: event.target.name.value,
-    //         phoneNumber: event.target.phoneNumber.value,
-    //         cuisine: event.target.cuisine.value,
-    //         location:event.target.location.value
-    //     })
-    // }).then(restaurant => {
-    //     console.log("restaurant " + restaurant.name + " saved to database");
-    // })
-    //     .catch(err => {
-    //         console.log(400);
-    //     });
+      };
+      axios
+        .post(
+          '/restaurant/newRestaurant',
+          {
+            owner: this.props.location.state.owner_id,
+            name: event.target.name.value,
+            phoneNumber: event.target.phoneNumber.value,
+            cuisine: event.target.cuisine.value,
+            location: event.target.location.value,
+            hours: event.target.hours.value,
+            tables: event.target.tables.value
+          },
+          header
+        )
+        .then(
+          response => {
+            this.setState({ redirect: true });
+            console.log(response);
+          },
+          error => {
+            console.log(error);
+          }
+        );
+    }
   }
   render() {
     const { redirect } = this.state;
 
     if (redirect) {
-      return <Redirect to={`/restaurateur/${this.props.location.state.id}`}/>;
+      return <Redirect to={`/restaurateur/${this.props.location.state.id}`} />;
     }
     return (
       <div className="new-restaurant-page">
@@ -75,57 +60,57 @@ class NewRestaurant extends Component {
           <div className="form-container mx-auto">
             <h2>Add A Restaurant</h2>
             <form onSubmit={this.handleSubmit} className="">
-              <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                  <span class="input-group-text" id="basic-addon1">
+              <div className="input-group mb-3">
+                <div className="input-group-prepend">
+                  <span className="input-group-text" id="basic-addon1">
                     Restaurant Name*
                   </span>
                 </div>
                 <input
                   type="text"
-                  class="form-control"
+                  className="form-control"
                   placeholder="Restaurant Name"
                   id="name"
                   name="name"
                 />
               </div>
-              <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                  <span class="input-group-text" id="basic-addon1">
+              <div className="input-group mb-3">
+                <div className="input-group-prepend">
+                  <span className="input-group-text" id="basic-addon1">
                     Restaurant Telephone*
                   </span>
                 </div>
                 <input
                   type="text"
-                  class="form-control"
+                  className="form-control"
                   placeholder="Telephone"
                   id="phoneNumber"
                   name="phoneNumber"
                 />
               </div>
-              <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                  <span class="input-group-text" id="basic-addon1">
+              <div className="input-group mb-3">
+                <div className="input-group-prepend">
+                  <span className="input-group-text" id="basic-addon1">
                     Restaurant Location
                   </span>
                 </div>
                 <input
                   type="text"
-                  class="form-control"
+                  className="form-control"
                   placeholder="Location"
                   id="location"
                   name="location"
                 />
               </div>
-              <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                  <span class="input-group-text" id="basic-addon1">
+              <div className="input-group mb-3">
+                <div className="input-group-prepend">
+                  <span className="input-group-text" id="basic-addon1">
                     Restaurant Cuisine
                   </span>
                 </div>
                 <input
                   type="text"
-                  class="form-control"
+                  className="form-control"
                   placeholder="Restaurant Cuisine"
                   id="cuisine"
                   name="cuisine"
@@ -143,6 +128,20 @@ class NewRestaurant extends Component {
                   placeholder="Operation Hours"
                   id="hours"
                   name="hours"
+                />
+              </div>
+              <div className="input-group mb-3">
+                <div className="input-group-prepend">
+                  <span className="input-group-text" id="basic-addon1">
+                    Number of Tables
+                  </span>
+                </div>
+                <input
+                  type="number"
+                  className="form-control"
+                  placeholder="number of tables"
+                  id="tables"
+                  name="tables"
                 />
               </div>
 

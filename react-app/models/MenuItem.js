@@ -34,7 +34,7 @@ const MenuItemSchema = new Schema({
     },
     calories: {
         type: Number,
-        required: true,
+        required: false,
         default: 0
     }
 });
