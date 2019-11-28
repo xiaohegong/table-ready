@@ -4,6 +4,7 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import { DatePicker } from "@y0c/react-datepicker";
+import { Checkbox } from "@material-ui/core";
 
 class VerticalModal extends React.Component {
   state = {
@@ -11,7 +12,8 @@ class VerticalModal extends React.Component {
     ppl_number: 0,
     date: null,
     time_arrive: null,
-    time: null
+    time: null,
+    type: null
   };
   showdate = value => {
     const year = value.$y;
@@ -64,6 +66,24 @@ class VerticalModal extends React.Component {
                 ></DatePicker>
               </Form.Group>
             </Form.Row>
+            <Form.Row>
+              <Form.Group as={Col} md="auto">
+                <Form.Label>Reservation</Form.Label>
+                <Checkbox label={"Reservation"} onChange={(e) => {
+                  if(e.target.checked){
+                    this.state.type = "Reservation"
+                  }
+                }}
+                ></Checkbox>
+                
+              </Form.Group>
+              <Form.Group as={Col} md="auto">
+                <Form.Label>Waitlist</Form.Label>
+                <Checkbox onChange={(e) => {
+                  this.state.type = "Waitlist"
+                }}></Checkbox>
+              </Form.Group>
+            </Form.Row>
           </Form>
         </Modal.Body>
         <Modal.Footer>
@@ -73,7 +93,8 @@ class VerticalModal extends React.Component {
                 this.state.name,
                 this.state.ppl_number,
                 this.state.date,
-                this.state.time
+                this.state.time,
+                this.state.type
               )
             }
           >

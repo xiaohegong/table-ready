@@ -1,11 +1,9 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
-// import EmployeeListItem from "./EmployeeListItem";
 import "../../Stylesheets/restaurateur_page_2.scss";
-// import GeneralInfo from "./GeneralInfo";
 import { Redirect } from "react-router-dom";
 import Employees from "./Employees";
-import Pay from "./Pay";
+import Table from "./Table";
 import Menu from "./Menu";
 import Navbar from "../Navbar";
 import DressCode from "./DressCode";
@@ -34,6 +32,11 @@ class RestaurateurPage2 extends Component {
         id: 3,
         title: "Menu",
         model: <Menu res_id={this.props.match.params.id} />
+      },
+      {
+        id: 4,
+        title: "Table",
+        model: <Table res_id={this.props.match.params.id}/>
       }
     ]
   };

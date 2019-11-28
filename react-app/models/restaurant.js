@@ -54,6 +54,11 @@ const RestaurantSchema = new Schema({
     type: Array,
     required: false,
     default: []
+  },
+  waitlists: {
+    type: Array,
+    required: false,
+    default: []
   }
 });
 
