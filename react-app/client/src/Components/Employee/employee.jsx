@@ -1,21 +1,13 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { withStyles, ThemeProvider } from '@material-ui/core/styles';
 import { green } from '@material-ui/core/colors';
 import './employee.css';
 import Card from 'react-bootstrap/Card';
-import CardDeck from 'react-bootstrap/CardDeck';
 import Navbar from '../Navbar.jsx';
-import CardGroup from 'react-bootstrap/CardGroup';
 import CardColumns from 'react-bootstrap/CardColumns';
-import reservations_manager from './dummy_data_for_drag.jsx';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
-import Favorite from '@material-ui/icons/Favorite';
-import FavoriteBorder from '@material-ui/icons/FavoriteBorder';
 import Button from 'react-bootstrap/Button';
-import CheckIcon from '@material-ui/icons/Check';
 import '@y0c/react-datepicker/assets/styles/calendar.scss';
 import { DatePicker } from '@y0c/react-datepicker';
 import { slide as Menu } from 'react-burger-menu';
@@ -24,8 +16,11 @@ import Draggable, { DraggableCore } from 'react-draggable';
 import { withRouter } from 'react-router-dom';
 import VerticalModal from './verticalModal';
 import axios from 'axios';
-import HeaderSubHeader from 'semantic-ui-react/dist/commonjs/elements/Header/HeaderSubheader';
-import { Redirect } from 'react-router-dom';
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
+import Popover from 'react-bootstrap/Popover';
+import {Redirect} from 'react-router-dom'
+import Form from "react-bootstrap/Form";
+import {connect} from "react-redux";
 // fake data generator
 
 // a little function to help us with reordering the result
@@ -233,18 +228,17 @@ const initial_color = (() => {
 class Employee extends Component {
   constructor(props) {
     super(props);
-    console.log(this.props.cookies.cookies);
+    this.myRef = React.createRef()
     this.state = {
       all_seats: [],
       items: [],
       to_be_reserved: [],
       checkedG: false,
       current_date: null,
-      draggin: false,
-      menu_open: false,
-      current_table: null,
-      all_table: all_table.tables,
-      reservations_color: initial_color,
+      draggin:false,
+      menu_open:false,
+      all_table:[],
+      reservations_color:initial_color,
       user_obj: 0,
       changed: false,
       employee_obj: null,
@@ -254,56 +248,33 @@ class Employee extends Component {
       valid: false
     };
   }
+
+  tokenConfig = () => {
+    const token = this.props.auth.token;
+    const config = {
+      headers: {
+        'Content-type': 'application/json'
+      }
+    };
+
+    if (token) {
+      config.headers['x-auth-token'] = token;
+    }
+    return config;
+  };
+
   componentDidMount() {
     axios.get(`/api/employee/${this.props.match.params.id}`).then(user => {
-      console.log(user);
-      if (user.data.length === 0) {
-        this.setState({ loading: false, valid: false });
-      } else {
-        if (user.data[0].accountType !== 'Employee') {
-          this.setState({ loading: false, valid: false });
-        } else if (
-          user.data[0].accountType === 'Employee' &&
-          user.data[0].workFor === ''
-        ) {
-          this.setState({ loading: false, valid: false });
-        } else {
-          if (
-            this.props.cookies.cookies.cur_user.accountType === 'SuperAdmin'
-          ) {
-            this.setState({
-              loading: false,
-              valid: true,
-              employee_obj: user.data[0]
-            });
-            this.fetch_data();
-          } else if (
-            this.props.cookies.cookies.cur_user.accountType === 'Admin'
-          ) {
-            this.setState({ loading: false, valid: false });
-          } else {
-            if (user.data[0].workFor === '') {
-              this.setState({ loading: false, valid: false });
-            } else {
-              if (
-                this.props.cookies.cookies.cur_user._id === user.data[0]._id
-              ) {
-                this.setState({
-                  loading: false,
-                  valid: true,
-                  employee_obj: user.data[0]
-                });
-                this.fetch_data();
-              } else {
-                this.setState({ loading: false, valid: false });
-              }
-            }
-          }
-        }
+      console.log(user)
+      
+        this.setState({loading:false, validate_user:user.data[0]})
+        this.setState({valid:true, employee_obj:this.state.validate_user})
+      if(this.state.validate_user.workFor !== ""){
+        this.update_rest_waitlist(this.state.validate_user.workFor)
       }
-    });
+    })
   }
-  create_waitlist = new_wl => {
+  create_waitlist = (new_wl) => {
     const header = {
       headers: {
         Accept: 'application/json',
@@ -311,80 +282,78 @@ class Employee extends Component {
       }
     };
     let id;
-    axios
-      .post(
-        '/waitlist/newWaitlist',
-        {
-          id: new_wl.id,
-          name: new_wl.name,
-          people: new_wl.people,
-          date_of_arrival: new_wl.date_of_arrival,
-          estimated_time: new_wl.estimated_time
-        },
-        header
-      )
-      .then(response => {
-        id = response.data;
-        console.log(response.data);
-        axios
-          .post('/restaurant/updateReservation', {
-            _id: this.state.rest_obj._id,
-            reservations: [...this.state.rest_obj.reservations, id]
-          })
-          .then(this.filter_date())
-          .catch(function(error) {
+    axios.post('/waitlist/newWaitlist', {
+      id: new_wl.id,
+      name: new_wl.name,
+      people: new_wl.people,
+      type: new_wl.type,
+      date_of_arrival: new_wl.date_of_arrival,
+      estimated_time: new_wl.estimated_time
+    },header)
+      .then((response) => {
+        id = response.data
+        console.log(response.data)
+        axios.post('/restaurant/updateReservation', {
+          _id: this.state.rest_obj._id,
+          reservations: [...this.state.rest_obj.reservations, id]
+        })
+          .then(this.update_rest_waitlist(this.state.employee_obj.workFor))
+          .catch(function (error){
             console.log(error);
           });
       })
       .catch(error => {
         console.log(error);
-      });
-  };
-  update_rest_waitlist = rest_id => {
-    console.log('hiii');
-    axios.post('/restaurant/findRestaurant', { _id: rest_id }).then(res => {
-      this.setState({ rest_obj: res.data[1][0] });
-      this.setState({ all_seats: res.data[0] });
-      if (this.state.current_date != null) {
+      })
+  }
+  create_table = (capacity) => {
+    axios.post("/waitlist/CreateNewTable", {
+      rest_id: this.state.employee_obj.workFor,
+      table_occupied: false,
+      table_capacity: capacity
+    })
+      .then(res => console.log(res))
+      .catch(err => console.log(err))
+  }
+  modify_table = (table, status) => {
+    axios.put("/waitlist/ModifyTableStatus", {
+      id: table._id,
+      status: status
+    })
+      .then(res => console.log(res))
+      .catch(err => console.log(err))
+  }
+  get_table = () => {
+    axios.post("/waitlist/GetTableForRestaurant", {
+      rest_id: this.state.employee_obj.workFor
+    })
+      .then(res => {
+        console.log(res.data)
         this.setState({
-          items: this.state.all_seats.filter(
-            value => value.date_of_arrival === this.state.current_date
-          )
-        });
-      }
-    });
+          all_table: res.data
+        })
+        this.setReservationColor()
+      })
 
-    // .then(() => {
-    //   if(this.state.rest_obj != undefined){
-    //     this.setState({
-    //       all_seats: []
-    //     })
-    // this.state.rest_obj.reservations.forEach(element => {
-    //   axios.post("/waitlist/getWaitlistById",{_id: element})
-    //     .then((res) => {
-    //       let tmp_seats = [...this.state.all_seats, res.data[0]]
-    //       let values = tmp_seats.filter(value => value.date_of_arrival == this.state.current_date)
-    //       this.setState({
-    //         all_seats: tmp_seats, items:values
-    //       })
-    //     })
-    //     .catch(function (error){
-    //       console.log(error);
-    //     })
-    // }
+      .catch(err => console.log(err))
+  }
+  update_rest_waitlist = (rest_id) => {
+    this.setState({
+      to_be_reserved: []
+    })
+    axios.post("/restaurant/findRestaurant", {_id: rest_id})
+      .then(res => {
+        this.setState({rest_obj: res.data[1][0]})
+        this.setState({all_seats: res.data[0]})
+        if(this.state.current_date != null){
+          this.setState({
+            items: this.state.all_seats.filter(value => value.date_of_arrival == this.state.current_date)
+          })
+        }
+      })
 
-    // );
-    // }})
-    // .catch(function (error){
-    //   console.log(error);
-    // })
-
-    // console.log(this.state.all_seats)
-  };
-  fetch_data = () => {
-    this.update_rest_waitlist(this.state.employee_obj.workFor);
-  };
-  delete_data = data => {
+  }
+  delete_data = (data) => {
     const header = {
       headers: {
         Accept: 'application/text',
@@ -481,6 +450,7 @@ class Employee extends Component {
         to_be_reserved: tmp
       });
     }
+    
     this.setState({
       changed: false,
       draggin: false
@@ -490,9 +460,17 @@ class Employee extends Component {
     for (let i = 0; i < this.state.reservations_color.length; i++) {
       if (this.state.reservations_color[i] === 'green') {
         this.state.all_table[i].table_occupied = true;
+        this.modify_table(this.state.all_table[i], true)
       }
     }
   };
+  setReservationColor = () => {
+    for (let i = 0; i < this.state.all_table.length; i++){
+      if(this.state.all_table[i].table_occupied === true){
+        this.state.reservations_color[i] = 'green'
+      }
+    }
+  }
   change_menu_state = index => {
     this.setState({ menu_open: !this.state.menu_open });
     let in_list = false;
@@ -501,14 +479,11 @@ class Employee extends Component {
         in_list = true;
       }
     });
-    if (in_list === false) {
-      console.log(this.state.items[index]);
-      this.setState({
-        to_be_reserved: this.state.to_be_reserved.filter(value => value != null)
-      });
-      this.setState({
-        to_be_reserved: [...this.state.to_be_reserved, this.state.items[index]]
-      });
+    this.get_table()
+    if (in_list == false) {
+      console.log(this.state.items[index])
+      this.setState({to_be_reserved: this.state.to_be_reserved.filter((value) => value != null)})
+      this.setState({ to_be_reserved: [...this.state.to_be_reserved, this.state.items[index]]});
     }
     console.log(this.state.to_be_reserved);
   };
@@ -518,14 +493,11 @@ class Employee extends Component {
       items: this.state.items.filter(i => i.id != this.state.items[index].id)
     });
   };
-  info = e => {
-    // console.log("hi")
-  };
   removefocus = e => {
     e.preventDefault();
   };
   /* change color of card */
-
+  
   checkcapacity = index => {
     // const cur_table = document.getElementById(`Table-${index}`)
     // this.setState({current_table:cur_table})
@@ -577,6 +549,7 @@ class Employee extends Component {
     if (this.state.all_table[index].table_occupied === true) {
       this.state.all_table[index].table_occupied = false;
       this.resumecard(index);
+      this.modify_table(this.state.all_table[index], false)
     }
   };
   remove_from_reserved = index => {
@@ -587,21 +560,19 @@ class Employee extends Component {
       )
     });
   };
-  filter_date = () => {
-    this.fetch_data();
-  };
   setModalState = state => {
     this.setState({
       modal_show: state
     });
   };
-  add_reservation = (name, ppl_num, date, time) => {
+  add_reservation = (name, ppl_num, date, time, type) => {
     const new_wl = {
       id: Math.random()
         .toString(36)
         .substr(2, 9),
       name: name,
       people: ppl_num,
+      type: type,
       date_of_arrival: date,
       estimated_time: time
     };
@@ -650,11 +621,21 @@ class Employee extends Component {
   // Normally you would want to split things out into separate components.
   // But in this example everything is just done in one place for simplicity
   render() {
-    if (!this.state.loading) {
-      if (this.state.valid === true) {
-        let draggables = [];
-        this.state.to_be_reserved.forEach((item, index) => {
-          if (item != null) {
+    if (!this.state.loading){
+      if (!this.props.isAuthenticated) {
+        console.log(
+          'redirecting to signin since not authenticated in RestaurateurPage'
+        );
+        return <Redirect to="/SignIn" />;
+      } else{
+        if (this.props.current_user.accountType !== "SuperAdmin" && this.state.validate_user.workFor === ""){
+          console.log(this.props.current_user.accountType)
+          return <Redirect to="/SignIn" />;
+        }
+      }
+        let draggables = []
+        this.state.to_be_reserved.forEach((item,index) => {
+          if(item!=null){
             draggables.push(
               <Draggable
                 onStart={() => this.handleStart(index)}
@@ -732,112 +713,65 @@ class Employee extends Component {
           }
         });
         return (
-          <div id="outer-container" className="card-container">
-            <Menu
-              pageWrapId={'page-wrap'}
-              width={'1000px'}
-              outerContainerId={'outer-container'}
-              right
-              disableAutoFocus
-              customBurgerIcon={false}
-              isOpen={this.state.menu_open}
-              onStateChange={state => this.handleStateChange(state)}
-              handleMousemove={() => handleMousemove(this)}
-            >
-              <span id="reservation_container" onMouseDown={this.removefocus}>
-                {draggables.map((item, index) => (
-                  //Fix bug
-                  <div key={index}>{item}</div>
-                ))}
+          <div id = "outer-container" className = "card-container">
+            <Menu pageWrapId={ "page-wrap" }  width = {'1000px'} outerContainerId={ "outer-container" } right disableAutoFocus customBurgerIcon={false} isOpen={this.state.menu_open}
+             onStateChange={(state) => this.handleStateChange(state)} handleMousemove = {() => handleMousemove(this)}>
+              <span id = "reservation_container" onMouseDown = {this.removefocus}>
+                {
+                  draggables.map((item,index) => (
+                    //Fix bug
+                    <div key={index}>
+                      {item}
+                    </div>
+                    
+                  ))
+                }
               </span>
-              <span
-                id="avaliable_seats_container"
-                onMouseDown={this.removefocus}
-              >
-                {this.state.all_table.map((item, index) => (
-                  <Card
-                    key={index}
-                    id={`Table-${index}`}
-                    className="tablecard"
-                    style={{
-                      backgroundColor: this.state.reservations_color[index],
-                      width: '18rem'
-                    }}
-                    onMouseOver={e => this.handleMouseOver(index)}
-                    onMouseLeave={() => this.resumecard(index)}
-                  >
-                    <Card.Header className="header-of-card">
-                      <div className="pic-container">
-                        <strong>{`Table-${index + 1}`}</strong>
-                        <img
-                          className="user-pic"
-                          src={
-                            process.env.PUBLIC_URL +
-                            '/images/restaurant_images/table.png'
-                          }
-                        ></img>
-                      </div>
-                    </Card.Header>
-                    <Card.Body>
-                      <div>
-                        <span>Capacity: {item.table_capacity}</span>
-                      </div>
-                      <div className="user_profile_holder">
-                        <div className="check-container">
-                          <button
-                            className="reject-button"
-                            onClick={e => this.empty_seats(index)}
-                            onMouseDown={this.removefocus}
-                          >
-                            <img
-                              src={
-                                process.env.PUBLIC_URL +
-                                '/images/restaurant_images/no-stopping.png'
-                              }
-                            ></img>
-                          </button>
+              <span id = "avaliable_seats_container" onMouseDown = {this.removefocus} ref={this.myRef}>
+                {
+                  this.state.all_table.map((item,index) => (
+                    <Card key={index} id = {`Table-${index}`} className = "tablecard" style={{backgroundColor:this.state.reservations_color[index],  width: '18rem' }}  onMouseOver = {(e) => this.handleMouseOver(index)} onMouseLeave = {() => this.resumecard(index)}>
+                      <Card.Header className = "header-of-card">
+                        <div className = "pic-container">
+                          <strong>
+                            {`Table-${index+1}`}
+                          </strong>
+                          <img className = "user-pic"src = {process.env.PUBLIC_URL + "/images/restaurant_images/table.png"}></img>
                         </div>
-                      </div>
-                    </Card.Body>
-                  </Card>
-                ))}
-              </span>
-            </Menu>
-            <div id="page-wrap">
-              <Navbar cookies={this.props.cookies} />
-              <div id="cal" style={{ height: '80px' }}>
-                <DatePicker
-                  onChange={value => this.showdate(value)}
-                  showDefaultIcon
-                ></DatePicker>
-                <button id="date-confirm" onClick={() => this.filter_date()}>
-                  Confirm
-                </button>
-                <button
-                  id="date-confirm"
-                  onClick={() => this.setModalState(true)}
-                >
-                  Add Reservation
-                </button>
-              </div>
-              <CardColumns id="content-wrapper">
-                {this.state.items.map((item, index) => (
-                  <Card
-                    key={index}
-                    className="usercard"
-                    bg="light"
-                    style={{ width: '18rem' }}
-                  >
-                    <Card.Header className="header-of-card">
-                      <div className="pic-container">
-                        <strong>{item.name}</strong>
-                        <img
-                          className="user-pic"
-                          src={
-                            process.env.PUBLIC_URL +
-                            '/images/restaurant_images/boy.png'
-                          }
-                        ></img>
+                      </Card.Header>
+                      <Card.Body>
+                        <div>
+                          <span>Capacity: {item.table_capacity}</span>
+                        </div>
+                        <div className = "user_profile_holder">
+                          <div className = "check-container">
+                              <button className="reject-button" onClick = {(e) => this.empty_seats(index)} onMouseDown = {this.removefocus}><img src = {process.env.PUBLIC_URL + "/images/restaurant_images/no-stopping.png"}></img></button>
+                          </div>
+                        </div>
+                      </Card.Body>
+                    </Card>
+                  ))
+                  }
+                </span>
+          </Menu>
+          <div id = "page-wrap">
+            <Navbar cookies={this.props.cookies}/>
+            <div id = "cal" style={{height: '80px'}}>
+              <DatePicker onChange={(value)=>this.showdate(value)} showDefaultIcon></DatePicker>
+              <button id  = "date-confirm" onClick={()=>this.update_rest_waitlist(this.state.employee_obj.workFor)}>Confirm</button>
+              <button id = "date-confirm" onClick={()=>this.setModalState(true)}>Add Reservation</button>
+            </div>
+            <CardColumns id = "content-wrapper">
+              {
+                this.state.items.map((item,index) => (
+                  <Card key={index} className = "usercard" bg="light" style={{ width: '18rem' }}>
+                    <Card.Header className = "header-of-card">
+                      <div className = "pic-container">
+                        <strong>
+                          {item.name}
+                        </strong>
+                        <img className = "user-pic"src = {process.env.PUBLIC_URL + "/images/restaurant_images/boy.png"}></img>
+                        
                       </div>
                     </Card.Header>
                     <Card.Body>
@@ -915,14 +849,19 @@ class Employee extends Component {
             </div>
           </div>
         );
-      } else {
-        console.log('hi');
-        return <Redirect to="/error"></Redirect>;
-      }
+      
     } else {
       return null;
     }
   }
 }
 
-export default withRouter(Employee);
+// getting from reducers (error and auth reducers)
+const mapStateToProps = state => ({
+  isAuthenticated: state.auth.isAuthenticated,
+  error: state.error,
+  current_user: state.auth.user,
+  auth: state.auth
+});
+
+export default connect(mapStateToProps)(withRouter(Employee));

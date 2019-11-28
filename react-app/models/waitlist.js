@@ -19,6 +19,10 @@ const WaitlistSchema = new Schema({
         type: Number,
         required: true
     },
+    type: {
+        type: String,
+        required: true
+    },
     date_of_arrival:{
         type: String,
         required: true
