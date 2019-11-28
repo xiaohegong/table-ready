@@ -44,7 +44,11 @@ class ImageUploader extends Component {
     const file = input_element.files[0];
     const file_type = file.type;
     this.setState({ isUploading: true });
-    if (!file_type.includes('png') && !file_type.includes('jpg')) {
+    if (
+      !file_type.includes('png') &&
+      !file_type.includes('jpg') &&
+      !file_type.includes('jpeg')
+    ) {
       this.setMessage('File must be jpg or png');
       return;
     }

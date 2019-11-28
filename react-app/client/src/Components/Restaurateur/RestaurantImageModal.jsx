@@ -24,7 +24,9 @@ class RestaurantImageModal extends Component {
     this.setState({ [key]: value });
   };
 
-  confirm = async () => {
+  confirm = () => {
+    this.toggle();
+    if (!this.state.url) return;
     axios
       .patch(
         `/api/restaurants/${this.props.match.params.id}`,
@@ -35,7 +37,6 @@ class RestaurantImageModal extends Component {
       )
       .then(res => {
         this.setState({ image: this.state.url });
-        this.toggle();
       })
       .catch(err => {
         console.log(err);

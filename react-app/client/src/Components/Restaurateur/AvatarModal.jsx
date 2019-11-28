@@ -18,7 +18,9 @@ class AvatarModal extends Component {
     this.setState({ [key]: value });
   };
 
-  confirm = async () => {
+  confirm = () => {
+    this.toggle();
+    if (!this.state.url) return;
     axios
       .patch(
         `/api/users/change-avatar/${this.props.match.params.id}`,
@@ -30,7 +32,6 @@ class AvatarModal extends Component {
       .then(res => {
         store.dispatch(loadUser()); // update image in currentuser
         this.setState({ image: this.state.url });
-        this.toggle();
       })
       .catch(err => {
         console.log(err);
