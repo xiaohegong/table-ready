@@ -27,7 +27,7 @@ class Userpage extends React.Component{
     console.log(this.props)
      axios.get(`/restinfo/${this.props.match.params.id}`).then(
             res => {
-                console.log(res)
+                console.log(res) 
                 this.setState({invitations: res.data})
             }
         )
