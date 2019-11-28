@@ -10,8 +10,6 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import RestaurateurSettingModal from './RestaurateurSettingModal';
 import AvatarModal from './AvatarModal';
-import store from '../../store';
-import { loadUser } from '../../actions/authActions';
 
 class RestaurateurPage extends Component {
   state = {
@@ -159,10 +157,7 @@ class RestaurateurPage extends Component {
                           name={restaurant.name}
                           address={restaurant.location}
                           telephone={restaurant.phoneNumber}
-                          image={
-                            process.env.PUBLIC_URL +
-                            '/images/restaurant_images/restaurant1.jpeg'
-                          }
+                          image={restaurant.image}
                           _id={restaurant._id}
                         />
                       </Link>

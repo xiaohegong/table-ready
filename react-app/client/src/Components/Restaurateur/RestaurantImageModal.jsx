@@ -7,28 +7,33 @@ import { connect } from 'react-redux';
 import { loadUser } from '../../actions/authActions';
 import axios from 'axios';
 
-class AvatarModal extends Component {
+class RestaurantImageModal extends Component {
   constructor(props) {
     super(props);
     const { className } = props;
     this.state = { modal: false, className, image: props.image, url: '' };
   }
 
-  setAvatarModalState = (key, value) => {
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.image) {
+      this.setState({ image: nextProps.image });
+    }
+  }
+
+  setModalState = (key, value) => {
     this.setState({ [key]: value });
   };
 
   confirm = async () => {
     axios
       .patch(
-        `/api/users/change-avatar/${this.props.match.params.id}`,
+        `/api/restaurants/${this.props.match.params.id}`,
         {
           image: this.state.url
         },
         this.tokenConfig()
       )
       .then(res => {
-        store.dispatch(loadUser()); // update image in currentuser
         this.setState({ image: this.state.url });
         this.toggle();
       })
@@ -59,8 +64,14 @@ class AvatarModal extends Component {
           onClick={this.toggle}
           src={this.state.image}
           alt=""
-          className="avatar"
+          className="restaurant-image"
         />
+        <button
+          onClick={this.toggle}
+          className="btn btn-outline-secondary btn-sm btn-block mt-2"
+        >
+          Change Image
+        </button>
 
         <Modal
           isOpen={this.state.modal}
@@ -70,7 +81,7 @@ class AvatarModal extends Component {
           <ModalHeader toggle={this.toggle}>Change Avatar</ModalHeader>
           <ModalBody>
             <ImageUploader
-              setParentState={this.setAvatarModalState}
+              setParentState={this.setModalState}
               public_id={this.props.match.params.id}
             />
           </ModalBody>
@@ -96,4 +107,4 @@ const mapStateToProps = state => ({
   auth: state.auth
 });
 
-export default connect(mapStateToProps)(withRouter(AvatarModal));
+export default connect(mapStateToProps)(withRouter(RestaurantImageModal));

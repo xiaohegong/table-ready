@@ -1,16 +1,17 @@
-import React, { Component } from "react";
-import { withRouter } from "react-router-dom";
-import "../../Stylesheets/restaurateur_page_2.scss";
-import { Redirect } from "react-router-dom";
-import Employees from "./Employees";
-import Table from "./Table";
-import Menu from "./Menu";
-import Navbar from "../Navbar";
-import DressCode from "./DressCode";
-import uid from "uid";
-import axios from "axios";
-import EditRestaurant from "./EditRestaurant";
-import { connect } from "react-redux";
+import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom';
+import '../../Stylesheets/restaurateur_page_2.scss';
+import { Redirect } from 'react-router-dom';
+import Employees from './Employees';
+import Table from './Table';
+import Menu from './Menu';
+import Navbar from '../Navbar';
+import DressCode from './DressCode';
+import uid from 'uid';
+import axios from 'axios';
+import EditRestaurant from './EditRestaurant';
+import { connect } from 'react-redux';
+import RestaurantImageModal from './RestaurantImageModal';
 
 class RestaurateurPage2 extends Component {
   state = {
@@ -20,23 +21,23 @@ class RestaurateurPage2 extends Component {
     functions: [
       {
         id: 1,
-        title: "Employees",
+        title: 'Employees',
         model: <Employees res_id={this.props.match.params.id} />
       },
       {
         id: 2,
-        title: "Dress Code",
+        title: 'Dress Code',
         model: <DressCode id={this.props.match.params.id} />
       },
       {
         id: 3,
-        title: "Menu",
+        title: 'Menu',
         model: <Menu res_id={this.props.match.params.id} />
       },
       {
         id: 4,
-        title: "Table",
-        model: <Table res_id={this.props.match.params.id}/>
+        title: 'Table',
+        model: <Table res_id={this.props.match.params.id} />
       }
     ]
   };
@@ -57,7 +58,7 @@ class RestaurateurPage2 extends Component {
 
   componentDidMount() {
     axios
-      .post("/restaurant/findRestaurantById", {
+      .post('/restaurant/findRestaurantById', {
         _id: this.props.match.params.id
       })
       .then(response => {
@@ -66,21 +67,19 @@ class RestaurateurPage2 extends Component {
             console.log(
               'redirecting to signin since not authenticated in RestaurateurPage'
             );
-            this.setState({ access: false })
+            this.setState({ access: false });
           } else {
             if (
               this.props.current_user.accountType !== 'SuperAdmin' &&
               this.props.current_user._id !== this.state.info.owner
             ) {
-              this.setState({ access: false })
+              this.setState({ access: false });
             }
           }
-          console.log("Customers fetched...", this.state.info)
-        }
-
-        );
+          console.log('Customers fetched...', this.state.info);
+        });
       })
-      .catch(function (error) {
+      .catch(function(error) {
         console.log(error);
       });
   }
@@ -115,12 +114,13 @@ class RestaurateurPage2 extends Component {
                   Edit
                 </button>
                 <h2>Restaurant Info</h2>
+                <RestaurantImageModal image={this.state.info.image} />
                 <ul className="list-group list-group-flush">
                   <li className="list-group-item">
                     <strong>Name: </strong> {this.state.info.name}
                   </li>
                   <li className="list-group-item">
-                    <strong>Operation Hours: </strong>{" "}
+                    <strong>Operation Hours: </strong>{' '}
                     {this.state.info.operationHour}
                   </li>
                   <li className="list-group-item">
@@ -168,6 +168,5 @@ const mapStateToProps = state => ({
   current_user: state.auth.user,
   auth: state.auth
 });
-
 
 export default connect(mapStateToProps)(withRouter(RestaurateurPage2));

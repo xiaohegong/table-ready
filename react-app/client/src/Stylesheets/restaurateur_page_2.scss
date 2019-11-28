@@ -4,6 +4,10 @@
     margin-top: 2em;
   }
   .restaurant-info {
+    .restaurant-image {
+      cursor: pointer;
+      width: 100%;
+    }
     h2 {
       margin: 0;
     }
@@ -61,7 +65,7 @@
 
   .employee-list-item-component {
   }
-  #codeBlock{
-    width:100%;
+  #codeBlock {
+    width: 100%;
   }
 }

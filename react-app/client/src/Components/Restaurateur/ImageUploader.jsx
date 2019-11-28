@@ -27,7 +27,9 @@ class ImageUploader extends Component {
   };
 
   onChange = async e => {
-    // this.removeFile();
+    if (!this.props.public_id) {
+      this.removeFile();
+    }
     if (!e.target.files[0]) return;
     this.setState({
       filename: e.target.files[0].name,
@@ -72,7 +74,7 @@ class ImageUploader extends Component {
       this.setMessage('File Uploaded');
       console.log(res.data[0]);
       this.setState({ url: res.data[0].url, public_id: res.data[0].public_id });
-      this.props.setAvatarModalState('url', this.state.url);
+      this.props.setParentState('url', this.state.url);
       this.setState({ isUploading: false });
     } catch (err) {
       if (err.response.status === 500) {
