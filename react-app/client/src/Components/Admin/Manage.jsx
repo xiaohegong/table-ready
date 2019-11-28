@@ -40,7 +40,7 @@ class Manage extends Component {
             return (
                 <Restaurants/>
             );
-        } else if (this.state.page == 'addAdmin') {
+        } else if (this.state.page === 'addAdmin') {
             return (
                 <AddAdmin/>
             );

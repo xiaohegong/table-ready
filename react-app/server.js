@@ -11,6 +11,9 @@ const Restaurant = require('./models/restaurant.js');
 const MenuItem = require('./models/MenuItem.js');
 const Waitlist = require('./models/waitlist.js');
 const path = require('path');
+const config = require('config');
+const cloudinary = require('cloudinary').v2;
+const formData = require('express-form-data');
 
 /* Use statements for the server */
 app.use(express.static(path.join(__dirname, 'client', 'build')));
@@ -18,11 +21,32 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 require('./mongoose').connect();
 
+// setup cloudinary
+app.use(formData.parse());
+cloudinary.config({
+  cloud_name: config.get('cloud_name'),
+  api_key: config.get('api_key'),
+  api_secret: config.get('api_secret')
+});
+
 const usersRouter = require('./routes/users');
 app.use('/api/users', usersRouter);
+const restaurantsRouter = require('./routes/restaurants');
+app.use('/api/restaurants', restaurantsRouter);
 
 app.get('/', (req, res) => {
   res.send('Hello World');
+});
+
+app.post('/upload', (req, res) => {
+  console.log(req.files);
+  const values = Object.values(req.files);
+  console.log(values);
+  const promises = values.map(image => cloudinary.uploader.upload(image.path));
+
+  Promise.all(promises)
+    .then(results => res.json(results))
+    .catch(err => res.status(400).json(err));
 });
 
 app.get('/api/customers', (req, res) => {
@@ -33,6 +57,24 @@ app.get('/api/customers', (req, res) => {
   ];
 
   res.json(customers);
+});
+
+app.post('/api/upload', (req, res) => {
+  console.log('change avatar route reached');
+  const public_id = req.body.public_id;
+  const options = {};
+  if (public_id) {
+    options.public_id = public_id;
+  }
+  const values = Object.values(req.files);
+  console.log('public id: ', public_id);
+  const promises = values.map(image =>
+    cloudinary.uploader.upload(image.path, options)
+  );
+
+  Promise.all(promises)
+    .then(results => res.json(results))
+    .catch(err => res.status(400).json(err));
 });
 
 app.post('/user/signup', (req, res) => {
@@ -55,6 +97,22 @@ app.post('/user/signup', (req, res) => {
       res.status(400).send(err);
     });
 });
+app.post('/waitlist/CreateNewTable', (req, res) => {
+  const table = new Table({
+    rest_id: req.body.rest_id,
+    table_occupied: req.body.table_occupied,
+    table_capacity: req.body.table_capacity
+  });
+  table
+    .save()
+    .then(table => {
+      res.send('table' + table.id + ' created');
+    })
+    .catch(err => {
+      log(err);
+      res.send({ code: 404, err });
+    });
+});
 
 app.post('/restaurant/newRestaurant', (req, res) => {
   const restaurant = new Restaurant({
@@ -65,14 +123,54 @@ app.post('/restaurant/newRestaurant', (req, res) => {
     operationHour: req.body.hours,
     owner: req.body.owner
   });
+
   restaurant
     .save()
     .then(restaurant => {
+      res.send('restaurant ' + restaurant.name + ' saved to database');
+      for (let i = 0; i < req.body.tables; i++) {
+        let table = new Table({
+          rest_id: restaurant._id
+        });
+        table.save().catch(err => {
+          log(err);
+        });
+      }
       res.send('restaurant ' + restaurant.name + ' saved to database');
     })
     .catch(err => {
       log(err);
       res.send({ code: 404, err });
+    });
+});
+
+app.post('/resetaurant/newTable', (req, res) => {
+  const table = new Table({
+    rest_id: req.body.restaurant_id
+  });
+  table
+    .save()
+    .then(table => {
+      log('NEW TABLE CREATED');
+      res.send(table);
+    })
+    .catch(err => {
+      log(err);
+      res.send({ code: 400, err });
+    });
+});
+
+app.post('/restaurant/updateTable', (req, res) => {
+  Table.findByIdAndUpdate(req.body._id, {
+    table_capacity: req.body.tableNum,
+    name: req.body.name
+  })
+    .then(table => {
+      res.send(table);
+    })
+    .catch(err => {
+      log(err);
+      res.send({ code: 400, err });
     });
 });
 
@@ -118,8 +216,8 @@ app.post('/restaurant/newMenuItem', (req, res) => {
 app.post('/restaurant/findMenuByRestaurant', (req, res) => {
   const restaurant_id = req.body.restaurant_id;
   MenuItem.find({ restaurant: restaurant_id }).then(
-    users => {
-      res.send(users);
+    menus => {
+      res.send(menus);
     },
     error => {
       res.send({ code: 404, error });
@@ -127,7 +225,19 @@ app.post('/restaurant/findMenuByRestaurant', (req, res) => {
   );
 });
 
-app.delete("/restaurant/deleteMenuItem/?:id", (req, res) => {
+app.post('/restaurant/findTableByRestaurant', (req, res) => {
+  const restaurant_id = req.body.restaurant_id;
+  Table.find({ rest_id: restaurant_id }).then(
+    table => {
+      res.send(table);
+    },
+    error => {
+      res.send({ code: 404, error });
+    }
+  );
+});
+
+app.delete('/restaurant/deleteMenuItem/?:id', (req, res) => {
   // const restaurant_id = req.body.restaurant_id;
   const menu_id = req.params.id;
   if (menu_id) {
@@ -142,7 +252,22 @@ app.delete("/restaurant/deleteMenuItem/?:id", (req, res) => {
   }
 });
 
-app.put("/restaurant/EditMenuItem", (req, res) => {
+app.post('/restaurant/deleteTableItem', (req, res) => {
+  // const restaurant_id = req.body.restaurant_id;
+  const table_id = req.body.table_id;
+  if (table_id) {
+    Table.findByIdAndDelete(table_id).then(
+      table => {
+        res.send(table);
+      },
+      error => {
+        res.send({ code: 404, error });
+      }
+    );
+  }
+});
+
+app.put('/restaurant/EditMenuItem', (req, res) => {
   // const restaurant_id = req.body.restaurant_id;
   const id = req.body.id;
   if (id) {
@@ -162,7 +287,7 @@ app.put("/restaurant/EditMenuItem", (req, res) => {
   }
 });
 
-app.post("/restaurant/findRestaurantByOwner", (req, res) => {
+app.post('/restaurant/findRestaurantByOwner', (req, res) => {
   Restaurant.find({ owner: req.body.owner }).then(
     restaurant => {
       console.log(restaurant);
@@ -241,6 +366,7 @@ app.post('/restaurant/add_employee', (req, res) => {
     User.findOneAndUpdate(
       { username: username },
       { workFor: restaurant_id }
+      //{ $addToSet: { restaurantInvitation: restaurant_id } }
     ).then(user => {
       res.send(user);
     });
@@ -264,6 +390,19 @@ app.post('/restaurant/delete_employee', (req, res) => {
   }
 });
 
+app.delete('/waitlist/DeleteTableByID', (req, res) => {
+  const id = req.body.id;
+  Table.findByIdAndDelete(id)
+    .then(res => console.log(res))
+    .catch(err => console.log(err));
+});
+app.put('/waitlist/ModifyTableStatus', (req, res) => {
+  const status = req.body.status;
+  const id = req.body.id;
+  Table.findByIdAndUpdate(id, { table_occupied: status })
+    .then(res => console.log(res))
+    .catch(err => console.log(err));
+});
 app.post('/restaurant/findRestaurant', (req, res) => {
   Restaurant.find({ _id: req.body._id }).then(
     user => {
@@ -308,6 +447,7 @@ app.post('/waitlist/newWaitlist', (req, res) => {
     id: req.body.id,
     name: req.body.name,
     people: req.body.people,
+    type: req.body.type,
     date_of_arrival: req.body.date_of_arrival,
     estimated_time: req.body.estimated_time
   });
@@ -361,36 +501,21 @@ app.get('/api/users', (req, res) => {
   });
 });
 
-app.get('/api/restaurants', (req, res) => {
-  Restaurant.find({}, function(err, restaurants) {
-    if (err) {
-      log(err);
-      return err;
-    }
-    res.send(restaurants);
-  });
+app.post('/waitlist/GetTableForRestaurant', (req, res) => {
+  Table.find({ rest_id: req.body.rest_id })
+    .then(table => {
+      res.send(table);
+    })
+    .catch(err => console.log(err));
 });
 
 app.delete('/api/users/:id', (req, res) => {
   const id = req.params.id;
   User.findById(id)
-    .then((user) => {
-      user.remove().then(()=>{
-        res.send("User " + id + " deleted.");
-      })
-    })
-    .catch(err => {
-      res.status(400).json('Error: ' + err);
-    });
-});
-
-app.delete('/api/restaurants/:id', (req, res) => {
-  const id = req.params.id;
-  Restaurant.findById(id)
-    .then((rest) => {
-      rest.remove();
-      res.send("res " + id + " deleted.");
-
+    .then(user => {
+      user.remove().then(() => {
+        res.send('User ' + id + ' deleted.');
+      });
     })
     .catch(err => {
       res.status(400).json('Error: ' + err);

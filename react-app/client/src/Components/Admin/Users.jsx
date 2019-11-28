@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
 import {Button, Card, CardBody, CardHeader, Col, Row, Table} from 'reactstrap';
 import axios from 'axios';
+import {confirmAlert} from "react-confirm-alert";
+import 'react-confirm-alert/src/react-confirm-alert.css';
 
 axios.defaults.baseURL = '../';
 
@@ -70,15 +72,36 @@ class Users extends Component {
     }
 
     deleteUser(id) {
-        axios.delete('api/users/' + id)
-            .then(res => {
-                this.setState({
-                    users: this.state.users.filter(el => el._id !== id)
-                });
-            })
-            .catch(err => {
-                log(err);
-            });
+        const user = this.state.users.filter(el => el._id === id)[0];
+
+        confirmAlert({
+            title: 'Delete User',
+            message: 'Are you sure you want to remove user ' + user.username + '?',
+            buttons: [
+                {
+                    label: 'Yes',
+                    onClick: () => {
+                        axios.delete('api/users/' + id)
+                            .then(res => {
+                                this.setState({
+                                    users: this.state.users.filter(el => el._id !== id)
+                                });
+                            })
+                            .catch(err => {
+                                log(err);
+                            });
+                    }
+                },
+                {
+                    label: 'No',
+                    onClick: () => {
+                        return;
+                    }
+                }
+            ]
+        });
+
+
     }
 
 

@@ -8,7 +8,8 @@ import Navbar from '../Navbar';
 import axios from 'axios';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { stat } from 'fs';
+import RestaurateurSettingModal from './RestaurateurSettingModal';
+import AvatarModal from './AvatarModal';
 
 class RestaurateurPage extends Component {
   state = {
@@ -20,7 +21,6 @@ class RestaurateurPage extends Component {
     isAuthenticated: PropTypes.bool
   };
   componentDidMount() {
-    console.log('restaurateurPage Did Mount');
     const header = {
       headers: {
         Accept: 'application/json',
@@ -69,12 +69,16 @@ class RestaurateurPage extends Component {
     return config;
   };
 
+  changeAvatar = () => {
+    console.log('change avatar');
+  };
+
   render() {
     if (!this.props.isAuthenticated) {
       console.log(
         'redirecting to signin since not authenticated in RestaurateurPage'
       );
-      return <div></div>;
+      return <Redirect to="/SignIn" />;
     } else {
       if (
         this.props.current_user.accountType !== 'SuperAdmin' &&
@@ -93,11 +97,12 @@ class RestaurateurPage extends Component {
               <div className="col-md-3 info">
                 <h2 className="">{this.state.current_user.username}</h2>
                 <div>
-                  <img
+                  {/* <img
                     src={'/images/avatar_sample.png'}
                     alt=""
                     className="avatar"
-                  />
+                  /> */}
+                  <AvatarModal image={this.props.current_user.image} />
                 </div>
                 <ul className="list-group">
                   <li className="list-group-item">
@@ -108,6 +113,9 @@ class RestaurateurPage extends Component {
                     <strong>Email: </strong>
                     {this.state.current_user.email}
                   </li>
+                  <li className="list-group-item">
+                    <RestaurateurSettingModal user={this.state.current_user} />
+                  </li>
                 </ul>
               </div>
 
@@ -116,7 +124,10 @@ class RestaurateurPage extends Component {
                 <Link
                   to={{
                     pathname: '/addNewRestaurant',
-                    state: { id: this.props.match.params.id }
+                    state: {
+                      id: this.props.match.params.id,
+                      owner_id: this.props.current_user._id
+                    }
                   }}
                 >
                   <button className="addNewButton btn btn-outline-success btn-sm">
@@ -125,6 +136,13 @@ class RestaurateurPage extends Component {
                 </Link>
                 <div className="restaurants-display">
                   <div className="list-group">
+                    {this.state.restaurants.length === 0 ? (
+                      <React.Fragment>
+                        <br />
+                        <p>You don't have any restaurant.</p>
+                        <p>Please click Add New Button to add Restaurant</p>
+                      </React.Fragment>
+                    ) : null}
                     {this.state.restaurants.map(restaurant => (
                       <Link
                         key={restaurant._id}
@@ -139,10 +157,7 @@ class RestaurateurPage extends Component {
                           name={restaurant.name}
                           address={restaurant.location}
                           telephone={restaurant.phoneNumber}
-                          image={
-                            process.env.PUBLIC_URL +
-                            '/images/restaurant_images/restaurant1.jpeg'
-                          }
+                          image={restaurant.image}
                           _id={restaurant._id}
                         />
                       </Link>

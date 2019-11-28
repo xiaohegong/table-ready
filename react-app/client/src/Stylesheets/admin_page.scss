@@ -105,10 +105,13 @@
       .card {
         min-width: 40%;
         width: 170%;
+        max-width: 500px;
       }
+
       .alert {
         margin-left: 2%;
         width: 170%;
+        max-width: 400px;
       }
 
     }
