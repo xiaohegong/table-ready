@@ -119,9 +119,9 @@ app.post("/resetaurant/newTable", (req,res)=>{
 });
 
 app.post("/restaurant/updateTable", (req,res)=>{
-  console.log("WHAT")
   Table.findByIdAndUpdate(req.body._id, {
-    table_capacity: req.body.tableNum
+    table_capacity: req.body.tableNum,
+    name: req.body.name
   }).then(table =>{
       res.send(table);
     })
