@@ -73,9 +73,9 @@ class Admin extends Component {
                     <div className="row menu-bar">
                         <div className="col-sm-8 menu d-flex justify-content-lg-center">
                             <ButtonGroup size={"lg"}>
-                                <Button outline color="danger" active={true} size="lg" onClick={this.chooseManage}>Manage
+                                <Button outline color="danger" id="choose-manage" active={true} size="lg" onClick={this.chooseManage}>Manage
                                 </Button>
-                                <Button outline color="danger" size="lg" onClick={this.chooseSetting}>Setting
+                                <Button outline color="danger" id="choose-setting" size="lg" onClick={this.chooseSetting}>Setting
                                 </Button>
                             </ButtonGroup>
                         </div>

@@ -17,7 +17,7 @@ import NotFound from './Components/page_not_found/404';
 import NewRestaurant from './Components/Restaurateur/NewRestaurant';
 import AddNewMenuItem from './Components/Restaurateur/AddNewMenuItem';
 import { Provider } from 'react-redux';
-import store from './store';
+import {store} from './store';
 import { loadUser } from './actions/authActions';
 import EditMenuItem from './Components/Restaurateur/EditMenuItem';
 class App extends React.Component {
