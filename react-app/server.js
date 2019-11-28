@@ -57,6 +57,24 @@ app.get('/api/customers', (req, res) => {
   res.json(customers);
 });
 
+app.post('/api/upload', (req, res) => {
+  console.log('change avatar route reached');
+  const public_id = req.body.public_id;
+  const options = {};
+  if (public_id) {
+    options.public_id = public_id;
+  }
+  const values = Object.values(req.files);
+  console.log('public id: ', public_id);
+  const promises = values.map(image =>
+    cloudinary.uploader.upload(image.path, options)
+  );
+
+  Promise.all(promises)
+    .then(results => res.json(results))
+    .catch(err => res.status(400).json(err));
+});
+
 app.post('/user/signup', (req, res) => {
   log(req.body);
   const user = new User({

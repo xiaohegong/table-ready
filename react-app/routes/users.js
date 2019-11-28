@@ -26,7 +26,7 @@ router.post('/', (req, res) => {
         { id: user._id },
         config.get('jwtSecret'),
         {
-          expiresIn: 1 * hour
+          expiresIn: 12 * hour
         },
         (err, token) => {
           if (err) throw err;
@@ -66,7 +66,7 @@ router.post('/login', (req, res) => {
           { id: user._id },
           config.get('jwtSecret'),
           {
-            expiresIn: 1 * hour
+            expiresIn: 12 * hour
           },
           (err, token) => {
             if (err) throw err;
@@ -113,6 +113,18 @@ router.patch('/setting/:id', (req, res) => {
           // password incorrect
           res.status(400).send(err);
         });
+    })
+    .catch(err => {
+      res.status(500).send(err);
+    });
+});
+
+// update user
+router.patch('/change-avatar/:user_id', (req, res) => {
+  User.findByIdAndUpdate(req.params.user_id, req.body)
+    .then(user => {
+      if (!user) return res.status(404).send('User not found');
+      res.send('avatar updated');
     })
     .catch(err => {
       res.status(500).send(err);
