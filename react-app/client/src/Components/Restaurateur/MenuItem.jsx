@@ -51,7 +51,6 @@ class MenuItem extends Component {
                       <div
                         style={{marginBottom: "5px"}}
                         className="btn btn-sm btn-outline-success"
-                        onClick={deleteItem.bind(this, id)}
                       >
                         Edit
                       </div>

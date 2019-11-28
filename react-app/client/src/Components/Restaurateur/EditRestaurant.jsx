@@ -22,7 +22,7 @@ class EditRestaurant extends Component {
 
     axios
       .post(
-        '/restaurant/updateRestaurant',
+        '/api/restaurants/updateRestaurant',
         {
           _id: this.props.info._id,
           name: event.target.name.value,

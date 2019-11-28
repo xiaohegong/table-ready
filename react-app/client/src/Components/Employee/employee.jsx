@@ -264,7 +264,7 @@ class Employee extends Component {
   };
 
   componentDidMount() {
-    axios.get(`/api/employee/${this.props.match.params.id}`).then(user => {
+    axios.get(`/api/users/${this.props.match.params.id}`).then(user => {
       console.log(user)
       
         this.setState({loading:false, validate_user:user.data[0]})
@@ -341,7 +341,7 @@ class Employee extends Component {
     this.setState({
       to_be_reserved: []
     })
-    axios.post("/restaurant/findRestaurant", {_id: rest_id})
+    axios.post("/api/restaurants/findRestaurant", {_id: rest_id})
       .then(res => {
         this.setState({rest_obj: res.data[1][0]})
         this.setState({all_seats: res.data[0]})

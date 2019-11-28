@@ -29,7 +29,7 @@ class RestaurateurPage extends Component {
     };
     axios
       .post(
-        '/restaurant/findRestaurantByOwner',
+        '/api/restaurants/findRestaurantByOwner',
         {
           owner: this.props.match.params.id
         },

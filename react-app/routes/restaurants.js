@@ -82,4 +82,114 @@ router.post('/newRestaurant', (req, res) => {
     });
 });
 
+router.post('/newTable', (req, res) => {
+  const table = new Table({
+    rest_id: req.body.restaurant_id
+  });
+  table
+    .save()
+    .then(table => {
+      log('NEW TABLE CREATED');
+      res.send(table);
+    })
+    .catch(err => {
+      log(err);
+      res.send({ code: 400, err });
+    });
+});
+
+router.post('/updateTable', (req, res) => {
+  Table.findByIdAndUpdate(req.body._id, {
+    table_capacity: req.body.tableNum,
+    name: req.body.name
+  })
+    .then(table => {
+      res.send(table);
+    })
+    .catch(err => {
+      log(err);
+      res.send({ code: 400, err });
+    });
+});
+
+router.post('/updateRestaurant', (req, res) => {
+  Restaurant.findByIdAndUpdate(req.body._id, {
+    name: req.body.name,
+    phoneNumber: req.body.phoneNumber,
+    location: req.body.location,
+    Cuisine: req.body.cuisine,
+    operationHour: req.body.hours
+  })
+    .then(restaurant => {
+      res.send('restaurant ' + restaurant.name + ' updated to database');
+    })
+    .catch(err => {
+      log(err);
+      res.send({ code: 404, err });
+    });
+});
+
+router.post('/findRestaurantByOwner', (req, res) => {
+  Restaurant.find({ owner: req.body.owner }).then(
+    restaurant => {
+      console.log(restaurant);
+      res.send(restaurant);
+    },
+    error => {
+      res.send({ code: 404, error });
+    }
+  );
+});
+
+router.post('/updateDressCode', (req, res) => {
+  Restaurant.findByIdAndUpdate(req.body._id, {
+    DressCode: req.body.dressCode
+  }).then(
+    user => {
+      res.send(user);
+    },
+    error => {
+      res.send({ code: 404, error });
+    }
+  );
+});
+
+router.post('/findRestaurant', (req, res) => {
+  Restaurant.find({ _id: req.body._id }).then(
+    user => {
+      const num_reserv = user[0].reservations;
+      let tmp = [];
+      num_reserv.forEach(element => {
+        tmp.push(element);
+      });
+      Waitlist.find({
+        _id: { $in: tmp }
+      })
+        .then(docs => {
+          res.send([docs, user]);
+          console.log(docs);
+        })
+        .catch(error => console.log(error));
+    },
+    error => {
+      res.send({ code: 404, error });
+    }
+  );
+});
+
+router.post('/findRestaurantById', (req, res) => {
+  Restaurant.findById(req.body._id)
+    .then(restaurant => {
+      console.log(restaurant);
+      res.send(restaurant);
+    })
+    .catch(err => {
+      if (err) {
+        res.send({ code: 404, err });
+      }
+    });
+});
+
+
+
 module.exports = router;

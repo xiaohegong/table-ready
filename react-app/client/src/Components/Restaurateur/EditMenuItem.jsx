@@ -22,7 +22,7 @@ class EditMenuItem extends Component {
 
     axios
       .put(
-        "/restaurant/EditMenuItem",
+        "/api/menu/EditMenuItem",
         {
           id: this.props.location.state.id,
           name: event.target.name.value,
@@ -34,11 +34,12 @@ class EditMenuItem extends Component {
       )
       .then(
         response => {
+          console.log("RESULT",response);
           this.setState({ redirect: true });
-          console.log(response);
+
         },
         error => {
-          console.log(error);
+          console.log("ERROR",error);
         }
       );
   }

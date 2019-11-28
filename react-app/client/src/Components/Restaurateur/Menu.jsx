@@ -25,7 +25,7 @@ class Menu extends Component {
     };
     axios
       .post(
-        '/restaurant/findMenuByRestaurant',
+        '/api/menu/findMenuByRestaurant',
         {
           restaurant_id: this.props.res_id
         },
@@ -46,7 +46,7 @@ class Menu extends Component {
     for (let i = 0; i < menuItem.length; i++) {
       if (menuItem[i]._id === id) {
         axios
-          .delete("/restaurant/deleteMenuItem/" + id, {
+          .delete("/api/menu/deleteMenuItem/" + id, {
             restaurant_id: this.props.res_id,
             menu_id: id
           })

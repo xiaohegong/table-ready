@@ -72,7 +72,7 @@ class Table extends Component {
       };
       axios
         .post(
-          "/resetaurant/newTable",
+          "/api/resetaurants/newTable",
           {
             restaurant_id: this.props.res_id
           },

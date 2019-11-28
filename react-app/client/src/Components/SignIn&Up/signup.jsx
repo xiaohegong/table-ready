@@ -104,7 +104,7 @@ class SignUp extends Component {
 
   componentWillMount() {
     axios
-      .get('/user/info')
+      .get('/api/users/info')
       .then(res => {
         log(res.data);
         this.setState({
