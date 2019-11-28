@@ -446,8 +446,6 @@ class Employee extends Component {
           tmp.push(item);
         }
       });
-      this.setOccupiedState()
-      this.get_table()
       this.setState({
         to_be_reserved: tmp
       });
