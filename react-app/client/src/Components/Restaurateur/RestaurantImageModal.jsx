@@ -78,7 +78,9 @@ class RestaurantImageModal extends Component {
           toggle={this.toggle}
           className={this.state.className}
         >
-          <ModalHeader toggle={this.toggle}>Change Avatar</ModalHeader>
+          <ModalHeader toggle={this.toggle}>
+            Change Restaurant Image
+          </ModalHeader>
           <ModalBody>
             <ImageUploader
               setParentState={this.setModalState}

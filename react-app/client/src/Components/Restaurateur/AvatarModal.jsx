@@ -61,7 +61,12 @@ class AvatarModal extends Component {
           alt=""
           className="avatar"
         />
-
+        <button
+          onClick={this.toggle}
+          className="btn btn-outline-secondary btn-sm btn-block mt-2 mb-2"
+        >
+          Change Avatar
+        </button>
         <Modal
           isOpen={this.state.modal}
           toggle={this.toggle}

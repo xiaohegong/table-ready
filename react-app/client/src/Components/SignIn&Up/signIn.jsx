@@ -76,7 +76,7 @@ class SignIn extends Component {
   };
 
   render() {
-    if (this.isAuthenticated) {
+    if (this.props.isAuthenticated) {
       console.log('redirecting in signin page');
       this.redirectUser();
     }
