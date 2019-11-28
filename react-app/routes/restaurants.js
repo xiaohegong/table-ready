@@ -52,4 +52,34 @@ router.delete('/:id', (req, res) => {
     });
 });
 
+router.post('/newRestaurant', (req, res) => {
+  const restaurant = new Restaurant({
+    name: req.body.name,
+    phoneNumber: req.body.phoneNumber,
+    location: req.body.location,
+    cuisine: req.body.cuisine,
+    operationHour: req.body.hours,
+    owner: req.body.owner
+  });
+
+  restaurant
+    .save()
+    .then(restaurant => {
+      res.send('restaurant ' + restaurant.name + ' saved to database');
+      for (let i = 0; i < req.body.tables; i++) {
+        let table = new Table({
+          rest_id: restaurant._id
+        });
+        table.save().catch(err => {
+          log(err);
+        });
+      }
+      res.send('restaurant ' + restaurant.name + ' saved to database');
+    })
+    .catch(err => {
+      log(err);
+      res.send({ code: 404, err });
+    });
+});
+
 module.exports = router;

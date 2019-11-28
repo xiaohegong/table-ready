@@ -25,7 +25,7 @@ class NewRestaurant extends Component {
       };
       axios
         .post(
-          '/restaurant/newRestaurant',
+          'api/restaurants/newRestaurant',
           {
             owner: this.props.location.state.owner_id,
             name: event.target.name.value,

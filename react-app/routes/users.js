@@ -89,6 +89,8 @@ router.post('/login', (req, res) => {
     });
 });
 
+
+
 // change setting of a user
 router.patch('/setting/:id', (req, res) => {
   const { email, tel, old_password, new_password } = req.body;

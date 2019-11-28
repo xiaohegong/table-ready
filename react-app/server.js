@@ -33,10 +33,8 @@ const usersRouter = require('./routes/users');
 app.use('/api/users', usersRouter);
 const restaurantsRouter = require('./routes/restaurants');
 app.use('/api/restaurants', restaurantsRouter);
-
-app.get('/', (req, res) => {
-  res.send('Hello World');
-});
+const menuRouter = require('./routes/menu');
+app.use('/api/menu', menuRouter);
 
 app.post('/upload', (req, res) => {
   console.log(req.files);
@@ -49,15 +47,6 @@ app.post('/upload', (req, res) => {
     .catch(err => res.status(400).json(err));
 });
 
-app.get('/api/customers', (req, res) => {
-  const customers = [
-    { id: 1, firstName: 'John', lastName: 'Doe' },
-    { id: 2, firstName: 'Brad', lastName: 'Traversy' },
-    { id: 3, firstName: 'Mary', lastName: 'Swanson' }
-  ];
-
-  res.json(customers);
-});
 
 app.post('/api/upload', (req, res) => {
   console.log('change avatar route reached');
@@ -77,26 +66,7 @@ app.post('/api/upload', (req, res) => {
     .catch(err => res.status(400).json(err));
 });
 
-app.post('/user/signup', (req, res) => {
-  log(req.body);
-  const user = new User({
-    accountType: req.body.accountType,
-    username: req.body.username,
-    password: req.body.password,
-    email: req.body.email,
-    tel: req.body.tel
-  });
 
-  user
-    .save()
-    .then(user => {
-      res.send('user ' + user.username + ' saved to database');
-    })
-    .catch(err => {
-      log(err);
-      res.status(400).send(err);
-    });
-});
 app.post('/waitlist/CreateNewTable', (req, res) => {
   const table = new Table({
     rest_id: req.body.rest_id,
@@ -114,35 +84,7 @@ app.post('/waitlist/CreateNewTable', (req, res) => {
     });
 });
 
-app.post('/restaurant/newRestaurant', (req, res) => {
-  const restaurant = new Restaurant({
-    name: req.body.name,
-    phoneNumber: req.body.phoneNumber,
-    location: req.body.location,
-    cuisine: req.body.cuisine,
-    operationHour: req.body.hours,
-    owner: req.body.owner
-  });
 
-  restaurant
-    .save()
-    .then(restaurant => {
-      res.send('restaurant ' + restaurant.name + ' saved to database');
-      for (let i = 0; i < req.body.tables; i++) {
-        let table = new Table({
-          rest_id: restaurant._id
-        });
-        table.save().catch(err => {
-          log(err);
-        });
-      }
-      res.send('restaurant ' + restaurant.name + ' saved to database');
-    })
-    .catch(err => {
-      log(err);
-      res.send({ code: 404, err });
-    });
-});
 
 app.post('/resetaurant/newTable', (req, res) => {
   const table = new Table({
