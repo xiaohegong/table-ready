@@ -13,9 +13,10 @@ router.patch('/:id', (req, res) => {
     res.status(404).send('id not valid');
   }
   console.log(req.body);
-  MenuItem.findByIdAndUpdate(req.params.id, { $set: req.body }, { new: true })
+  MenuItem.findByIdAndUpdate(req.params.id, { image: req.body.image }, { new: true })
     .then(restaurant => {
       if (!restaurant) {
+        console.log(req.params.id)
         res.status(404).send('Restaurant not found, and cannot update');
       } else {
         res.send(restaurant);

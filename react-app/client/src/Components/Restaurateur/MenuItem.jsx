@@ -13,7 +13,7 @@ class MenuItem extends Component {
           >
               <div className="row">
                   <div className="col col-md-4">
-                    <MenuImageModal image={this.props.image} />
+                    <MenuImageModal id = {this.props.id} image={this.props.image} />
                   </div>
                   <div className="col col-md-6">
                       <div className="employee-info">

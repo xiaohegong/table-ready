@@ -11,7 +11,7 @@ class MenuImageModal extends Component {
   constructor(props) {
     super(props);
     const { className } = props;
-    this.state = { modal: false, className, image: props.image, url: '' };
+    this.state = { modal: false, className, id: props.id, image: props.image, url: '' };
   }
 
   componentWillReceiveProps(nextProps) {
@@ -27,7 +27,7 @@ class MenuImageModal extends Component {
   confirm = async () => {
     axios
       .patch(
-        `/api/menu/${this.props.match.params.id}`,
+        `/api/menu/${this.state.id}`,
         {
           image: this.state.url
         },
@@ -64,7 +64,7 @@ class MenuImageModal extends Component {
           onClick={this.toggle}
           src={this.state.image}
           alt=""
-          className="restaurant-image"
+          className="restaurant-menu-item"
         />
         <button
           onClick={this.toggle}
