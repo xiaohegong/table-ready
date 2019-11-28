@@ -35,16 +35,13 @@ app.get("/api/customers", (req, res) => {
 app.get("/restinfo/:id", (req, res) => {
   const employee_id = req.params.id
   const send_back = res
-  User.find({_id: employee_id}).then(res => {
-    console.log(res[0].restaurantInvitation)
-    const invitation_array = res[0].restaurantInvitation
-    let tmp = []
-    invitation_array.forEach(element => {
-      tmp.push(element)
-    })
+  User.findById(employee_id).then(res => {
+    console.log(res.username)
+    const invitation_array = res.restaurantInvitation
     Restaurant.find({
-      _id: {$in: tmp}
+      _id: {$in: invitation_array}
     }).then(docs => {
+      console.log(docs)
       send_back.send(docs)
     }).catch(error => console.log(error))
   }).catch(error => console.log(error))

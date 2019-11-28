@@ -32,6 +32,10 @@ const UserSchema = new Schema({
     required: true,
     default: "/images/avatar_sample.png"
   },
+  restaurantInvitation:{
+    type:Array,
+    default: []
+  },
   email: String,
   tel: String,
 });
