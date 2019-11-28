@@ -322,7 +322,7 @@ app.post('/restaurant/add_employee', (req, res) => {
   if (username && restaurant_id) {
     User.findOneAndUpdate(
       { username: username },
-      { restaurantInvitation: restaurant_id }
+      { workFor: restaurant_id }
     ).then(user => {
       res.send(user);
     });

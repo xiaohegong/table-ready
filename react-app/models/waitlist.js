@@ -23,6 +23,14 @@ const WaitlistSchema = new Schema({
         type: String,
         required: true
     },
+    date_of_arrival:{
+        type: String,
+        required: true
+    },
+    estimated_time:{
+        type: String,
+        required: true
+    },
     reserved:{
         type: Boolean,
         required: false,

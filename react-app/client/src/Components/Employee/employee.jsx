@@ -266,9 +266,12 @@ class Employee extends Component {
   componentDidMount() {
     axios.get(`/api/employee/${this.props.match.params.id}`).then(user => {
       console.log(user)
-      this.setState({loading:false, validate_user:user.data[0]})
-      this.setState({valid:true, employee_obj:this.state.validate_user})
-      this.update_rest_waitlist(this.state.validate_user.workFor)
+      
+        this.setState({loading:false, validate_user:user.data[0]})
+        this.setState({valid:true, employee_obj:this.state.validate_user})
+      if(this.state.validate_user.workFor !== ""){
+        this.update_rest_waitlist(this.state.validate_user.workFor)
+      }
     })
   }
   create_waitlist = (new_wl) => {
@@ -329,8 +332,9 @@ class Employee extends Component {
         this.setState({
           all_table: res.data
         })
+        this.setReservationColor()
       })
-      this.setOccupied()
+
       .catch(err => console.log(err))
   }
   update_rest_waitlist = (rest_id) => {
@@ -462,10 +466,10 @@ class Employee extends Component {
       }
     }
   };
-  setOccupiedState = () => {
-    for (let i = 0; i < this.state.reservations_color.length; i++) {
-      if (this.state.reservations_color[i] === 'green') {
-        this.modify_table(this.state.all_table[i], true)
+  setReservationColor = () => {
+    for (let i = 0; i < this.state.all_table.length; i++){
+      if(this.state.all_table[i].table_occupied === true){
+        this.state.reservations_color[i] = 'green'
       }
     }
   }
@@ -495,7 +499,7 @@ class Employee extends Component {
     e.preventDefault();
   };
   /* change color of card */
-
+  
   checkcapacity = index => {
     // const cur_table = document.getElementById(`Table-${index}`)
     // this.setState({current_table:cur_table})
@@ -626,14 +630,11 @@ class Employee extends Component {
         );
         return <Redirect to="/SignIn" />;
       } else{
-        if (this.props.current_user.accountType !== "SuperAdmin" && this.state.validate_user.workFor === undefined){
+        if (this.props.current_user.accountType !== "SuperAdmin" && this.state.validate_user.workFor === ""){
           console.log(this.props.current_user.accountType)
           return <Redirect to="/SignIn" />;
         }
-
       }
-
-
         let draggables = []
         this.state.to_be_reserved.forEach((item,index) => {
           if(item!=null){
