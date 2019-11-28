@@ -32,6 +32,26 @@ app.get("/api/customers", (req, res) => {
   res.json(customers);
 });
 
+app.get("/restinfo/:id", (req, res) => {
+  const employee_id = req.params.id
+  const send_back = res
+  User.find({_id: employee_id}).then(res => {
+    console.log(res[0].restaurantInvitation)
+    const invitation_array = res[0].restaurantInvitation
+    let tmp = []
+    invitation_array.forEach(element => {
+      tmp.push(element)
+    })
+    Restaurant.find({
+      _id: {$in: tmp}
+    }).then(docs => {
+      send_back.send(docs)
+    }).catch(error => console.log(error))
+  }).catch(error => console.log(error))
+
+})
+
+
 app.post("/user/signup", (req, res) => {
   log(req.body);
   const user = new User({

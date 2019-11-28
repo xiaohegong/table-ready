@@ -262,6 +262,7 @@ class Employee extends Component {
     };
   }
   componentDidMount() {
+    console.log(this.props)
     axios.get(`/api/employee/${this.props.match.params.id}`).then(user => {
       console.log(user)
       if (user.data.length === 0){
@@ -442,9 +443,8 @@ class Employee extends Component {
   handleChange = () => {
     this.setState({ checkedG: !this.state.checkedG });
   };
-  handleStart = (index) => {
-    let tmp = this.state.items[index]
-    this.setState({user_obj:tmp})
+  handleStart = (item) => {
+    this.setState({user_obj:item})
     this.setState({draggin:true})
   }
   handleStop = (index) => {
@@ -620,7 +620,7 @@ class Employee extends Component {
         if (item != null) {
           draggables.push(
             <Draggable
-              onStart={() => this.handleStart(index)}
+              onStart={() => this.handleStart(item)}
               onStop={() => this.handleStop(index)}
             >
               <Card
@@ -778,7 +778,7 @@ class Employee extends Component {
                {this.state.items.map((item, index) => (
                  <OverlayTrigger
                  trigger="click"
-                 key={"top"}
+                 key={index}
                  placement={"down"}
                   overlay={
                      <Popover id={`popover-positioned-${"down"}`}>
