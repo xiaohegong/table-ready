@@ -39,7 +39,7 @@ function getUserLink(user) {
     } else if (user.accountType === "Employee")
         res = "/userpage" + res;
 
-    return res;
+    return res + "?redirect=true";
 }
 
 class Users extends Component {
