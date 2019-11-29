@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
 import {Button, Card, CardBody, CardHeader, Col, Row, Table} from 'reactstrap';
 import axios from 'axios';
+import {confirmAlert} from "react-confirm-alert";
+import 'react-confirm-alert/src/react-confirm-alert.css';
 
 axios.defaults.baseURL = '../';
 
@@ -16,6 +18,7 @@ function UserRow(props) {
             <th scope="row"><Link to={getUserLink(user)}>{user.username}</Link></th>
             {/*<td><Link to={""}>{user.name}</Link></td>*/}
             {/*<td>{user.registered}</td>*/}
+            <td>{user.email}</td>
             <td>{user.tel}</td>
             <td>{user.accountType}</td>
             <td><Button outline color="danger" size="sm" onClick={() => {
@@ -34,9 +37,9 @@ function getUserLink(user) {
     } else if (user.accountType === "Admin") {
         res = "/restaurateur" + res;
     } else if (user.accountType === "Employee")
-        res = "/employee" + res;
+        res = "/userpage" + res;
 
-    return res;
+    return res + "?redirect=true";
 }
 
 class Users extends Component {
@@ -55,7 +58,7 @@ class Users extends Component {
     }
 
     componentDidMount() {
-        axios.get('api/users')
+        axios.get('/api/users/')
             .then(res => {
                 if (res.data.length > 0) {
                     this.setState({
@@ -70,15 +73,36 @@ class Users extends Component {
     }
 
     deleteUser(id) {
-        axios.delete('api/users/' + id)
-            .then(res => {
-                this.setState({
-                    users: this.state.users.filter(el => el._id !== id)
-                });
-            })
-            .catch(err => {
-                log(err);
-            });
+        const user = this.state.users.filter(el => el._id === id)[0];
+
+        confirmAlert({
+            title: 'Delete User',
+            message: 'Are you sure you want to remove user ' + user.username + '?',
+            buttons: [
+                {
+                    label: 'Yes',
+                    onClick: () => {
+                        axios.delete('/api/users/' + id)
+                            .then(res => {
+                                this.setState({
+                                    users: this.state.users.filter(el => el._id !== id)
+                                });
+                            })
+                            .catch(err => {
+                                log(err);
+                            });
+                    }
+                },
+                {
+                    label: 'No',
+                    onClick: () => {
+                        return;
+                    }
+                }
+            ]
+        });
+
+
     }
 
 
@@ -128,10 +152,8 @@ class Users extends Component {
                                         <thead>
                                         <tr>
                                             <th scope="col">Username</th>
-                                            {/*<th scope="col">Name</th>*/}
+                                            <th scope="col">Email</th>
                                             <th scope="col">Phone Number</th>
-                                            {/*TODO (xiaohegong) add name, date registered*/}
-                                            {/*<th scope="col">registered</th>*/}
                                             <th scope="col">Role</th>
                                             <th scope="col">Action</th>
                                         </tr>

@@ -3,16 +3,34 @@
     background-color: black;
   }
 
+  .welcome-message {
+    color: white;
+    margin-right: 1em;
+  }
+
+  #user-avatar {
+    margin-top: 8px;
+    margin-bottom: 8px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50px;
+    margin-left: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.7);
+  }
+  .home-btn {
+    color: white;
+  }
+
   .btn-group {
     margin-right: 1em;
   }
   #shareEx-logo-text {
     color: white !important;
     font-weight: bold;
-    font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
   }
 
-  input[type="search"] {
+  input[type='search'] {
     margin-left: 20px;
   }
 }

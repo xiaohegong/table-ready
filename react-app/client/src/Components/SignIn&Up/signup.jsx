@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 import { register } from '../../actions/authActions';
 import { clearErrors } from '../../actions/errorActions';
 import { REGISTER_FAIL } from '../../actions/actionTypes';
-import Animation from './animation.jsx';
+// import Animation from './animation.jsx';
 
 const log = console.log;
 
@@ -82,68 +82,8 @@ class SignUp extends Component {
     }
   };
 
-  // handleEmailChange(event) {
-  //   this.setState({ email: event.target.value });
-  // }
-
-  // handleTelChange(event) {
-  //   this.setState({ tel: event.target.value });
-  // }
-
-  // handleUsernameChange(event) {
-  //   this.setState({ username: event.target.value });
-  // }
-
-  // handlePasswordChange(event) {
-  //   this.setState({ password: event.target.value });
-  // }
-
-  // handleConfirmChange(event) {
-  //   this.setState({ confirm: event.target.value });
-  // }
-
-  componentWillMount() {
-    axios
-      .get('/user/info')
-      .then(res => {
-        log(res.data);
-        this.setState({
-          users: res.data
-        });
-      })
-      .catch(error => {
-        log(error);
-      });
-  }
-
   signUp = event => {
     event.preventDefault();
-    // const username = this.state.username;
-    // const email = this.state.email;
-    // const tel = this.state.tel;
-    // const password = this.state.password;
-    // const confirm = this.state.confirm;
-
-    // if (
-    //   username === '' ||
-    //   password === '' ||
-    //   tel === '' ||
-    //   email === '' ||
-    //   confirm === ''
-    // ) {
-    //   alert('All inputs must be filled in');
-    // } else if (password !== confirm) {
-    //   alert("Your password doesn't match confirm");
-    // } else if (!email.includes('@') && !email.includes('.')) {
-    //   alert('enter proper email');
-    // } else if (password.length < 4) {
-    //   alert('Password too short, need to be at least 4 character.');
-    // } else {
-    //   const users = this.state.users;
-    //   if (users.filter(user => user.username === username).length !== 0) {
-    //     log('Username already exists');
-    //     alert('Username already exists, change another one');
-    //   } else {
     this.props.clearErrors();
     const { accountType, username, password, email, tel } = this.state;
 
@@ -198,10 +138,12 @@ class SignUp extends Component {
             {this.state.message}
           </div>
         ) : null}
-        <Animation />
+        {/*<Animation />*/}
 
         <div id="divPage">
-          <header className="center header-style">SIGN UP HERE: </header>
+          <header className="center header-style" id="header">
+            Join Table Ready Today!
+          </header>
           <form action="" onSubmit={this.signUp}>
             <div className="input-group mb-3">
               <div className="input-group-prepend">
@@ -312,7 +254,7 @@ class SignUp extends Component {
               />
             </div>
 
-            <button type="submit" className="btn btn-danger">
+            <button type="submit" className="btn btn-block btn-danger center">
               Register
             </button>
           </form>

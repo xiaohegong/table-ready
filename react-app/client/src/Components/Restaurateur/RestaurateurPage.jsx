@@ -8,7 +8,8 @@ import Navbar from '../Navbar';
 import axios from 'axios';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { stat } from 'fs';
+import RestaurateurSettingModal from './RestaurateurSettingModal';
+import AvatarModal from './AvatarModal';
 
 class RestaurateurPage extends Component {
   state = {
@@ -20,7 +21,6 @@ class RestaurateurPage extends Component {
     isAuthenticated: PropTypes.bool
   };
   componentDidMount() {
-    console.log('restaurateurPage Did Mount');
     const header = {
       headers: {
         Accept: 'application/json',
@@ -29,7 +29,7 @@ class RestaurateurPage extends Component {
     };
     axios
       .post(
-        '/restaurant/findRestaurantByOwner',
+        '/api/restaurants/findRestaurantByOwner',
         {
           owner: this.props.match.params.id
         },
@@ -69,93 +69,114 @@ class RestaurateurPage extends Component {
     return config;
   };
 
-  render() {
-    if (!this.props.isAuthenticated) {
-      console.log(
-        'redirecting to signin since not authenticated in RestaurateurPage'
-      );
-      return <div></div>;
-    } else {
-      if (
-        this.props.current_user.accountType !== 'SuperAdmin' &&
-        this.props.current_user._id !== this.props.match.params.id
-      ) {
-        return <Redirect to="/signin" />;
-      }
-    }
+  changeAvatar = () => {
+    console.log('change avatar');
+  };
 
-    return (
-      <div>
-        <Navbar />
-        <div className="restaurateur-page">
-          <div className="container">
-            <div className="row">
-              <div className="col-md-3 info">
-                <h2 className="">{this.state.current_user.username}</h2>
-                <div>
-                  <img
+  render() {
+    if (this.props.isAuthenticated !== null) {
+      if (!this.props.isAuthenticated) {
+        console.log(
+          'redirecting to signin since not authenticated in RestaurateurPage'
+        );
+        return <Redirect to="/SignIn" />;
+      } else {
+        if (
+          this.props.current_user.accountType !== 'SuperAdmin' &&
+          this.props.current_user._id !== this.props.match.params.id
+        ) {
+          return <Redirect to="/signin" />;
+        }
+      }
+
+      return (
+        <div>
+          <Navbar />
+          <div className="restaurateur-page">
+            <div className="container">
+              <div className="row">
+                <div className="col-md-3 info">
+                  <h2 className="">{this.state.current_user.username}</h2>
+                  <div>
+                    {/* <img
                     src={'/images/avatar_sample.png'}
                     alt=""
                     className="avatar"
-                  />
+                  /> */}
+                    <AvatarModal image={this.props.current_user.image} />
+                  </div>
+                  <ul className="list-group">
+                    <li className="list-group-item">
+                      <strong>Telephone: </strong>
+                      {this.state.current_user.tel}
+                    </li>
+                    <li className="list-group-item">
+                      <strong>Email: </strong>
+                      {this.state.current_user.email}
+                    </li>
+                    <li className="list-group-item">
+                      <RestaurateurSettingModal user={this.state.current_user} />
+                    </li>
+                  </ul>
                 </div>
-                <ul className="list-group">
-                  <li className="list-group-item">
-                    <strong>Telephone: </strong>
-                    {this.state.current_user.tel}
-                  </li>
-                  <li className="list-group-item">
-                    <strong>Email: </strong>
-                    {this.state.current_user.email}
-                  </li>
-                </ul>
-              </div>
 
-              <div className="col-md-9">
-                <h2 style={{ display: 'inline' }}>Your Restaurants</h2>
-                <Link
-                  to={{
-                    pathname: '/addNewRestaurant',
-                    state: { id: this.props.match.params.id }
-                  }}
-                >
-                  <button className="addNewButton btn btn-outline-success btn-sm">
-                    Add New
-                  </button>
-                </Link>
-                <div className="restaurants-display">
-                  <div className="list-group">
-                    {this.state.restaurants.map(restaurant => (
-                      <Link
-                        key={restaurant._id}
-                        to={{
-                          pathname: '/restaurateur2',
-                          state: {
-                            restaurant_id: restaurant._id
-                          }
-                        }}
-                      >
-                        <RestaurantListItem
-                          name={restaurant.name}
-                          address={restaurant.location}
-                          telephone={restaurant.phoneNumber}
-                          image={
-                            process.env.PUBLIC_URL +
-                            '/images/restaurant_images/restaurant1.jpeg'
-                          }
-                          _id={restaurant._id}
-                        />
-                      </Link>
-                    ))}
+                <div className="col-md-9">
+                  <h2 style={{ display: 'inline' }}>Your Restaurants</h2>
+                  <Link
+                    to={{
+                      pathname: '/addNewRestaurant',
+                      state: {
+                        id: this.props.match.params.id,
+                        owner_id: this.props.current_user._id
+                      }
+                    }}
+                  >
+                    <button className="addNewButton btn btn-outline-success btn-sm">
+                      Add New
+                    </button>
+                  </Link>
+                  <div className="restaurants-display">
+                    <div className="list-group">
+                      {this.state.restaurants.length === 0 ? (
+                        <React.Fragment>
+                          <br />
+                          <p>You don't have any restaurant yet.</p>
+                          <p>Please click Add New Button to add a restaurant.</p>
+                        </React.Fragment>
+                      ) : null}
+                      {this.state.restaurants.map(restaurant => (
+                        <Link
+                          key={restaurant._id}
+                          to={{
+                            pathname: '/restaurateur2',
+                            state: {
+                              restaurant_id: restaurant._id
+                            }
+                          }}
+                        >
+                          <RestaurantListItem
+                            name={restaurant.name}
+                            address={restaurant.location}
+                            telephone={restaurant.phoneNumber}
+                            image={restaurant.image}
+                            _id={restaurant._id}
+                          />
+                        </Link>
+                      ))}
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    );
-  }
+      );
+    }else{
+      return <p>loading</p>
+    }
+    }
+
+
 }
 // getting from reducers (error and auth reducers)
 const mapStateToProps = state => ({

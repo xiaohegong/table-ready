@@ -4,7 +4,7 @@ import uid from "uid";
 import axios from "axios";
 
 class Employees extends Component {
-  state = { employees: [] };
+  state = { employees: [], message: null };
   constructor(props) {
     super(props);
     this.addEmployee = this.addEmployee.bind(this);
@@ -25,7 +25,7 @@ class Employees extends Component {
     };
     axios
       .post(
-        "/restaurant/findEmployeesByRestaurant",
+        "/api/users/findEmployeesByRestaurant",
         {
           restaurant_id: this.props.res_id
         },
@@ -49,7 +49,7 @@ class Employees extends Component {
       if (employees[i]._id === id) {
         // employees.splice(i, 1);
         axios
-          .post("/restaurant/delete_employee", {
+          .post("/api/users/delete_employee", {
             restaurant_id: this.props.res_id,
             user_id: id
           })
@@ -65,25 +65,28 @@ class Employees extends Component {
     this.setState({ employees: employees });
   };
 
-  addEmployee = () => {
+  addEmployee = async () => {
     const employee_username = document.getElementById("add-employee-input")
       .value;
     console.log(`employee to be added: ${employee_username}`);
-    const fetchEmployees = this.fetchEmployee;
-    axios
-      .post("/restaurant/add_employee", {
+    // const fetchEmployees = this.fetchEmployee;
+    try {
+      const res = await axios.post("/restaurant/add_employee", {
         restaurant_id: this.props.res_id,
         username: employee_username
       })
-      .then(function(response) {
-        console.log(response);
-        console.log("added");
-        fetchEmployees();
-      })
-      .catch(function(error) {
-        console.log(error);
-      });
+      this.fetchEmployee();
+      this.setState({ message: `Invitation has been sent to ${res.data.username}` })
+      setTimeout(() => {
+        this.setState({ message: null })
+      }, 2000)
+    }
+    catch (err) {
+      console.log(err)
+    }
   };
+
+  clearMessage = () => { }
 
   render() {
     return (
@@ -109,6 +112,13 @@ class Employees extends Component {
             </button>
           </div>
         </div>
+        {this.state.message ?
+          <div className="alert alert-info" role="alert">
+            {this.state.message}
+          </div> : null
+        }
+
+
         <div className="list-group employee-list">
           {this.state.employees.map(employee => {
             return (
@@ -118,6 +128,7 @@ class Employees extends Component {
                 name={employee.username}
                 id={employee._id}
                 telephone={employee.tel}
+                email = {employee.email}
                 deleteEmployee={this.deleteEmployee}
               />
             );

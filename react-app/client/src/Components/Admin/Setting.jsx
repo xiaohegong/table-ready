@@ -29,7 +29,7 @@ class Setting extends Component {
             alert("Please fill all boxes!");
         } else {
             const cur_info = this.props.id;
-            const link = '/user/' + cur_info;
+            const link = '/api/users/get/' + cur_info;
             console.log(cur_info);
             console.log("above is curr user id");
             console.log(link);

@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
 import {Button, Card, CardBody, CardHeader, Col, Row, Table} from 'reactstrap';
 import axios from 'axios';
+import {confirmAlert} from "react-confirm-alert";
+import 'react-confirm-alert/src/react-confirm-alert.css';
 
 const log = console.log;
 
@@ -17,9 +19,9 @@ function RestRow(props) {
         <tr key={rest._id.toString()}>
             <th scope="row"><Link to={restLink}>{rest.name}</Link></th>
             <td><Link to={ownerLink}>{rest.owner_name}</Link></td>
-            {/*<td>{rest.registered}</td>*/}
-            {/*<td>{rest.owner}</td>*/}
             <td>{rest.location}</td>
+            <td>{rest.phoneNumber}</td>
+            <td>{rest.operationHour}</td>
             <td><Button outline color="danger" size="sm" onClick={() => {
                 del(rest._id);
             }}>Delete
@@ -70,15 +72,35 @@ class Restaurants extends Component {
     }
 
     deleteRest(id) {
-        axios.delete('api/restaurants/' + id)
-            .then(res => {
-                this.setState({
-                    rest: this.state.rest.filter(el => el._id !== id)
-                });
-            })
-            .catch(err => {
-                log(err);
-            });
+        const restaurant = this.state.rest.filter(el => el._id === id)[0];
+
+        confirmAlert({
+            title: 'Delete Restaurant',
+            message: 'Are you sure you want to remove restaurant ' + restaurant.name + '?',
+            buttons: [
+                {
+                    label: 'Yes',
+                    onClick: () => {
+                        axios.delete('api/restaurants/' + id)
+                            .then(res => {
+                                this.setState({
+                                    rest: this.state.rest.filter(el => el._id !== id)
+                                });
+                            })
+                            .catch(err => {
+                                log(err);
+                            });
+                    }
+                },
+                {
+                    label: 'No',
+                    onClick: () => {
+                        return;
+                    }
+                }
+            ]
+        });
+
     }
 
 
@@ -146,8 +168,8 @@ class Restaurants extends Component {
                                             <th scope="col">Name</th>
                                             <th scope="col">Owner</th>
                                             <th scope="col">Location</th>
-                                            {/*<th scope="col">registered</th>*/}
-                                            {/*<th scope="col">Role</th>*/}
+                                            <th scope="col">Contact</th>
+                                            <th scope="col">Hours</th>
                                             <th scope="col">Action</th>
                                         </tr>
                                         </thead>

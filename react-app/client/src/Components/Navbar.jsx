@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import '../Stylesheets/navbar.scss';
+import { Redirect, withRouter } from 'react-router-dom';
 import $ from 'jquery';
 import { connect } from 'react-redux';
 import { logout } from '../actions/authActions';
@@ -54,7 +55,15 @@ class Navbar extends React.Component {
   render() {
     return (
       <nav className="navbar-page navbar navbar-expand-lg navbar-dark bg-dark">
-        <Link to="/">Home</Link>
+        <button
+          className="nav-link btn home-btn"
+          onClick={() => {
+            console.log('hi');
+            window.location.href = '/';
+          }}
+        >
+          <strong>Home</strong>
+        </button>
 
         <button
           className="navbar-toggler"
@@ -119,12 +128,23 @@ class Navbar extends React.Component {
           {/* {this.getButton()} */}
           {this.props.isAuthenticated ? (
             <div>
+              <span className="welcome-message">
+                <strong>Welcome</strong>{' '}
+                <em>{this.props.current_user.username}</em>
+              </span>
               <button
                 className="btn btn-outline-danger btn-sm logout-btn"
                 onClick={this.props.logout}
               >
                 Logout
               </button>
+              <Link to="/">
+                <img
+                  id="user-avatar"
+                  src={this.props.current_user.image}
+                  alt=""
+                />
+              </Link>
             </div>
           ) : (
             <div className="btn-group">
@@ -149,4 +169,4 @@ const mapStateToProps = state => ({
   current_user: state.auth.user
 });
 
-export default connect(mapStateToProps, { logout })(Navbar);
+export default connect(mapStateToProps, { logout })(withRouter(Navbar));

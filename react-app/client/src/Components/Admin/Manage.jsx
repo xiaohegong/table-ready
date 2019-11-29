@@ -43,7 +43,7 @@ class Manage extends Component {
             return (
                 <Restaurants/>
             );
-        } else if (this.state.page == 'addAdmin') {
+        } else if (this.state.page === 'addAdmin') {
             return (
                 <AddAdmin/>
             );
@@ -70,7 +70,7 @@ class Manage extends Component {
                             </div>
                         </div>
 
-                        <div className='col-sm-4'>
+                        <div className='col-sm-4 menu'>
                             <ul className="list-group list-all">
                                 <li id="manageUsers" className="list-group-item list-content active"
                                     onClick={this.manageUsers}>Users
