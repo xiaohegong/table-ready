@@ -19,7 +19,7 @@ class EmployeeListItem extends Component {
                 {this.props.name}
               </p>
               <p>
-                <strong>ID: </strong> {id}
+                <strong>Email: </strong> {this.props.email}
               </p>
               <p>
                 <strong>Telephone: </strong>

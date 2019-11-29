@@ -18,6 +18,7 @@ function UserRow(props) {
             <th scope="row"><Link to={getUserLink(user)}>{user.username}</Link></th>
             {/*<td><Link to={""}>{user.name}</Link></td>*/}
             {/*<td>{user.registered}</td>*/}
+            <td>{user.email}</td>
             <td>{user.tel}</td>
             <td>{user.accountType}</td>
             <td><Button outline color="danger" size="sm" onClick={() => {
@@ -36,9 +37,9 @@ function getUserLink(user) {
     } else if (user.accountType === "Admin") {
         res = "/restaurateur" + res;
     } else if (user.accountType === "Employee")
-        res = "/employee" + res;
+        res = "/userpage" + res;
 
-    return res;
+    return res + "?redirect=true";
 }
 
 class Users extends Component {
@@ -57,7 +58,7 @@ class Users extends Component {
     }
 
     componentDidMount() {
-        axios.get('api/users')
+        axios.get('/api/users/')
             .then(res => {
                 if (res.data.length > 0) {
                     this.setState({
@@ -81,7 +82,7 @@ class Users extends Component {
                 {
                     label: 'Yes',
                     onClick: () => {
-                        axios.delete('api/users/' + id)
+                        axios.delete('/api/users/' + id)
                             .then(res => {
                                 this.setState({
                                     users: this.state.users.filter(el => el._id !== id)
@@ -151,10 +152,8 @@ class Users extends Component {
                                         <thead>
                                         <tr>
                                             <th scope="col">Username</th>
-                                            {/*<th scope="col">Name</th>*/}
+                                            <th scope="col">Email</th>
                                             <th scope="col">Phone Number</th>
-                                            {/*TODO (xiaohegong) add name, date registered*/}
-                                            {/*<th scope="col">registered</th>*/}
                                             <th scope="col">Role</th>
                                             <th scope="col">Action</th>
                                         </tr>

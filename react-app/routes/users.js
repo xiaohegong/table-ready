@@ -4,7 +4,9 @@ const User = require('../models/user');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const config = require('config');
+const { ObjectID } = require('mongodb');
 const { isAuth, isSuperAdmin } = require('../middleware/auth');
+const log = console.log;
 
 // register
 
@@ -13,6 +15,11 @@ router.post('/', (req, res) => {
   const { accountType, username, password, email, tel } = req.body;
   if (!accountType || !username || !email || !password || !tel) {
     return res.status(400).json({ message: 'Please enter all fields' });
+  }
+  if (password.length < 4) {
+    return res
+      .status(400)
+      .json({ message: 'Password must be longer than 4 characters' });
   }
   User.findOne({ username }).then(user => {
     if (user) return res.status(400).json({ message: 'User already exists' });
@@ -40,8 +47,8 @@ router.post('/', (req, res) => {
       );
     })
     .catch(err => {
-      console.log(err);
-      res.status(400).json({ err });
+      console.log(err.message);
+      res.status(400).json({ message: err.message });
     });
 });
 
@@ -88,6 +95,8 @@ router.post('/login', (req, res) => {
       res.status(400).json({ message: error });
     });
 });
+
+
 
 // change setting of a user
 router.patch('/setting/:id', (req, res) => {
@@ -163,6 +172,94 @@ router.get('/auth/:id', isAuth, isSuperAdmin, (req, res) => {
     .then(user => {
       res.json(user);
     });
+});
+
+router.post('/findEmployeesByRestaurant', (req, res) => {
+  const restaurant_id = req.body.restaurant_id;
+  console.log('restaurant_id:   --- ', restaurant_id);
+  User.find({ workFor: restaurant_id }).then(
+    users => {
+      res.send(users);
+    },
+    error => {
+      res.send({ code: 404, error });
+    }
+  );
+
+});
+
+router.post('/delete_employee', (req, res) => {
+  // const restaurant_id = req.body.restaurant_id;
+  const user_id = req.body.user_id;
+  if (user_id) {
+    User.findByIdAndUpdate(user_id, { workFor: '' }, (err, user) => {
+      if (err) {
+        console.log(err);
+        res.send(err);
+      }
+      console.log('user deleted from restaurant');
+      console.log(user);
+      res.send(user);
+    });
+  }
+});
+
+router.get('/', (req, res) => {
+  User.find({}, function(err, users) {
+    if (err) {
+      log(err);
+      return err;
+    }
+
+    res.send(users);
+  });
+});
+
+router.get('/info', (req, res) => {
+  User.find()
+    .then(users => res.json(users))
+    .catch(error => res.status(400).json('Err ' + error));
+});
+
+
+router.delete('/:id', (req, res) => {
+  const id = req.params.id;
+  User.findById(id)
+    .then(user => {
+      user.remove().then(() => {
+        res.send('User ' + id + ' deleted.');
+      });
+    })
+    .catch(err => {
+      res.status(400).json('Error: ' + err);
+    });
+});
+
+router.get('/get/:id', (req, res) => {
+  const employee_id = req.params.id;
+  User.find({ _id: ObjectID(employee_id) }, function(err, single_user) {
+    if (err) {
+      console.log(err);
+      return err;
+    }
+    res.send(single_user);
+  });
+});
+
+router.put('/get/:id', (req, res) => {
+  User.findByIdAndUpdate(
+    req.params.id,
+    req.body,
+    { new: true },
+    (err, todo) => {
+      if (err) {
+        return res.status(500).send(err);
+      }
+
+      console.log(todo);
+      return res.send(todo);
+    }
+  );
 });
 
 module.exports = router;

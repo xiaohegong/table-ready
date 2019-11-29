@@ -26,7 +26,7 @@ class AddNewMenuItem extends Component {
 
       axios
         .post(
-          "/restaurant/newMenuItem",
+          "/api/menu/newMenuItem",
           {
             restaurant: this.props.location.state.id,
             name: event.target.name.value,
