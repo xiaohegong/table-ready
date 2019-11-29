@@ -272,6 +272,7 @@ class Employee extends Component {
         this.setState({valid:true, employee_obj:this.state.validate_user})
       if(this.state.validate_user.workFor !== ""){
         this.update_rest_waitlist(this.state.validate_user.workFor)
+        this.get_table(this.state.validate_user.workFor)
       }
     })
   }
@@ -282,25 +283,6 @@ class Employee extends Component {
         i => i.id != this.state.to_be_reserved[index].id
       )
     });
-  };
-  change_menu_state = index => {
-    this.setState({ menu_open: !this.state.menu_open });
-    let in_list = false;
-    this.state.to_be_reserved.forEach(element => {
-      if (element === this.state.items[index]) {
-        in_list = true;
-      }
-    });
-    if (in_list === false) {
-      console.log(this.state.items[index]);
-      this.setState({
-        to_be_reserved: this.state.to_be_reserved.filter(value => value != null)
-      });
-      this.setState({
-        to_be_reserved: [...this.state.to_be_reserved, this.state.items[index]]
-      });
-    }
-    console.log(this.state.to_be_reserved);
   };
   remove_reservation_from_items = index => {
     this.delete_data(this.state.items[index]);
@@ -358,15 +340,13 @@ class Employee extends Component {
       .then(res => console.log(res))
       .catch(err => console.log(err))
   }
-  get_table = () => {
+  get_table = (rest_id) => {
     axios.post("/waitlist/GetTableForRestaurant", {
-      rest_id: this.state.employee_obj.workFor
+      rest_id: rest_id
     })
       .then(res => {
         console.log(res.data)
-        this.setState({
-          all_table: res.data
-        })
+        this.state.all_table = res.data
         this.setReservationColor()
       })
 
@@ -460,9 +440,8 @@ class Employee extends Component {
   handleChange = () => {
     this.setState({ checkedG: !this.state.checkedG });
   };
-  handleStart = index => {
-    let tmp = this.state.to_be_reserved[index];
-    this.setState({ user_obj: tmp });
+  handleStart = item => {
+    this.setState({ user_obj: item });
     this.setState({ draggin: true });
   };
   handleStop = index => {
@@ -499,25 +478,29 @@ class Employee extends Component {
     }
   };
   setReservationColor = () => {
+    let tmp = this.state.reservations_color
     for (let i = 0; i < this.state.all_table.length; i++){
       if(this.state.all_table[i].table_occupied === true){
-        this.state.reservations_color[i] = 'green'
+        tmp[i] = 'green'
       }
     }
+    console.log(tmp)
+    this.setState({
+      reservations_color: tmp
+    })
   }
-  change_menu_state = index => {
+  change_menu_state = (value,index) => {
     this.setState({ menu_open: !this.state.menu_open });
     let in_list = false;
     this.state.to_be_reserved.forEach(element => {
-      if (element === this.state.items[index]) {
+      if (element === value) {
         in_list = true;
       }
     });
-    this.get_table()
+    this.get_table(this.state.validate_user.workFor)
     if (in_list == false) {
-      console.log(this.state.items[index])
       this.setState({to_be_reserved: this.state.to_be_reserved.filter((value) => value != null)})
-      this.setState({ to_be_reserved: [...this.state.to_be_reserved, this.state.items[index]]});
+      this.setState({ to_be_reserved: [...this.state.to_be_reserved, value]});
     }
     console.log(this.state.to_be_reserved);
   };
@@ -536,7 +519,6 @@ class Employee extends Component {
     // const cur_table = document.getElementById(`Table-${index}`)
     // this.setState({current_table:cur_table})
     const cur_table_obj = this.state.all_table[index];
-    console.log(this.state.all_table)
     if (this.state.draggin) {
       if (
         cur_table_obj.table_capacity >= this.state.user_obj.people &&
@@ -624,14 +606,14 @@ class Employee extends Component {
       this.create_waitlist(new_wl);
     }
   };
-  render_button = index => {
+  render_button = (value,index) => {
     if (this.state.items[index].reserved) {
       return null;
     } else {
       return (
         <button
           className="accept-button"
-          onClick={e => this.change_menu_state(index)}
+          onClick={e => this.change_menu_state(value, index)}
           onMouseDown={this.removefocus}
         >
           <img
@@ -665,7 +647,7 @@ class Employee extends Component {
       } else{
         if (this.props.current_user.accountType !== "SuperAdmin" && this.state.validate_user.workFor === ""){
           console.log(this.props.current_user.accountType)
-          return <Redirect to="/SignIn" />;
+          return <Redirect to={`/userpage/${this.props.match.params.id}`} />;
         }
     }
       let draggables = [];
@@ -823,12 +805,14 @@ class Employee extends Component {
             <Navbar cookies={this.props.cookies}/>
             <div id = "cal" style={{height: '80px'}}>
               <DatePicker onChange={(value)=>this.showdate(value)} showDefaultIcon></DatePicker>
-              <button id  = "date-confirm" onClick={()=>this.filter_date()}>Confirm</button>
+              <button id  = "date-confirm" onClick={()=>this.update_rest_waitlist(this.state.validate_user.workFor)}>Confirm</button>
               <button id = "date-confirm" onClick={()=>this.setModalState(true)}>Add Reservation</button>
             </div>
               <div id = "res-holder">
                <strong id = "reserv-header">Reservations</strong>
-               {this.state.items.map((item, index) => (
+               {this.state.items.map((item, index) => {
+                 if(item.type === "Reservation"){
+                  return (
                  <OverlayTrigger
                  trigger="click"
                  key={index}
@@ -861,7 +845,7 @@ class Employee extends Component {
                      </div>
                      <span><span className = "attendence">{`${item.people} people`}</span></span>
                      <span className = "Button-container">
-                     {this.render_button(index)}
+                     {this.render_button(item, index)}
                      <button
                          className="reject-button"
                          onClick={e =>
@@ -875,7 +859,60 @@ class Employee extends Component {
                    </Card.Header>
                  </Card>
              </OverlayTrigger>
-               ))}
+              )}})}
+              </div>
+              <div id = "res-holder">
+               <strong id = "reserv-header">Reservations</strong>
+               {this.state.items.map((item, index) => {
+                 if(item.type === "Waitlist"){
+                 return(
+                 <OverlayTrigger
+                 trigger="click"
+                 key={index}
+                 placement={"down"}
+                  overlay={
+                     <Popover id={`popover-positioned-${"down"}`}>
+                         <Popover.Content>
+                           <div>
+                                     <span><img className = "info-png" src = {process.env.PUBLIC_URL + "/images/restaurant_images/calendar.png"}></img><span className = 
+                                     "reservation_time">{item.estimated_time}</span><span className = "reservation_date">/{item.date_of_arrival}</span></span>
+                                   </div>
+                                   <div className = "num_people">
+                                     <span><img className = "info-png" src = {process.env.PUBLIC_URL + "/images/restaurant_images/avatar.png"}></img><span className = "attendence">{item.people}</span></span>
+                                   </div>
+                                   <div>
+                                   <span><img className = "info-png" src = {process.env.PUBLIC_URL + "/images/restaurant_images/receptionist.png"}></img><span className = "attendence">{item.reserved ? 'Reserved' : 'Not Reserved'}</span></span>
+                                   </div>
+                                   <div className = "user_profile_holder">
+                                   </div>
+                             
+                         </Popover.Content>
+                     </Popover>
+                 }>
+                  <Card key={index} className = "card border-light mb-3 rese-card" bg="light" style={{ width: '18rem' }}>
+                    <Card.Header className = "header-of-card">
+                      <div className = "pic-container">
+                        <strong>
+                          {item.name}
+                        </strong>
+                     </div>
+                     <span><span className = "attendence">{`${item.people} people`}</span></span>
+                     <span className = "Button-container">
+                     {this.render_button(item, index)}
+                     <button
+                         className="reject-button"
+                         onClick={e =>
+                           this.remove_reservation_from_items(index)
+                         }
+                         onMouseDown={this.removefocus}
+                       >
+                         <img src = {process.env.PUBLIC_URL + "/images/restaurant_images/no-stopping.png"}></img>
+                       </button>
+                       </span>
+                   </Card.Header>
+                 </Card>
+             </OverlayTrigger>
+              )}})}
               </div>
               <div id = "avaliable_seats_container" onMouseDown = {this.removefocus}>
                 {

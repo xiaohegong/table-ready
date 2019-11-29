@@ -14,12 +14,15 @@ import { Link } from 'react-router-dom';
 import userlist from './userlist'
 import axios from 'axios'
 import { withCookies } from 'react-cookie';
+import { connect } from "react-redux";
+import {Redirect} from 'react-router-dom'
 
 class Userpage extends React.Component{
     constructor(props){
         super(props)
         this.state = {
-            invitations: []
+            invitations: [],
+            approved: false
         }
     }
     
@@ -44,34 +47,45 @@ class Userpage extends React.Component{
 
     approveinvitation = (index) => {
         const approved = this.state.invitations[index]
+        console.log(approved)
         axios.post(`/acceptinvi/${this.props.match.params.id}`, {
             new_array: [],
             rest_id: approved
-        }).then(res => console.log(res)).catch(error => console.log(error))
+        }).then(res => {
+            console.log(res)
+            this.setState({approved: true})
+        }).catch(error => console.log(error))
     }
 
     render(){
         {
-            return(
-                this.state.invitations.map((item,index) => {
-                    <Col md="3" key={index} className="request_col">        
-                        <Card className="request_card">
-                            <Card.Header>ID: {item._id}</Card.Header>
-                            <Card.Body>
-                                <Card.Text>Name: {item.name}</Card.Text>
-                                <Card.Text>Rating: {item.rating}</Card.Text>
-                                <Card.Text>Phone Number: {item.phoneNumber}</Card.Text>
-                                <Button variant="danger" onClick={(index)=>{
-                                        this.deleteinvitation(index)
-                                    }}>Reject</Button>
-                                <Button className="float-right" variant="success" onClick={(index)=>{
-                                        this.approveinvitation(index)
-                                    }}>Approve</Button>
-                            </Card.Body>
-                        </Card>
-                    </Col>
-                })
-            )
+            if(this.state.approved){
+                return <Redirect to={`/employee/${this.props.match.params.id}`} />;
+            }
+            else{
+                return(
+                
+                    this.state.invitations.map((item,index) => (
+                        <Col md="3" key={index} className="request_col">        
+                            <Card className="request_card">
+                                <Card.Header>ID: {item._id}</Card.Header>
+                                <Card.Body>
+                                    <Card.Text>Name: {item.name}</Card.Text>
+                                    <Card.Text>Rating: {item.rating}</Card.Text>
+                                    <Card.Text>Phone Number: {item.phoneNumber}</Card.Text>
+                                    <Button variant="danger" onClick={(index)=>{
+                                            this.deleteinvitation(index)
+                                        }}>Reject</Button>
+                                    <Button className="float-right" variant="success" onClick={(e)=>{
+                                            this.approveinvitation(index)
+                                        }}>Approve</Button>
+                                </Card.Body>
+                            </Card>
+                        </Col>
+                    ))
+                )
+            }
+            
         }
     }
 }
