@@ -91,8 +91,15 @@ class RestaurateurPage2 extends Component {
   };
 
   render() {
+    console.log('Restaurant render');
     if (!this.state.access) {
       return <Redirect to="/signin" />;
+    }
+    if (!this.props.isAuthenticated) {
+      console.log(
+        'redirecting to signin since not authenticated in RestaurateurPage'
+      );
+      return <Redirect to="/SignIn" />;
     }
     return (
       <div>
