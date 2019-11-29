@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 import {Link} from "react-router-dom";
+import RestaurantImageModal from "./RestaurantImageModal";
+import MenuImageModal from "./MenuImageModal";
 
 class MenuItem extends Component {
     state = {  };
@@ -11,7 +13,7 @@ class MenuItem extends Component {
           >
               <div className="row">
                   <div className="col col-md-4">
-                      <img className="" src={this.props.image} alt="" />
+                    <MenuImageModal id = {this.props.id} image={this.props.image} />
                   </div>
                   <div className="col col-md-6">
                       <div className="employee-info">
@@ -49,7 +51,6 @@ class MenuItem extends Component {
                       <div
                         style={{marginBottom: "5px"}}
                         className="btn btn-sm btn-outline-success"
-                        onClick={deleteItem.bind(this, id)}
                       >
                         Edit
                       </div>

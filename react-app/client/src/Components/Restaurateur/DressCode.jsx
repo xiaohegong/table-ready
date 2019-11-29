@@ -13,7 +13,7 @@ class DressCode extends Component {
     };
     axios
       .post(
-        "/restaurant/findRestaurantById",
+        "/api/restaurants/findRestaurantById",
         {
           _id: this.props.id
         },
@@ -60,7 +60,7 @@ class DressCode extends Component {
     };
     axios
       .post(
-        "/restaurant/updateDressCode",
+        "/api/restaurants/updateDressCode",
         {
           _id: this.props.id,
           dressCode: document.getElementById("codeBlock").value

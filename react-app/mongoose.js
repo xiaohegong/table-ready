@@ -5,6 +5,8 @@ const url =
 
 function connect() {
   mongoose.set('debug', true);
+  mongoose.set('useFindAndModify', false);
+
 
   return mongoose
     .connect(url, { useNewUrlParser: true })

@@ -57,7 +57,7 @@ class Users extends Component {
     }
 
     componentDidMount() {
-        axios.get('api/users')
+        axios.get('/api/users/')
             .then(res => {
                 if (res.data.length > 0) {
                     this.setState({
@@ -81,7 +81,7 @@ class Users extends Component {
                 {
                     label: 'Yes',
                     onClick: () => {
-                        axios.delete('api/users/' + id)
+                        axios.delete('/api/users/' + id)
                             .then(res => {
                                 this.setState({
                                     users: this.state.users.filter(el => el._id !== id)

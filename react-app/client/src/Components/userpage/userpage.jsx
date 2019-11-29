@@ -16,6 +16,7 @@ import axios from 'axios'
 import { withCookies } from 'react-cookie';
 import { connect } from "react-redux";
 import {Redirect} from 'react-router-dom'
+import Navbar from '../Navbar.jsx';
 
 class Userpage extends React.Component{
     constructor(props){
@@ -64,8 +65,9 @@ class Userpage extends React.Component{
             }
             else{
                 return(
-                
-                    this.state.invitations.map((item,index) => (
+                    <div>
+                        <Navbar cookies={this.props.cookies}/>
+                        {this.state.invitations.map((item,index) => (
                         <Col md="3" key={index} className="request_col">        
                             <Card className="request_card">
                                 <Card.Header>ID: {item._id}</Card.Header>
@@ -82,7 +84,9 @@ class Userpage extends React.Component{
                                 </Card.Body>
                             </Card>
                         </Col>
-                    ))
+                        ))}
+                    </div>
+                    
                 )
             }
             

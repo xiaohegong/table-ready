@@ -9,7 +9,7 @@ import axios from 'axios';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import RestaurateurSettingModal from './RestaurateurSettingModal';
-import { stat } from 'fs';
+import AvatarModal from './AvatarModal';
 
 class RestaurateurPage extends Component {
   state = {
@@ -29,7 +29,7 @@ class RestaurateurPage extends Component {
     };
     axios
       .post(
-        '/restaurant/findRestaurantByOwner',
+        '/api/restaurants/findRestaurantByOwner',
         {
           owner: this.props.match.params.id
         },
@@ -69,6 +69,10 @@ class RestaurateurPage extends Component {
     return config;
   };
 
+  changeAvatar = () => {
+    console.log('change avatar');
+  };
+
   render() {
     if (!this.props.isAuthenticated) {
       console.log(
@@ -93,11 +97,12 @@ class RestaurateurPage extends Component {
               <div className="col-md-3 info">
                 <h2 className="">{this.state.current_user.username}</h2>
                 <div>
-                  <img
+                  {/* <img
                     src={'/images/avatar_sample.png'}
                     alt=""
                     className="avatar"
-                  />
+                  /> */}
+                  <AvatarModal image={this.props.current_user.image} />
                 </div>
                 <ul className="list-group">
                   <li className="list-group-item">
@@ -119,8 +124,10 @@ class RestaurateurPage extends Component {
                 <Link
                   to={{
                     pathname: '/addNewRestaurant',
-                    state: { id: this.props.match.params.id,
-                            owner_id: this.props.current_user._id}
+                    state: {
+                      id: this.props.match.params.id,
+                      owner_id: this.props.current_user._id
+                    }
                   }}
                 >
                   <button className="addNewButton btn btn-outline-success btn-sm">
@@ -150,10 +157,7 @@ class RestaurateurPage extends Component {
                           name={restaurant.name}
                           address={restaurant.location}
                           telephone={restaurant.phoneNumber}
-                          image={
-                            process.env.PUBLIC_URL +
-                            '/images/restaurant_images/restaurant1.jpeg'
-                          }
+                          image={restaurant.image}
                           _id={restaurant._id}
                         />
                       </Link>
