@@ -17,6 +17,10 @@ import {withCookies} from 'react-cookie';
 import {connect} from "react-redux";
 import {Redirect} from 'react-router-dom';
 import Navbar from '../Navbar.jsx';
+import '../../Stylesheets/restaurateur_page.scss';
+import RestaurateurSettingModal from '../Restaurateur/RestaurateurSettingModal';
+import AvatarModal from '../Restaurateur/AvatarModal';
+
 
 class Userpage extends React.Component {
     constructor(props) {
@@ -58,6 +62,67 @@ class Userpage extends React.Component {
         }).catch(error => console.log(error));
     };
 
+    render_page = () => {
+        return (
+            this.state.invitations.map((item, index) => (
+                <Col md="6" key={index} className="request_col">
+                    <Card className="request_card">
+                        <Card.Header>ID: {item._id}</Card.Header>
+                        <Card.Body>
+                            <Card.Text>Name: {item.name}</Card.Text>
+                            <Card.Text>Rating: {item.rating}</Card.Text>
+                            <Card.Text>Phone Number: {item.phoneNumber}</Card.Text>
+                            <Button variant="danger" onClick={(index) => {
+                                this.deleteInvitation(index);
+                            }}>Reject</Button>
+                            <Button className="float-right" variant="success" onClick={(e) => {
+                                this.approveInvitation(index);
+                            }}>Approve</Button>
+                        </Card.Body>
+                    </Card>
+                </Col>
+        )
+
+        ))
+    }
+    new_render_page = () => {
+        return (
+        <div className="restaurateur-page">
+          <div className="container">
+            <div className="row">
+              <div className="col-md-3 info">
+                <h2 className="">{this.props.current_user.username}</h2>
+                <div>
+                  <AvatarModal image={this.props.current_user.image} />
+                </div>
+                <ul className="list-group">
+                  <li className="list-group-item">
+                    <strong>Telephone: </strong>
+                    {this.props.current_user.tel}
+                  </li>
+                  <li className="list-group-item">
+                    <strong>Email: </strong>
+                    {this.props.current_user.email}
+                  </li>
+                  <li className="list-group-item">
+                    <RestaurateurSettingModal user={this.props.current_user} />
+                  </li>
+                </ul>
+              </div>
+
+              <div className="col-md-9">
+                <h2 style={{ display: 'inline' }}>Your Invitations</h2>
+                <div className="restaurants-display">
+                  {this.render_page()}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )
+        
+    }
+
     render() {
         {
             if (this.state.approved) {
@@ -77,24 +142,7 @@ class Userpage extends React.Component {
                                 <p>    Please request your restaurant managers to send you an invitation and check back!</p>
                             </React.Fragment>
                             </div>
-                        ) : this.state.invitations.map((item, index) => (
-                            <Col md="3" key={index} className="request_col">
-                                <Card className="request_card">
-                                    <Card.Header>ID: {item._id}</Card.Header>
-                                    <Card.Body>
-                                        <Card.Text>Name: {item.name}</Card.Text>
-                                        <Card.Text>Rating: {item.rating}</Card.Text>
-                                        <Card.Text>Phone Number: {item.phoneNumber}</Card.Text>
-                                        <Button variant="danger" onClick={(index) => {
-                                            this.deleteInvitation(index);
-                                        }}>Reject</Button>
-                                        <Button className="float-right" variant="success" onClick={(e) => {
-                                            this.approveInvitation(index);
-                                        }}>Approve</Button>
-                                    </Card.Body>
-                                </Card>
-                            </Col>
-                        ))}
+                        ) : this.new_render_page()}
                     </div>
 
                 );
