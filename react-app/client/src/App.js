@@ -2,16 +2,17 @@ import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Route, Switch, BrowserRouter } from 'react-router-dom';
 // import Navbar from "./Components/Navbar";
-import './App.scss';
-import SignIn from './Components/SignIn&Up/signIn';
-import SignUp from './Components/SignIn&Up/signup';
-import RestaurateurPage from './Components/Restaurateur/RestaurateurPage';
-import RestaurateurPage2 from './Components/Restaurateur/RestaurateurPage2';
-import Dashboard from './Components/Restaurateur/Dashboard';
-import Admin from './Components/Admin/Admin';
-import Employee from './Components/Employee/employee';
-import './App.scss';
-import { withCookies, useCookies } from 'react-cookie';
+import "./App.scss";
+import SignIn from "./Components/SignIn&Up/signIn";
+import SignUp from "./Components/SignIn&Up/signup";
+import RestaurateurPage from "./Components/Restaurateur/RestaurateurPage";
+import RestaurateurPage2 from "./Components/Restaurateur/RestaurateurPage2";
+import Dashboard from "./Components/Restaurateur/Dashboard";
+import Admin from "./Components/Admin/Admin";
+import Employee from "./Components/Employee/employee";
+import "./App.scss";
+import { withCookies, useCookies } from "react-cookie";
+import Userpage from './Components/userpage/userpage'
 // import NotFound from "./Components/page_not_found/page_not_found";
 import NotFound from './Components/page_not_found/404';
 import NewRestaurant from './Components/Restaurateur/NewRestaurant';
@@ -49,7 +50,6 @@ class App extends React.Component {
             <Route exact path="/dashboard" render={() => <Dashboard />} />
             <Route exact path="/admin/:id" render={() => <Admin />} />
             <Route exact path="/employee/:id" render={() => <Employee />} />
-
             <Route
               exact
               path="/addNewMenuItem"
@@ -61,6 +61,12 @@ class App extends React.Component {
               path="/addNewRestaurant"
               render={() => <NewRestaurant />}
             />
+          <Route
+            exact
+            path = "/userpage/:id"
+            render = {() => (<Userpage />
+            )}
+          />
             <Route
               exact
               path="/imageUpload"
@@ -69,8 +75,8 @@ class App extends React.Component {
           </Switch>
         </BrowserRouter>
       </Provider>
-    );
-  }
+  );
+            }
 }
 
 export default App;

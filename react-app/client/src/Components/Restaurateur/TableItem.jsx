@@ -35,7 +35,7 @@ class TableItem extends Component {
     };
     axios
       .post(
-        "/restaurant/updateTable",
+        "/api/restaurants/updateTable",
         {
           _id: this.props.id,
           tableNum: document.getElementById("capacity").value,

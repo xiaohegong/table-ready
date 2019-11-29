@@ -25,7 +25,7 @@ class Employees extends Component {
     };
     axios
       .post(
-        "/restaurant/findEmployeesByRestaurant",
+        "/api/users/findEmployeesByRestaurant",
         {
           restaurant_id: this.props.res_id
         },
@@ -49,7 +49,7 @@ class Employees extends Component {
       if (employees[i]._id === id) {
         // employees.splice(i, 1);
         axios
-          .post("/restaurant/delete_employee", {
+          .post("/api/users/delete_employee", {
             restaurant_id: this.props.res_id,
             user_id: id
           })

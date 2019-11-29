@@ -44,6 +44,11 @@
     height:200px;
 } */
 
+.usercard{
+  width:20%
+}
+
+
 .user_profile_holder{
     display: inline-block;
     margin-left:40%
@@ -170,20 +175,21 @@
 #avaliable_seats_container{
     display: inline-block !important;
     width: 30%;;
-    margin-left:30%
+    float: right;
 }
 .accept{
     width:20px;
     height:20px;
    
 }
-.check-container{
- margin-left: 40px;
-}
 
 #content-wrapper{
     margin-top:1%;
-    margin-left:4%
+    margin-left:4%;
+    height:100%
+}
+.card-group{
+  flex-flow: column;
 }
 /* CSS for sidebar*/
 /* Position and sizing of burger button */
@@ -236,11 +242,44 @@
   .bm-morph-shape {
     fill: #373a47;
   }
-  
+
+  #reserv-header{
+    margin-left: 15%;
+
+  }
+  #res-holder{
+    width: 24%;
+    float: left;
+    margin-left:10px;
+  }
+  #waitlist-header{
+    margin-left: 22%;
+  }
+  #waitlist-cont{
+    width:22%;
+    display: inline-block;
+  }
+
+  .Button-container{
+    margin-left:10%
+  }
+
+  .rese-card{
+    display: inline-block;
+    margin-left:3px;
+  }
+  #page-wrap{
+    height: 100%;
+  }
+
   /* Wrapper for item list */
   .bm-item-list {
     color: #b8b7ad;
     padding: 0.8em;
+  }
+
+  .cap-word{
+    margin-left:5%
   }
   
   /* Individual item */

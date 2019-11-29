@@ -58,7 +58,7 @@ class RestaurateurPage2 extends Component {
 
   componentDidMount() {
     axios
-      .post('/restaurant/findRestaurantById', {
+      .post('/api/restaurants/findRestaurantById', {
         _id: this.props.match.params.id
       })
       .then(response => {
