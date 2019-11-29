@@ -21,6 +21,8 @@ import Popover from 'react-bootstrap/Popover';
 import {Redirect} from 'react-router-dom';
 import Form from "react-bootstrap/Form";
 import {connect} from "react-redux";
+
+const dayjs = require('dayjs');
 // fake data generator
 
 // a little function to help us with reordering the result
@@ -235,7 +237,7 @@ class Employee extends Component {
             items: [],
             to_be_reserved: [],
             checkedG: false,
-            current_date: new Date(),
+            current_date: dayjs().format('YYYY/MM/DD'),
             draggin: false,
             menu_open: false,
             all_table: [],
@@ -248,6 +250,7 @@ class Employee extends Component {
             loading: true,
             valid: false
         };
+        console.log(this.state)
     }
 
     tokenConfig = () => {
@@ -805,15 +808,27 @@ class Employee extends Component {
                     <div id="page-wrap">
                         <Navbar/>
                         <div id="cal" style={{height: '80px'}}>
-                            <DatePicker onChange={(value) => this.showdate(value)} showDefaultIcon
-                                        selected={this.state.current_date}></DatePicker>
-                            <button id="date-confirm"
-                                    onClick={() => this.update_rest_waitlist(this.state.validate_user.workFor)}>Confirm
-                            </button>
-                            <button id="date-confirm" onClick={() => this.setModalState(true)}>Add Reservation</button>
+                            <DatePicker onChange={
+                                (value) => {
+                                    this.showdate(value);
+                                    this.update_rest_waitlist(this.state.validate_user.workFor);
+                                }
+                            } showDefaultIcon
+                                        initialDate={dayjs().format('YYYY/MM/DD')}></DatePicker>
+                            {/*<button id="date-confirm"*/}
+                            {/*onClick={() => this.update_rest_waitlist(this.state.validate_user.workFor)}>Confirm*/}
+                            {/*</button>*/}
+                            <button id="date-confirm" onClick={() => this.setModalState(true)}>New Guests</button>
                         </div>
                         <div id="res-holder">
                             <strong id="reserv-header">Reservations</strong>
+                            {this.state.items.filter((item) => {return item.type === "Reservation"}).length === 0 ? (
+                                <React.Fragment>
+                                    <br />
+                                    <p>No reservation added for today yet.</p>
+                                    <p>Please click the "New Guests" button to add a new reservation.</p>
+                                </React.Fragment>
+                            ) : null}
                             {this.state.items.map((item, index) => {
                                 if (item.type === "Reservation") {
                                     return (
@@ -876,7 +891,14 @@ class Employee extends Component {
                             })}
                         </div>
                         <div id="res-holder">
-                            <strong id="reserv-header">Reservations</strong>
+                            <strong id="reserv-header">Waitlist</strong>
+                            {this.state.items.filter((item) => {return item.type === "Waitlist"}).length === 0 ? (
+                                <React.Fragment>
+                                    <br />
+                                    <p>No one is on the waitlist for today yet.</p>
+                                    <p>Please click the "New Guests" button to add guests to the waitlist.</p>
+                                </React.Fragment>
+                            ) : null}
                             {this.state.items.map((item, index) => {
                                 if (item.type === "Waitlist") {
                                     return (
