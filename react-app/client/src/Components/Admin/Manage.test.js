@@ -3,7 +3,6 @@ import {shallow} from "enzyme";
 import {configure} from "enzyme";
 import Adapter from "enzyme-adapter-react-16";
 import Manage from "./Manage";
-const manage = require("./Manage")
 
 configure({adapter: new Adapter()});
 
@@ -37,9 +36,9 @@ describe("Manage", () => {
       };
       // instance.manageUsers(event);
       // expect(wrapper.state().page).toEqual("user");
-      const spy = jest.spyOn(wrapper.instance(), "manageRestaurant");
-      // const a = instance.manageRestaurant(event);
-      wrapper.find("#manageRes").simulate('click', event);
+      const spy = jest.spyOn(wrapper.instance(), "showManaging");
+      const a = instance.manageRestaurant(event);
+      // wrapper.find("#manageRes").simulate('click', event);
       expect(spy).toHaveBeenCalled();
     });
   });
