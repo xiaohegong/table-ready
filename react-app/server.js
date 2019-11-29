@@ -26,6 +26,23 @@ app.get('/', (req, res) => {
   res.send('Hello World');
 });
 
+
+app.post("/deleteinvi/:id", (req, res) => {
+  User.findByIdAndUpdate(req.params.id, {
+    restaurantInvitation: req.body.new_array
+  }
+    ).then(user => res.send(user)).catch(error => res.send(error))
+})
+
+app.post("/acceptinvi/:id", (req, res) => {
+  User.findByIdAndUpdate(req.params.id, {
+    restaurantInvitation: req.body.new_array,
+    workFor: req.body.rest_id
+  }).then(user => {
+    res.send(user)
+  }).catch(error => res.send(error))
+})
+
 app.get('/api/customers', (req, res) => {
   const customers = [
     { id: 1, firstName: 'John', lastName: 'Doe' },
@@ -35,6 +52,7 @@ app.get('/api/customers', (req, res) => {
 
   res.json(customers);
 });
+
 
 app.get("/restinfo/:id", (req, res) => {
   const employee_id = req.params.id
@@ -52,8 +70,7 @@ app.get("/restinfo/:id", (req, res) => {
 
 })
 
-
-app.post("/user/signup", (req, res) => {
+app.post('/user/signup', (req, res) => {
   log(req.body);
   const user = new User({
     accountType: req.body.accountType,

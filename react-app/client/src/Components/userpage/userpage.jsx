@@ -27,67 +27,52 @@ class Userpage extends React.Component{
     console.log(this.props)
      axios.get(`/restinfo/${this.props.match.params.id}`).then(
             res => {
-                console.log(res) 
                 this.setState({invitations: res.data})
             }
         )
     }
 
-    handleStateChange(state) {
-        this.setState({ menuOpen: state.isOpen })
+    deleteinvitation = (index) => {
+        const tobedeleted = this.state.invitations[index]
+        axios.post(`/deleteinvi/${this.props.match.params.id}`, {
+            new_array: this.state.invitations.filter(element => element != tobedeleted )
+        }).then(res => {
+            console.log(res)
+        }
+        ).catch(error => console.log(error))
     }
-    statopen = () => {
-        this.setState(state => ({statOpen:!state.statOpen}))
+
+    approveinvitation = (index) => {
+        const approved = this.state.invitations[index]
+        axios.post(`/acceptinvi/${this.props.match.params.id}`, {
+            new_array: [],
+            rest_id: approved
+        }).then(res => console.log(res)).catch(error => console.log(error))
     }
-    expand = () => {
-        this.setState(state => ({ menuOpen: !state.menuOpen }))
-    }
+
     render(){
-        return null
-        //     request_cards = this.state.roommate_list.map((roommate, index) => (
-
-            
-        //         <Col md="3" key={index} className="request_col">        
-        //             <Card className="request_card">
-        //                 <p>ID: {roommate.id}</p><br></br>
-        //                 <Card.Body>
-        //                     <Card.Text>Name: {roommate.name}</Card.Text>
-        //                     <Card.Text>Rating: {roommate.rating}</Card.Text>
-        //                     <Card.Text><Link to={roommate.url}>Link</Link></Card.Text>
-        //                     <Button variant="danger" onClick={()=>{
-        //                             this.state.roommate_list[index].status = "reject"
-        //                             this.setState({
-        //                                 roommate_list: this.state.roommate_list.filter(i => i.status == "pending")     
-        //                             })
-        //                             console.log(this.state.roommate_list)
-        //                         }}>Reject</Button>
-        //                     <Button className="float-right" variant="success" onClick={()=>{
-        //                             this.state.roommate_list[index].status = "approve"
-        //                             this.setState({
-        //                                 roommate_list: this.state.roommate_list.filter(i => i.status == "pending")     
-        //                             })
-        //                         }}>Approve</Button>
-        //                 </Card.Body>
-        //             </Card>
-        //         </Col>
-        //     ))
-        // return(
-        //     <div>
-        //         <div id="pagewrap">
-        //         <span className="content">
-        //             <div className="header">
-        //                 <h2 id="header_text">Dash Board</h2>
-        //             </div>
-        //             <h4 className="sub_header">{this.state.request_type} Requests</h4>
-        //             <Row>
-        //                 {request_cards}
-        //             </Row>
-        //         </span>
-
-
-        //     </div>
-        //     </div>
-        //)
+        {
+            return(
+                this.state.invitations.map((item,index) => {
+                    <Col md="3" key={index} className="request_col">        
+                        <Card className="request_card">
+                            <Card.Header>ID: {item._id}</Card.Header>
+                            <Card.Body>
+                                <Card.Text>Name: {item.name}</Card.Text>
+                                <Card.Text>Rating: {item.rating}</Card.Text>
+                                <Card.Text>Phone Number: {item.phoneNumber}</Card.Text>
+                                <Button variant="danger" onClick={(index)=>{
+                                        this.deleteinvitation(index)
+                                    }}>Reject</Button>
+                                <Button className="float-right" variant="success" onClick={(index)=>{
+                                        this.approveinvitation(index)
+                                    }}>Approve</Button>
+                            </Card.Body>
+                        </Card>
+                    </Col>
+                })
+            )
+        }
     }
 }
 
