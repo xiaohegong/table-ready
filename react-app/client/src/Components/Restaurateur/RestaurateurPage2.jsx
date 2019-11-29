@@ -81,7 +81,8 @@ class RestaurateurPage2 extends Component {
   render() {
     console.log('Restaurant render');
 
-    if (this.props.auth && this.state.info) {
+    if (this.props.isAuthenticated !== null && this.state.info) {
+      console.log("F",this.props.isAuthenticated,this.state.info.owner)
       if (!this.props.isAuthenticated) {
         console.log(
           'redirecting to signin since not authenticated in RestaurateurPage'
