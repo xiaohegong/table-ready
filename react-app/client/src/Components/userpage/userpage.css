@@ -1,0 +1,49 @@
+.header{
+    position: relative;
+    padding-top:1.5%;
+    padding-bottom:1.5%;    
+    left: 1%;
+    border-bottom: 2px solid grey;
+}
+
+.request_card{
+    height: 90%;
+    width: 90%;
+    margin-top: 50px;
+}
+#actual-nav{
+    margin-left:40% !important;
+}
+.content{
+    position: relative;
+    width:90%;
+    left: 5.5%;
+    top: 12px;
+    display: inline-block;
+}
+.navb{
+    width:15%;
+}
+#header_text {
+    position: relative;
+}
+.bm-burger-button{
+    left: 20px !important;
+}
+.bm-menu-wrap{
+    width: 200px;
+}
+.request_col{
+    margin-top: 5%;
+}
+.sub_header{
+    position: relative;
+    top: 30px;
+    left: 1%;
+}
+.float-right{
+    float:right;
+}
+.side_button{
+    margin-bottom: 30%;
+}

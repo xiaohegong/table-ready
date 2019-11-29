@@ -7,6 +7,8 @@ const config = require('config');
 const { isAuth, isSuperAdmin } = require('../middleware/auth');
 const { ObjectID } = require('mongodb');
 const Restaurant = require('../models/restaurant');
+const Waitlist = require('../models/waitlist')
+const Table = require('../models/table')
 
 router.get('/test', (req, res) => {
   res.send('now on restaurants route');
