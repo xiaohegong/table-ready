@@ -59,7 +59,6 @@ class Admin extends Component {
     };
 
     render() {
-        log(this.props);
         if (!this.props.isAuthenticated) {
             console.log(
                 'redirecting to signin since not authenticated in admin page'

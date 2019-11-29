@@ -67,7 +67,12 @@
     }
 
     .manage {
-      margin-left: 15%;
+      margin-left: 3%;
+      .menu{
+        margin-left: 8%;
+        float: left;
+        max-width: 25%;
+      }
 
       .active {
         background-color: #6c757d;
