@@ -128,6 +128,7 @@ class Employees extends Component {
                 name={employee.username}
                 id={employee._id}
                 telephone={employee.tel}
+                email = {employee.email}
                 deleteEmployee={this.deleteEmployee}
               />
             );

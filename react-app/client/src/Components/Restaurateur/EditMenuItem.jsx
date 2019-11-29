@@ -34,7 +34,6 @@ class EditMenuItem extends Component {
       )
       .then(
         response => {
-          console.log("RESULT",response);
           this.setState({ redirect: true });
 
         },
