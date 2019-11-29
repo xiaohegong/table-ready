@@ -139,8 +139,8 @@ class RestaurateurPage extends Component {
                     {this.state.restaurants.length === 0 ? (
                       <React.Fragment>
                         <br />
-                        <p>You don't have any restaurant.</p>
-                        <p>Please click Add New Button to add Restaurant</p>
+                        <p>You don't have any restaurant yet.</p>
+                        <p>Please click Add New Button to add a restaurant.</p>
                       </React.Fragment>
                     ) : null}
                     {this.state.restaurants.map(restaurant => (

@@ -67,7 +67,7 @@ class Manage extends Component {
                             </div>
                         </div>
 
-                        <div className='col-sm-4'>
+                        <div className='col-sm-4 menu'>
                             <ul className="list-group list-all">
                                 <li className="list-group-item list-content active"
                                     onClick={this.manageUsers}>Users
