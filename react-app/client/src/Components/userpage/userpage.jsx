@@ -90,5 +90,12 @@ class Userpage extends React.Component{
         //)
     }
 }
+const mapStateToProps = state => ({
+    isAuthenticated: state.auth.isAuthenticated,
+    error: state.error,
+    current_user: state.auth.user,
+    auth: state.auth
+});
+  
+export default connect(mapStateToProps)(withRouter(Userpage));
 
-export default withRouter(Userpage)

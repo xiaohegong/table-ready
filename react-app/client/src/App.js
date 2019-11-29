@@ -49,25 +49,21 @@ class App extends React.Component {
             <Route exact path="/dashboard" render={() => <Dashboard />} />
             <Route exact path="/admin/:id" render={() => <Admin />} />
             <Route exact path="/employee/:id" render={() => <Employee />} />
-
-          <Route
-            exact
-            path="/addNewMenuItem"
-            render={() => (
-              <AddNewMenuItem cookies={{ cookies, setCookie, removeCookie }} />
-            )}
-          />
-          <Route
-            exact
-            path="/addNewRestaurant"
-            render={() => (
-              <NewRestaurant cookies={{ cookies, setCookie, removeCookie }} />
-            )}
-          />
+            <Route
+              exact
+              path="/addNewMenuItem"
+              render={() => <AddNewMenuItem />}
+            />
+            <Route exact path="/editMenuItem" render={() => <EditMenuItem />} />
+            <Route
+              exact
+              path="/addNewRestaurant"
+              render={() => <NewRestaurant />}
+            />
           <Route
             exact
             path = "/userpage/:id"
-            render = {() => (<Userpage cookies = {{ cookies, setCookie, removeCookie }} />
+            render = {() => (<Userpage />
             )}
           />
         </Switch>
