@@ -21,7 +21,6 @@ import { Provider } from 'react-redux';
 import store from './store';
 import { loadUser } from './actions/authActions';
 import EditMenuItem from './Components/Restaurateur/EditMenuItem';
-import ImageUpload from './Components/ImageUpload'
 class App extends React.Component {
   state = {};
   componentDidMount() {
@@ -61,22 +60,23 @@ class App extends React.Component {
               path="/addNewRestaurant"
               render={() => <NewRestaurant />}
             />
-          <Route
-            exact
-            path = "/userpage/:id"
-            render = {() => (<Userpage />
-            )}
-          />
             <Route
               exact
-              path="/imageUpload"
-              render={() => <ImageUpload />}
+              path="/userpage/:id"
+              render={() => (<Userpage />
+              )}
+            />
+            <Route
+              path="/*"
+              render={() => (<NotFound />
+              )}
             />
           </Switch>
+
         </BrowserRouter>
       </Provider>
-  );
-            }
+    );
+  }
 }
 
 export default App;
