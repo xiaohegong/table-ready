@@ -69,7 +69,7 @@ class Manage extends Component {
 
                         <div className='col-sm-4'>
                             <ul className="list-group list-all">
-                                <li className="list-group-item list-content active"
+                                <li id="manageUsers" className="list-group-item list-content active"
                                     onClick={this.manageUsers}>Users
                                 </li>
                                 <li className="list-group-item list-content"
