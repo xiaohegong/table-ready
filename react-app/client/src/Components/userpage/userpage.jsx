@@ -29,7 +29,8 @@ class Userpage extends React.Component {
         this.state = {
             invitations: [],
             approved: false,
-            rest_obj: null
+            rest_obj: null,
+            current_user: null
         };
     }
 
@@ -40,6 +41,23 @@ class Userpage extends React.Component {
                     this.setState({invitations: res.data});
                 }
             )
+        axios.get(`/api/users/get/${this.props.match.params.id}`)
+            .then(res => {
+                this.state.current_user = res.data[0]
+                console.log(this.state.current_user)
+            })
+            .then(() => {
+                if(this.state.current_user.workFor != null){
+                    axios.post("/api/restaurants/findRestaurant", {_id: this.state.current_user.workFor})
+                        .then(res => {
+                            this.setState({
+                                rest_obj : res.data[1][0]
+                            })
+                        })
+                }
+
+            })
+        
     }
 
     deleteInvitation = (index) => {
@@ -107,12 +125,28 @@ class Userpage extends React.Component {
         )
     }
     render_restaurant = () => {
+        console.log(this.state.rest_obj)
         return (
-            <div>
-                <Link to={`/employee/${this.props.match.params.id}`}>
-                    <Button>To my Restaruant</Button>
-                </Link>
-                
+                <div className="restaurant-list-item" style={{width: '800px'}}>
+                    <Link to={`/employee/${this.props.match.params.id}`}>
+                    <button
+                    type="button"
+                    className="list-group-item list-group-item-action"
+                    >
+                        <div className="row">
+                            <div className="restaurant-info col-md-8">
+                                <h4>{this.state.rest_obj.name}</h4>
+                                <p>Address: {this.state.rest_obj.location}</p>
+                                <p>Telephone: {this.state.rest_obj.phoneNumber}</p>
+                            </div>
+                            <img
+                            src={this.state.rest_obj.image}
+                            alt=""
+                            className="img-thumbnail rounded float-right col-md-4"
+                            />
+                        </div>
+                    </button>
+                    </Link>
             </div>
         )
     }
@@ -123,27 +157,27 @@ class Userpage extends React.Component {
           <div className="container">
             <div className="row">
               <div className="col-md-3 info">
-                <h2 className="">{this.props.current_user.username}</h2>
+                <h2 className="">{this.state.current_user.username}</h2>
                 <div>
-                  <AvatarModal image={this.props.current_user.image} />
+                  <AvatarModal image={this.state.current_user.image} />
                 </div>
                 <ul className="list-group">
                   <li className="list-group-item">
                     <strong>Telephone: </strong>
-                    {this.props.current_user.tel}
+                    {this.state.current_user.tel}
                   </li>
                   <li className="list-group-item">
                     <strong>Email: </strong>
-                    {this.props.current_user.email}
+                    {this.state.current_user.email}
                   </li>
                   <li className="list-group-item">
-                    <RestaurateurSettingModal user={this.props.current_user} />
+                    <RestaurateurSettingModal user={this.state.current_user} />
                   </li>
                 </ul>
               </div>
             
             <div>
-                {this.props.current_user.workFor === "" ? this.render_invitations() : this.render_restaurant()}
+                {this.state.current_user.workFor === "" ? this.render_invitations() : this.render_restaurant()}
             </div>
               
               
@@ -155,6 +189,7 @@ class Userpage extends React.Component {
     }
 
     render() {
+        if(this.state.current_user != null && this.state.rest_obj != null){
             if (this.state.approved) {
                 return <Redirect to={`/employee/${this.props.match.params.id}`}/>;
             }
@@ -169,6 +204,11 @@ class Userpage extends React.Component {
 
                 );
             }
+        }
+        else{
+            return(null)
+        }
+
     }
 }
 const mapStateToProps = state => ({
