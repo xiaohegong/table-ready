@@ -12,7 +12,7 @@
 //
 // const setUp = (initialState = {}) => {
 //   const store = testStore(initialState);
-//   const wrapper = shallow(<Admin store={store}/>).childAt(0).dive();
+//   const wrapper = shallow(<Admin.WrappedComponent store={store}/>);
 //   console.log(wrapper.instance());
 //   return wrapper;
 // };
@@ -29,6 +29,7 @@
 //   describe("chooseManage", () => {
 //     it("should call setState", () => {
 //       const instance = wrapper.instance();
+//       console.log(instance);
 //       const outcome = instance.chooseManage({page: "manage"});
 //       expect(wrapper.state().page).toEqual('manage');
 //       const component = wrapper.find(wrapper, 'appComponent');
