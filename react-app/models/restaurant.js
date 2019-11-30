@@ -36,7 +36,7 @@ const RestaurantSchema = new Schema({
     required: true,
     default: 0
   },
-  Cuisine: {
+  cuisine: {
     type: String,
     required: false,
     default: ""
