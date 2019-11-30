@@ -4,14 +4,13 @@ const chaiHttp = require("chai-http");
 const mongoose = require("mongoose");
 const url = process.env.MONGODB_URI || 'mongodb://localhost:27017/TableReadyTest';
 const User = require("../models/user.js");
-// const Restaurant = require("../models/restaurant.js");
 const {expect} = chai;
 chai.use(chaiHttp);
 
 describe("Users", () => {
 
   before(function (done) {
-    mongoose.connect(url, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true})
+    mongoose.connect(url, {useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true})
       .then(() => done())
       .catch((error) => done(error));
   });
@@ -24,7 +23,8 @@ describe("Users", () => {
 
   describe("POST ./users", () => {
     before(done => {
-      User.deleteMany({}, () => {});
+      User.deleteMany({}, () => {
+      });
       //create dummy user
       const user = new User({
         accountType: "Admin",
@@ -34,8 +34,7 @@ describe("Users", () => {
         tel: "6478828888",
         workFor: "abc123"
       });
-      user.save();
-      done()
+      user.save().then(() => done());
     });
 
     it("successfully create a new user", (done) => {
@@ -67,7 +66,9 @@ describe("Users", () => {
         expect(res).to.have.status(400);
         expect(res.body.message).to.equals('User already exists');
         done()
-      }).catch((err) => {done(err)});
+      }).catch((err) => {
+        done(err)
+      });
 
     });
 
@@ -83,7 +84,9 @@ describe("Users", () => {
         expect(res).to.have.status(400);
         expect(res.body.message).to.equals('Please enter all fields');
         done()
-      }).catch((err) => {done(err)});
+      }).catch((err) => {
+        done(err)
+      });
 
     });
 
@@ -96,7 +99,9 @@ describe("Users", () => {
         expect(res).to.have.status(200);
         expect(res.body.message).to.equals('Authenticated');
         done();
-      }).catch(err => {done(err)});
+      }).catch(err => {
+        done(err)
+      });
     });
 
     it("login as Bob without password field filled", (done) => {
@@ -105,9 +110,11 @@ describe("Users", () => {
         password: "",
       }).then((res) => {
         expect(res).to.have.status(400);
-        expect(res.body.message).to.equals( 'Please enter all fields' );
+        expect(res.body.message).to.equals('Please enter all fields');
         done();
-      }).catch(err => {done(err)});
+      }).catch(err => {
+        done(err)
+      });
     });
 
     it("login as Bob2 who is not in the database", (done) => {
@@ -117,9 +124,11 @@ describe("Users", () => {
       }).then((res) => {
         // console.log(res);
         expect(res).to.have.status(400);
-        expect(res.body.message).to.equals( "User doesn\'t exist");
+        expect(res.body.message).to.equals("User doesn\'t exist");
         done();
-      }).catch(err => {done(err)});
+      }).catch(err => {
+        done(err)
+      });
     });
 
     it("find employee by restaurant", (done) => {
@@ -130,7 +139,9 @@ describe("Users", () => {
         expect(res).to.have.status(200);
         expect(res.body).to.have.lengthOf(1);
         done();
-      }).catch(err => {done(err)});
+      }).catch(err => {
+        done(err)
+      });
     });
 
     it("find empty employee set", (done) => {
@@ -141,29 +152,34 @@ describe("Users", () => {
         expect(res).to.have.status(200);
         expect(res.body).to.have.lengthOf(0);
         done();
-      }).catch(err => {done(err)});
+      }).catch(err => {
+        done(err)
+      });
     });
 
     it("delete employee", (done) => {
-     User.find({username: "Mike"}).then(users => {
-       const user = users[0];
-       // console.log(user);
-       chai.request(app).post("/api/users/delete_employee").send({
-         user_id: user._id
-       }).then((res) => {
-         // console.log(res);
-         expect(res).to.have.status(200);
-         expect(res.body.workFor).to.equals("");
-         done();
-       }).catch(err => {done(err)});
-     });
+      User.find({username: "Mike"}).then(users => {
+        const user = users[0];
+        // console.log(user);
+        chai.request(app).post("/api/users/delete_employee").send({
+          user_id: user._id
+        }).then((res) => {
+          // console.log(res);
+          expect(res).to.have.status(200);
+          expect(res.body.workFor).to.equals("");
+          done();
+        }).catch(err => {
+          done(err)
+        });
+      });
     });
 
   });
 
   describe("Get ./users", () => {
     before(done => {
-      User.deleteMany({}, () => {});
+      User.deleteMany({}, () => {
+      });
       //create dummy user
       const user1 = new User({
         accountType: "Admin",
@@ -184,23 +200,23 @@ describe("Users", () => {
       });
 
       user1.save();
-      user2.save().then(()=>done());
+      user2.save().then(() => done());
     });
 
     it("get normal user info", (done) => {
       chai.request(app).post('/api/users/login').send({
-          username: "Mike",
-          password: "12345"
-        }).then((res) => {
-          expect(res).to.have.status(200);
-          chai.request(app).get("/api/users/auth").set('x-auth-token', res.body.token)
-            .then((res) => {
-              // console.log(res);
-              expect(res).to.have.status(200);
-              expect(res.body.username).to.equals("Mike");
-              done();
-            });
-        });
+        username: "Mike",
+        password: "12345"
+      }).then((res) => {
+        expect(res).to.have.status(200);
+        chai.request(app).get("/api/users/auth").set('x-auth-token', res.body.token)
+          .then((res) => {
+            // console.log(res);
+            expect(res).to.have.status(200);
+            expect(res.body.username).to.equals("Mike");
+            done();
+          });
+      });
     });
 
     describe("get specific test as super admin", () => {
@@ -219,7 +235,7 @@ describe("Users", () => {
           password: "12345"
         }).then((res) => {
           expect(res).to.have.status(200);
-          chai.request(app).get("/api/users/auth/"+ Mike_id).set('x-auth-token', res.body.token)
+          chai.request(app).get("/api/users/auth/" + Mike_id).set('x-auth-token', res.body.token)
             .then((response) => {
               expect(response).to.have.status(200);
               expect(response.body.username).to.equals("Mike");
@@ -245,7 +261,7 @@ describe("Users", () => {
           password: "12345"
         }).then((res) => {
           expect(res).to.have.status(200);
-          chai.request(app).get("/api/users/auth/"+ Juliet_id).set('x-auth-token', res.body.token)
+          chai.request(app).get("/api/users/auth/" + Juliet_id).set('x-auth-token', res.body.token)
             .then((response) => {
               // console.log(res);
               expect(response).to.have.status(401);
@@ -269,7 +285,8 @@ describe("Users", () => {
   describe("Delete ./users", () => {
     let Mike_id = "";
     before((done) => {
-      User.deleteMany({}, () => {});
+      User.deleteMany({}, () => {
+      });
       //create dummy user
       const user1 = new User({
         accountType: "Admin",
@@ -294,7 +311,7 @@ describe("Users", () => {
         chai.request(app).delete("/api/users/" + Mike_id)
           .then(res => {
             expect(res).to.have.status(200);
-            expect(res.body.message).to.equals('User '+ Mike_id + ' deleted.');
+            expect(res.body.message).to.equals('User ' + Mike_id + ' deleted.');
             done();
           })
       });
@@ -305,7 +322,7 @@ describe("Users", () => {
             // console.log(res.body);
             expect(res).to.have.status(400);
             expect(res.body).to.equals("Error: CastError: Cast to ObjectId failed " +
-                "for value \"random_id\" at path \"_id\" for model \"User\"");
+              "for value \"random_id\" at path \"_id\" for model \"User\"");
             done();
           })
       });
@@ -317,7 +334,8 @@ describe("Users", () => {
 
   describe("PATCH ./users", () => {
     before((done) => {
-      User.deleteMany({}, () => {});
+      User.deleteMany({}, () => {
+      });
       //create dummy user
       const user1 = new User({
         accountType: "Admin",
@@ -346,9 +364,9 @@ describe("Users", () => {
           old_password: "12345",
           new_password: "changed"
         }).then(res => {
-            expect(res).to.have.status(200);
-            expect(res.body.email).to.equals("changed@mail.com");
-            done()
+          expect(res).to.have.status(200);
+          expect(res.body.email).to.equals("changed@mail.com");
+          done()
         })
       });
 
@@ -368,19 +386,20 @@ describe("Users", () => {
       it("change avatar", (done) => {
         chai.request(app).patch("/api/users/change-avatar/" + Mike_id)
           .then(res => {
-          expect(res).to.have.status(200);
-          expect(res.text).to.equals('avatar updated');
-          done()
-        })
+            expect(res).to.have.status(200);
+            expect(res.text).to.equals('avatar updated');
+            done()
+          })
       });
 
     });
 
   });
 
-  describe("PUT ./users", () =>{
+  describe("PUT ./users", () => {
     before((done) => {
-      User.deleteMany({}, () => {});
+      User.deleteMany({}, () => {
+      });
       //create dummy user
       const user1 = new User({
         accountType: "Admin",
@@ -402,7 +421,7 @@ describe("Users", () => {
       });
 
       it("update changes", done => {
-        chai.request(app).put("/api/users/get/"+ Mike_id).then((res) => {
+        chai.request(app).put("/api/users/get/" + Mike_id).then((res) => {
           // console.log(res);
           expect(res).to.have.status(200);
           done()
