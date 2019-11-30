@@ -32,6 +32,7 @@ function isSuperAdmin(req, res, next) {
     if (!user) {
       res.status(404).send('User not found');
     }
+    // console.log(user);
     if (user.accountType === 'SuperAdmin') {
       req.isSuperAdmin = true;
     } else {
