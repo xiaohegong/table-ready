@@ -7,8 +7,9 @@ const config = require('config');
 const { isAuth, isSuperAdmin } = require('../middleware/auth');
 const { ObjectID } = require('mongodb');
 const Restaurant = require('../models/restaurant');
-const Waitlist = require('../models/waitlist')
-const Table = require('../models/table')
+const Table = require("../models/table");
+const Waitlist = require('../models/waitlist.js');
+const log = console.log;
 
 router.get('/test', (req, res) => {
   res.send('now on restaurants route');
@@ -76,15 +77,43 @@ router.post('/newRestaurant', (req, res) => {
           log(err);
         });
       }
-      res.send('restaurant ' + restaurant.name + ' saved to database');
+      // res.send('restaurant ' + restaurant.name + ' saved to database');
     })
     .catch(err => {
-      log(err);
-      res.send({ code: 404, err });
+      // log(err);
+      res.status(404).send({  err });
     });
 });
 
+router.post('/newTable', (req, res) => {
+  const table = new Table({
+    rest_id: req.body.restaurant_id
+  });
+  table
+    .save()
+    .then(table => {
+      // log('NEW TABLE CREATED');
+      res.send(table);
+    })
+    .catch(err => {
+      // log(err);
+      res.status(400).send({  err });
+    });
+});
 
+router.post('/updateTable', (req, res) => {
+  Table.findByIdAndUpdate(req.body._id, {
+    table_capacity: req.body.tableNum,
+    name: req.body.name
+  }, {new: true})
+    .then(table => {
+      res.send(table);
+    })
+    .catch(err => {
+      log(err);
+      res.status(400).send({ err });
+    });
+});
 
 router.post('/updateRestaurant', (req, res) => {
   Restaurant.findByIdAndUpdate(req.body._id, {
@@ -99,18 +128,18 @@ router.post('/updateRestaurant', (req, res) => {
     })
     .catch(err => {
       log(err);
-      res.send({ code: 404, err });
+      res.status(404).send({ err });
     });
 });
 
 router.post('/findRestaurantByOwner', (req, res) => {
   Restaurant.find({ owner: req.body.owner }).then(
     restaurant => {
-      console.log(restaurant);
+      // console.log(restaurant);
       res.send(restaurant);
     },
     error => {
-      res.send({ code: 404, error });
+      res.status(404).send({ error });
     }
   );
 });
@@ -123,7 +152,7 @@ router.post('/updateDressCode', (req, res) => {
       res.send(user);
     },
     error => {
-      res.send({ code: 404, error });
+      res.status(404).send({  error });
     }
   );
 });
@@ -146,7 +175,7 @@ router.post('/findRestaurant', (req, res) => {
         .catch(error => console.log(error));
     },
     error => {
-      res.send({ code: 404, error });
+      res.status(400).send({  error });
     }
   );
 });
@@ -154,12 +183,12 @@ router.post('/findRestaurant', (req, res) => {
 router.post('/findRestaurantById', (req, res) => {
   Restaurant.findById(req.body._id)
     .then(restaurant => {
-      console.log(restaurant);
+      // console.log(restaurant);
       res.send(restaurant);
     })
     .catch(err => {
       if (err) {
-        res.send({ code: 404, err });
+        res.status(404).send({ err });
       }
     });
 });

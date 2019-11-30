@@ -10,12 +10,23 @@ const log = console.log;
 
 // register
 
-router.post('/', (req, res) => {
-  console.log(req.body);
+noDuplicate = (req, res, next) =>{
+  const username = req.body.username;
+  User.findOne({ username }).then(user => {
+    if (user) return res.status(400).json({ message: 'User already exists' });
+    else{
+      next();
+    }
+  }).catch(() => {});
+};
+
+router.post('/', noDuplicate, (req, res) => {
+  // console.log(req.body);
   const { accountType, username, password, email, tel } = req.body;
   if (!accountType || !username || !email || !password || !tel) {
     return res.status(400).json({ message: 'Please enter all fields' });
   }
+
   if (password.length < 4) {
     return res
       .status(400)
@@ -47,7 +58,7 @@ router.post('/', (req, res) => {
       );
     })
     .catch(err => {
-      console.log(err.message);
+      // console.log(err.message);
       res.status(400).json({ message: err.message });
     });
 });
@@ -56,14 +67,15 @@ router.post('/', (req, res) => {
 router.post('/login', (req, res) => {
   const hour = 3600;
   const { username, password } = req.body;
-  console.log(username);
-  console.log(password);
+  // console.log(username);
+  // console.log(password);
   if (!username || !password) {
     return res.status(400).json({ message: 'Please enter all fields' });
   }
 
   User.findByUsernamePassword(username, password)
     .then(user => {
+      // console.log(user);
       if (!user) {
         return res
           .status(400)
@@ -78,10 +90,10 @@ router.post('/login', (req, res) => {
           (err, token) => {
             if (err) throw err;
             user = user.toObject();
-            console.log('user: ', user);
+            // console.log('user: ', user);
 
             delete user.password; // prevent sending hashed password to frontend
-            console.log('user: ', user);
+            // console.log('user: ', user);
             res.json({
               token,
               user,
@@ -154,7 +166,7 @@ router.delete('/:id', (req, res) => {
 
 // return user info without password, given it's logged in and token is provided and not expired
 router.get('/auth', isAuth, (req, res) => {
-  console.log('debug: \n\n', req.user, '\n\n\n\n\n');
+  // console.log('debug: \n\n', req.user, '\n\n\n\n\n');
   User.findById(req.user.id)
     .select('-password')
     .then(user => {
@@ -163,20 +175,20 @@ router.get('/auth', isAuth, (req, res) => {
 });
 
 router.get('/auth/:id', isAuth, isSuperAdmin, (req, res) => {
-  console.log('debug: \n\n', req.user, '\n\n\n\n\n');
-  if (!req.user.isSuperAdmin && req.user.id !== req.params.id) {
+  // console.log('debug: \n\n', req.user, '\n\n\n\n\n');
+  if (!req.isSuperAdmin && req.user.id !== req.params.id) {
     res.status(401).send('NOT AUTHORIZED!!');
   }
   User.findById(req.params.id)
     .select('-password')
     .then(user => {
       res.json(user);
-    });
+    }).catch(() => {});
 });
 
 router.post('/findEmployeesByRestaurant', (req, res) => {
   const restaurant_id = req.body.restaurant_id;
-  console.log('restaurant_id:   --- ', restaurant_id);
+  // console.log('restaurant_id:   --- ', restaurant_id);
   User.find({ workFor: restaurant_id }).then(
     users => {
       res.send(users);
@@ -192,13 +204,13 @@ router.post('/delete_employee', (req, res) => {
   // const restaurant_id = req.body.restaurant_id;
   const user_id = req.body.user_id;
   if (user_id) {
-    User.findByIdAndUpdate(user_id, { workFor: '' }, (err, user) => {
+    User.findByIdAndUpdate(user_id, { workFor: '' },{new: true}, (err, user) => {
       if (err) {
         console.log(err);
         res.send(err);
       }
-      console.log('user deleted from restaurant');
-      console.log(user);
+      // console.log('user deleted from restaurant');
+      // console.log(user);
       res.send(user);
     });
   }
@@ -256,7 +268,7 @@ router.put('/get/:id', (req, res) => {
         return res.status(500).send(err);
       }
 
-      console.log(todo);
+      // console.log(todo);
       return res.send(todo);
     }
   );
