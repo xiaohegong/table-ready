@@ -47,7 +47,7 @@ class Userpage extends React.Component {
                 console.log(this.state.current_user)
             })
             .then(() => {
-                if(this.state.current_user.workFor != null){
+                if(this.state.current_user.workFor != ""){
                     axios.post("/api/restaurants/findRestaurant", {_id: this.state.current_user.workFor})
                         .then(res => {
                             this.setState({
@@ -125,8 +125,8 @@ class Userpage extends React.Component {
         )
     }
     render_restaurant = () => {
-        console.log(this.state.rest_obj)
-        return (
+        if(this.state.rest_obj != null){
+            return (
                 <div className="restaurant-list-item" style={{width: '800px'}}>
                     <Link to={`/employee/${this.props.match.params.id}`}>
                     <button
@@ -149,6 +149,8 @@ class Userpage extends React.Component {
                     </Link>
             </div>
         )
+        }
+        
     }
 
     new_render_page = () => {
@@ -189,7 +191,7 @@ class Userpage extends React.Component {
     }
 
     render() {
-        if(this.state.current_user != null && this.state.rest_obj != null){
+        if(this.state.current_user != null){
             if (this.state.approved) {
                 return <Redirect to={`/employee/${this.props.match.params.id}`}/>;
             }
