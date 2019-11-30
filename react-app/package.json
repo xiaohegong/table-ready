@@ -4,6 +4,7 @@
   "description": "This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).",
   "main": "server.js",
   "scripts": {
+    "test": "nyc --reporter=html --reporter=text mocha",
     "start": "node server.js",
     "heroku-postbuild": "cd client && npm install --only=dev && npm install && npm run build",
     "client": "cd client && npm start",
@@ -19,6 +20,8 @@
     "axios": "^0.19.0",
     "bcrypt": "^3.0.7",
     "body-parser": "^1.19.0",
+    "chai": "^4.2.0",
+    "chai-http": "^4.3.0",
     "cloudinary": "^1.17.0",
     "config": "^3.2.4",
     "connect-mongo": "^2.0.1",
@@ -29,9 +32,11 @@
     "install": "^0.13.0",
     "json-loader": "^0.5.7",
     "jsonwebtoken": "^8.5.1",
+    "mocha": "^6.2.2",
     "mongodb": "^3.3.3",
     "mongoose": "^5.7.8",
     "multer": "^1.4.2",
+    "nyc": "^14.1.1",
     "passport": "^0.4.0",
     "popper.js": "^1.16.0",
     "query-string": "^6.8.3",
@@ -40,6 +45,7 @@
     "react-dom": "^16.12.0",
     "reactstrap": "^8.1.1",
     "redux-thunk": "^2.3.0",
+    "sinon": "^7.5.0",
     "typescript": "^3.7.2"
   },
   "devDependencies": {
