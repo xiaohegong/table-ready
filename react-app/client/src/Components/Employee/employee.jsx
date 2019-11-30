@@ -21,6 +21,8 @@ import Popover from 'react-bootstrap/Popover';
 import {Redirect} from 'react-router-dom';
 import Form from "react-bootstrap/Form";
 import {connect} from "react-redux";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCheck,faBan } from '@fortawesome/free-solid-svg-icons'
 
 const dayjs = require('dayjs');
 // fake data generator
@@ -748,6 +750,8 @@ class Employee extends Component {
                         onStateChange={state => this.handleStateChange(state)}
                         handleMousemove={() => handleMousemove(this)}
                     >
+                        <h2 style={{display: 'inline'}}>Manage Guests Seating</h2>
+                        <p>Drag and drop groups of guests to tables of appropriate capacity!</p>
               <span id="reservation_container" onMouseDown={this.removefocus}>
                 {draggables.map((item, index) => (
                     //Fix bug
@@ -809,6 +813,7 @@ class Employee extends Component {
                     </Menu>
                     <div id="page-wrap">
                         <Navbar profile_link={`/userpage/${this.props.match.params.id}`}/>
+                        <h5>Welcome! Click <FontAwesomeIcon icon={faCheck} /> to sit a group of guests and <FontAwesomeIcon icon={faBan} /> to remove guests.</h5>
                         <div id="cal" style={{height: '80px'}}>
                             <DatePicker onChange={
                                 (value) => {
