@@ -22,13 +22,14 @@ describe("AddNewMenuItem", () => {
 
   it("num of elements", () => {
     const myMock = jest.fn();
-    const wrapper = shallow(<AddNewMenuItem />);
+    const fake = {
+      state:{ id:"13" }
+    };
+    const wrapper = shallow(<AddNewMenuItem location={fake}/>).dive();
     const image = wrapper.find('button').length;
     expect(image).toEqual(1);
     const text = wrapper.find('input').length;
     expect(text).toEqual(4);
-
-
   });
 
 });
