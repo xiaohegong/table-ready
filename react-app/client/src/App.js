@@ -7,7 +7,6 @@ import SignIn from "./Components/SignIn&Up/signIn";
 import SignUp from "./Components/SignIn&Up/signup";
 import RestaurateurPage from "./Components/Restaurateur/RestaurateurPage";
 import RestaurateurPage2 from "./Components/Restaurateur/RestaurateurPage2";
-import Dashboard from "./Components/Restaurateur/Dashboard";
 import Admin from "./Components/Admin/Admin";
 import Employee from "./Components/Employee/employee";
 import "./App.scss";
@@ -46,7 +45,7 @@ class App extends React.Component {
               path="/restaurateur2/:id"
               component={() => <RestaurateurPage2 />}
             />
-            <Route exact path="/dashboard" render={() => <Dashboard />} />
+
             <Route exact path="/admin/:id" render={() => <Admin />} />
             <Route exact path="/employee/:id" render={() => <Employee />} />
             <Route
