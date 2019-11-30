@@ -44,6 +44,9 @@ class Userpage extends React.Component {
         axios.get(`/api/users/get/${this.props.match.params.id}`)
             .then(res => {
                 this.state.current_user = res.data[0]
+                this.setState({
+                    current_user: res.data[0]
+                })
                 console.log(this.state.current_user)
             })
             .then(() => {
@@ -61,11 +64,16 @@ class Userpage extends React.Component {
     }
 
     deleteInvitation = (index) => {
+        console.log(index)
         const tobedeleted = this.state.invitations[index];
+        console.log(tobedeleted)
         axios.post(`/deleteinvi/${this.props.match.params.id}`, {
             new_array: this.state.invitations.filter(element => element !== tobedeleted)
         }).then(res => {
                 console.log(res);
+                this.setState({
+                    invitations: this.state.invitations.filter(element => element !== tobedeleted)
+                })
             }
         ).catch(error => console.log(error));
     };
@@ -92,7 +100,7 @@ class Userpage extends React.Component {
                             <Card.Text>Name: {item.name}</Card.Text>
                             <Card.Text>Rating: {item.rating}</Card.Text>
                             <Card.Text>Phone Number: {item.phoneNumber}</Card.Text>
-                            <Button variant="danger" onClick={(index) => {
+                            <Button variant="danger" onClick={(e) => {
                                 this.deleteInvitation(index);
                             }}>Reject</Button>
                             <Button className="float-right" variant="success" onClick={(e) => {
@@ -107,7 +115,7 @@ class Userpage extends React.Component {
     }
     render_invitations = () => {
         return (
-            <div className="col-md-9">
+            <Col md="6">
                 <h2 style={{ display: 'inline' }}>Your Invitations</h2>
                 <div className="restaurants-display">
                     {this.state.invitations.length === 0 ? (
@@ -120,7 +128,7 @@ class Userpage extends React.Component {
                     </div>
                 ) : this.render_page()}
                   </div>
-                </div>
+            </Col>
             
         )
     }
@@ -178,9 +186,7 @@ class Userpage extends React.Component {
                 </ul>
               </div>
             
-            <div>
                 {this.state.current_user.workFor === "" ? this.render_invitations() : this.render_restaurant()}
-            </div>
               
               
               </div>
