@@ -25,6 +25,9 @@ class Manage extends Component {
         this.setState({page: 'rest'});
         this.setActive(e);
     };
+    a = (e) =>{
+        this.manageRestaurant(e)
+    }
 
     addSysAdmin = (e) => {
         this.setState({page: 'addAdmin'});
@@ -67,13 +70,13 @@ class Manage extends Component {
                             </div>
                         </div>
 
-                        <div className='col-sm-4'>
+                        <div className='col-sm-4 menu'>
                             <ul className="list-group list-all">
-                                <li className="list-group-item list-content active"
+                                <li id="manageUsers" className="list-group-item list-content active"
                                     onClick={this.manageUsers}>Users
                                 </li>
-                                <li className="list-group-item list-content"
-                                    onClick={this.manageRestaurant}>Restaurants
+                                <li id="manageRes" className="list-group-item list-content"
+                                    onClick={this.a}>Restaurants
                                 </li>
                                 <li className="list-group-item list-content"
                                     onClick={this.addSysAdmin}>Add New Super Admin

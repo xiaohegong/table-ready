@@ -13,15 +13,13 @@ function RestRow(props) {
     const restLink = `/restaurateur2/${rest._id}`;
     const ownerLink = `/restaurateur/${rest.owner}`;
 
-    log(rest);
-
     return (
         <tr key={rest._id.toString()}>
             <th scope="row"><Link to={restLink}>{rest.name}</Link></th>
             <td><Link to={ownerLink}>{rest.owner_name}</Link></td>
-            {/*<td>{rest.registered}</td>*/}
-            {/*<td>{rest.owner}</td>*/}
             <td>{rest.location}</td>
+            <td>{rest.phoneNumber}</td>
+            {/*<td>{rest.operationHour}</td>*/}
             <td><Button outline color="danger" size="sm" onClick={() => {
                 del(rest._id);
             }}>Delete
@@ -114,10 +112,8 @@ class Restaurants extends Component {
         }
 
         return res.map((rest, index) => {
-                log(rest);
                 log(this.state.users);
                 let owner = this.state.users.find((user) => {
-                    log(user._id);
                     return user._id === rest.owner;
                 });
 
@@ -168,8 +164,8 @@ class Restaurants extends Component {
                                             <th scope="col">Name</th>
                                             <th scope="col">Owner</th>
                                             <th scope="col">Location</th>
-                                            {/*<th scope="col">registered</th>*/}
-                                            {/*<th scope="col">Role</th>*/}
+                                            <th scope="col">Contact</th>
+                                            {/*<th scope="col">Hours</th>*/}
                                             <th scope="col">Action</th>
                                         </tr>
                                         </thead>

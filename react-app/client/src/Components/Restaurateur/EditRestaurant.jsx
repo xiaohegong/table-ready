@@ -127,7 +127,7 @@ class EditRestaurant extends Component {
               </div>
 
               <button
-                type="submit"
+                type="1submit"
                 className="btn btn-outline-primary float-right"
               >
                 Update Restaurant Info

@@ -9,7 +9,6 @@ const { ObjectID } = require('mongodb');
 const Restaurant = require('../models/restaurant');
 const Table = require("../models/table");
 const Waitlist = require('../models/waitlist.js');
-
 const log = console.log;
 
 router.get('/test', (req, res) => {

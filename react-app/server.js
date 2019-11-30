@@ -10,6 +10,7 @@ const User = require('./models/user.js');
 const Restaurant = require('./models/restaurant.js');
 const MenuItem = require('./models/MenuItem.js');
 const Waitlist = require('./models/waitlist.js');
+const Table = require('./models/table')
 const path = require('path');
 const config = require('config');
 const cloudinary = require('cloudinary').v2;
@@ -48,6 +49,30 @@ app.post('/upload', (req, res) => {
 });
 
 
+app.post("/deleteinvi/:id", (req, res) => {
+  User.findByIdAndUpdate(req.params.id, {
+    restaurantInvitation: req.body.new_array
+  }
+    ).then(user => res.send(user)).catch(error => res.send(error))
+})
+
+app.post("/acceptinvi/:id", (req, res) => {
+  User.findByIdAndUpdate(req.params.id, {
+    restaurantInvitation: req.body.new_array,
+    workFor: req.body.rest_id
+  }).then(user => {
+    res.send(user)
+  }).catch(error => res.send(error))
+})
+
+app.get('/api/customers', (req, res) => {
+  const customers = [
+    { id: 1, firstName: 'John', lastName: 'Doe' },
+    { id: 2, firstName: 'Brad', lastName: 'Traversy' },
+    { id: 3, firstName: 'Mary', lastName: 'Swanson' }
+  ];
+})
+
 app.post('/api/upload', (req, res) => {
   console.log('change avatar route reached');
   const public_id = req.body.public_id;
@@ -66,6 +91,33 @@ app.post('/api/upload', (req, res) => {
     .catch(err => res.status(400).json(err));
 });
 
+
+app.get("/restinfo/:id", (req, res) => {
+  const employee_id = req.params.id
+  const send_back = res
+  User.findById(employee_id).then(res => {
+    console.log(res.username)
+    const invitation_array = res.restaurantInvitation
+    Restaurant.find({
+      _id: {$in: invitation_array}
+    }).then(docs => {
+      console.log(docs)
+      send_back.send(docs)
+    }).catch(error => console.log(error))
+  }).catch(error => console.log(error))
+
+})
+
+app.post('/user/signup', (req, res) => {
+  log(req.body);
+  const user = new User({
+    accountType: req.body.accountType,
+    username: req.body.username,
+    password: req.body.password,
+    email: req.body.email,
+    tel: req.body.tel
+  });
+})
 
 app.post('/waitlist/CreateNewTable', (req, res) => {
   const table = new Table({
@@ -151,7 +203,7 @@ app.post('/restaurant/add_employee', (req, res) => {
   if (username && restaurant_id) {
     User.findOneAndUpdate(
       { username: username },
-      { workFor: restaurant_id }
+      { $addToSet: { restaurantInvitation: restaurant_id } }
       //{ $addToSet: { restaurantInvitation: restaurant_id } }
     ).then(user => {
       res.send(user);
@@ -248,6 +300,36 @@ app.delete('/api/removeWaitlist/:id', (req, res) => {
     })
     .catch(err => {
       res.status(400).json('Error: ' + err);
+    });
+});
+
+app.post('/table/newTable', (req, res) => {
+  const table = new Table({
+    rest_id: req.body.restaurant_id
+  });
+  table
+    .save()
+    .then(table => {
+      log('NEW TABLE CREATED');
+      res.send(table);
+    })
+    .catch(err => {
+      log(err);
+      res.send({ code: 400, err });
+    });
+});
+
+app.post('/table/updateTable', (req, res) => {
+  Table.findByIdAndUpdate(req.body._id, {
+    table_capacity: req.body.tableNum,
+    name: req.body.name
+  })
+    .then(table => {
+      res.send(table);
+    })
+    .catch(err => {
+      log(err);
+      res.send({ code: 400, err });
     });
 });
 

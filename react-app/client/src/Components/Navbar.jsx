@@ -8,14 +8,14 @@ import { logout } from '../actions/authActions';
 import PropTypes from 'prop-types';
 
 class Navbar extends React.Component {
-  state = {};
+  state = {}
   static propTypes = {
     logout: PropTypes.func.isRequired
   };
   componentDidMount() {
-    $(document).ready(function () {
+    $(document).ready(function() {
       // Get click event, assign button to var, and get values from that var
-      $('#theme-btn-group button').on('click', function () {
+      $('#theme-btn-group button').on('click', function() {
         const btn_clicked = $(this);
         btn_clicked
           .addClass('active')
@@ -128,23 +128,34 @@ class Navbar extends React.Component {
           {/* {this.getButton()} */}
           {this.props.isAuthenticated ? (
             <div>
+              <span className="welcome-message">
+                <strong>Welcome</strong>{' '}
+                <em>{this.props.current_user.username}</em>
+              </span>
               <button
                 className="btn btn-outline-danger btn-sm logout-btn"
                 onClick={this.props.logout}
               >
                 Logout
               </button>
+              <Link to={this.props.profile_link !== undefined ? this.props.profile_link : '/'}>
+                <img
+                  id="user-avatar"
+                  src={this.props.current_user.image}
+                  alt=""
+                />
+              </Link>
             </div>
           ) : (
-              <div className="btn-group">
-                <Link to="/SignIn">
-                  <button className="btn btn-primary btn-sm">Sign In</button>
-                </Link>
-                <Link to="/SignUp">
-                  <button className="btn btn-success btn-sm">Sign Up</button>
-                </Link>
-              </div>
-            )}
+            <div className="btn-group">
+              <Link to="/SignIn">
+                <button className="btn btn-primary btn-sm">Sign In</button>
+              </Link>
+              <Link to="/SignUp">
+                <button className="btn btn-success btn-sm">Sign Up</button>
+              </Link>
+            </div>
+          )}
         </div>
       </nav>
     );

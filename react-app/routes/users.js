@@ -26,6 +26,15 @@ router.post('/', noDuplicate, (req, res) => {
   if (!accountType || !username || !email || !password || !tel) {
     return res.status(400).json({ message: 'Please enter all fields' });
   }
+
+  if (password.length < 4) {
+    return res
+      .status(400)
+      .json({ message: 'Password must be longer than 4 characters' });
+  }
+  User.findOne({ username }).then(user => {
+    if (user) return res.status(400).json({ message: 'User already exists' });
+  });
   const hour = 3600;
   const user = new User(req.body);
   user
@@ -49,8 +58,8 @@ router.post('/', noDuplicate, (req, res) => {
       );
     })
     .catch(err => {
-      // console.log(err);
-      res.status(400).json({ err });
+      // console.log(err.message);
+      res.status(400).json({ message: err.message });
     });
 });
 

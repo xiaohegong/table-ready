@@ -1,21 +1,21 @@
-import React, { Component } from 'react';
-import { withRouter } from 'react-router-dom';
+import React, {Component} from 'react';
+import {withRouter} from 'react-router-dom';
 import ImageUploader from './ImageUploader';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import {Button, Modal, ModalHeader, ModalBody, ModalFooter} from 'reactstrap';
 import store from '../../store';
-import { connect } from 'react-redux';
-import { loadUser } from '../../actions/authActions';
+import {connect} from 'react-redux';
+import {loadUser} from '../../actions/authActions';
 import axios from 'axios';
 
 class AvatarModal extends Component {
   constructor(props) {
     super(props);
-    const { className } = props;
-    this.state = { modal: false, className, image: props.image, url: '' };
+    const {className} = props;
+    this.state = {modal: false, className, image: props.image, url: ''};
   }
 
   setAvatarModalState = (key, value) => {
-    this.setState({ [key]: value });
+    this.setState({[key]: value});
   };
 
   confirm = () => {
@@ -31,7 +31,7 @@ class AvatarModal extends Component {
       )
       .then(res => {
         store.dispatch(loadUser()); // update image in currentuser
-        this.setState({ image: this.state.url });
+        this.setState({image: this.state.url});
       })
       .catch(err => {
         console.log(err);
@@ -51,7 +51,10 @@ class AvatarModal extends Component {
     }
     return config;
   };
-  toggle = () => this.setState({ modal: !this.state.modal });
+
+  toggle = () => this.setState(
+    {modal: !this.state.modal}
+  );
 
   render() {
     return (
