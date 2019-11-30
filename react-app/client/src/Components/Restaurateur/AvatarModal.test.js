@@ -19,11 +19,6 @@ describe("AvatarModal", () => {
     expect(num).toEqual(1);
     const num_btn = wrapper.find('Modal').length;
     expect(num).toEqual(1);
-    // const instance = wrapper.instance();
-    // jest.spyOn(instance, 'confirm');
-    // console.log(wrapper.find('Button').first());
-    // wrapper.find('Button').first().simulate('click');
-    // expect(instance.confirm).toHaveBeenCalledWith(0);
   });
 
 });
