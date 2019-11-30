@@ -34,6 +34,12 @@ describe("Restaurant", () => {
       })
     });
 
+    after(done => {
+      Restaurant.deleteMany({}, () => {
+        done()
+      });
+    });
+
     it("create new restaurant", done => {
       chai.request(app).post("/api/restaurants/newRestaurant").send({
         name: "TasteGoodRestaurant",
@@ -215,6 +221,12 @@ describe("Restaurant", () => {
       restaurant.save().then(() => done());
     });
 
+    after(done => {
+      Restaurant.deleteMany({}, () => {
+        done()
+      });
+    });
+
     describe("get restaurant id then delete", () => {
       let rest_id = "";
       before((done) => {
@@ -247,6 +259,13 @@ describe("Restaurant", () => {
       });
       restaurant.save().then(() => done());
     });
+
+    after(done => {
+      Restaurant.deleteMany({}, () => {
+        done()
+      });
+    });
+
     describe("get restaurant id then update", () => {
       let rest_id = "";
       before((done) => {

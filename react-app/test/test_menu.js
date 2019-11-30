@@ -4,13 +4,14 @@ const chaiHttp = require("chai-http");
 const mongoose = require("mongoose");
 const url = process.env.MONGODB_URI || 'mongodb://localhost:27017/TableReadyTest';
 const MenuItem = require("../models/MenuItem");
+const Restaurant = require("../models/restaurant.js");
 const {expect} = chai;
 chai.use(chaiHttp);
 
 describe("Menu", () => {
 
   before(function (done) {
-    mongoose.connect(url, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true})
+    mongoose.connect(url, {useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true})
       .then(() => done())
       .catch((error) => done(error));
   });
@@ -23,271 +24,174 @@ describe("Menu", () => {
 
   describe("POST ./menu", () => {
     before(done => {
-      User.deleteMany({}, () => {});
-      //create dummy user
-      const user = new User({
-        accountType: "Admin",
-        username: "Mike",
-        password: "12345",
-        email: "goodcitizen@mail.com",
-        tel: "6478828888",
-        workFor: "abc123"
+      MenuItem.deleteMany({}, () => {
       });
-      user.save();
-      done()
+
+      const test_restaurant = new Restaurant({
+        name: "TasteGoodRestaurant",
+        phoneNumber: "6778928837",
+        location: "Mars",
+        cuisine: "Sushi",
+        hours: "8am-11pm",
+        tables: 3,
+        owner: "Mike"
+      });
+
+      test_restaurant.save().then(() => {
+        done()
+      })
     });
 
-  });
-
-  describe("Get ./users", () => {
-    before(done => {
-      User.deleteMany({}, () => {});
-      //create dummy user
-      const user1 = new User({
-        accountType: "Admin",
-        username: "Mike",
-        password: "12345",
-        email: "goodcitizen@mail.com",
-        tel: "6478828888",
-        workFor: "abc123"
-      });
-
-      const user2 = new User({
-        accountType: "SuperAdmin",
-        username: "Juliet",
-        password: "12345",
-        email: "goodcitizen2@mail.com",
-        tel: "6478828888",
-        workFor: ""
-      });
-
-      user1.save();
-      user2.save().then(()=>done());
-    });
-
-    it("get normal user info", (done) => {
-      chai.request(app).post('/api/users/login').send({
-        username: "Mike",
-        password: "12345"
-      }).then((res) => {
-        expect(res).to.have.status(200);
-        chai.request(app).get("/api/users/auth").set('x-auth-token', res.body.token)
-          .then((res) => {
-            // console.log(res);
-            expect(res).to.have.status(200);
-            expect(res.body.username).to.equals("Mike");
-            done();
-          });
-      });
-    });
-
-    describe("get specific test as super admin", () => {
-      let Mike_id = "";
-
+    describe("find restaurant id then find menu", () => {
+      let rest_id = "";
       before(done => {
-        User.find({username: "Mike"}).then((users) => {
-          Mike_id = users[0]._id;
-          done()
-        });
-      });
-
-      it("get user info as super admin", (done) => {
-        chai.request(app).post('/api/users/login').send({
-          username: "Juliet",
-          password: "12345"
-        }).then((res) => {
-          expect(res).to.have.status(200);
-          chai.request(app).get("/api/users/auth/"+ Mike_id).set('x-auth-token', res.body.token)
-            .then((response) => {
-              expect(response).to.have.status(200);
-              expect(response.body.username).to.equals("Mike");
-              done();
-            });
-        });
-      });
-    });
-
-    describe("get specific test not as super admin with error", () => {
-      let Juliet_id = "";
-
-      before(done => {
-        User.find({username: "Juliet"}).then((users) => {
-          Juliet_id = users[0]._id;
+        Restaurant.find({name: "TasteGoodRestaurant"}).then(restaurants => {
+          rest_id = restaurants[0]._id;
           done()
         })
       });
 
-      it("get other users info with error", (done) => {
-        chai.request(app).post('/api/users/login').send({
-          username: "Mike",
-          password: "12345"
-        }).then((res) => {
+      it("create a new menu item", done => {
+        chai.request(app).post("/api/menu/newMenuItem").send({
+          name: "Takoyaki",
+          price: 100,
+          ingredients: "apple",
+          calories: 2,
+          restaurant: rest_id
+        }).then(res => {
           expect(res).to.have.status(200);
-          chai.request(app).get("/api/users/auth/"+ Juliet_id).set('x-auth-token', res.body.token)
-            .then((response) => {
-              // console.log(res);
-              expect(response).to.have.status(401);
-              expect(response.text).to.equals('NOT AUTHORIZED!!');
-              done();
-            });
-        });
+          expect(res.text).to.equals('menuItem Takoyaki saved to database');
+          done()
+        })
       });
 
+      it("findMenuByRestaurant", done => {
+        chai.request(app).post("/api/menu/findMenuByRestaurant").send({
+          restaurant_id: rest_id
+        }).then(res => {
+          // console.log(res);
+          expect(res).to.have.status(200);
+          expect(res.body).to.have.lengthOf(1);
+          done()
+        })
+      });
     });
 
-    it("get all users", (done) => {
-      chai.request(app).get("/api/users/").then((res) => {
-        expect(res.body).lengthOf(2);
-        done()
+  });
+
+  describe("Delete ./menu", () => {
+    before((done) => {
+      MenuItem.deleteMany({}, () => {
+      });
+
+      const menu = new MenuItem({
+        name: "Takoyaki",
+        price: 100,
+        ingredients: "apple",
+        calories: 2,
+        restaurant: "dummy"
+      });
+      menu.save().then(() => done());
+    });
+    describe("get menu id then delete", () => {
+      let menu_id = "";
+      before(done => {
+        MenuItem.find({}).then(menus => {
+          menu_id = menus[0]._id;
+          done()
+        })
+      });
+
+      it("delete menu", done => {
+        chai.request(app).delete("/api/menu/deleteMenuItem/" + menu_id)
+          .then(res => {
+            // console.log(res);
+            expect(res).to.have.status(200);
+            expect(res.body.name).to.equals("Takoyaki");
+            done()
+          })
       })
     });
 
   });
 
-  describe("Delete ./users", () => {
-    let Mike_id = "";
-    before((done) => {
-      User.deleteMany({}, () => {});
-      //create dummy user
-      const user1 = new User({
-        accountType: "Admin",
-        username: "Mike",
-        password: "12345",
-        email: "goodcitizen@mail.com",
-        tel: "6478828888",
-        workFor: "abc123"
-      });
-      user1.save().then(() => done());
-    });
-
-    describe("get user id then delete", () => {
-      before((done) => {
-        User.find({username: "Mike"}).then((users) => {
-          Mike_id = users[0]._id;
-          done();
-        })
-      });
-
-      it("delete user by id", (done) => {
-        chai.request(app).delete("/api/users/" + Mike_id)
-          .then(res => {
-            expect(res).to.have.status(200);
-            expect(res.body.message).to.equals('User '+ Mike_id + ' deleted.');
-            done();
-          })
-      });
-
-      it("delete user with non existed id", (done) => {
-        chai.request(app).delete("/api/users/" + "random_id")
-          .then(res => {
-            // console.log(res.body);
-            expect(res).to.have.status(400);
-            expect(res.body).to.equals("Error: CastError: Cast to ObjectId failed " +
-              "for value \"random_id\" at path \"_id\" for model \"User\"");
-            done();
-          })
-      });
-
-    });
-
-
-  });
-
   describe("PATCH ./users", () => {
     before((done) => {
-      User.deleteMany({}, () => {});
-      //create dummy user
-      const user1 = new User({
-        accountType: "Admin",
-        username: "Mike",
-        password: "12345",
-        email: "goodcitizen@mail.com",
-        tel: "6478828888",
-        workFor: "abc123"
+      MenuItem.deleteMany({}, () => {
       });
-      user1.save().then(() => done());
+
+      const menu = new MenuItem({
+        name: "Takoyaki",
+        price: 100,
+        ingredients: "apple",
+        calories: 2,
+        restaurant: "dummy"
+      });
+      menu.save().then(() => done());
     });
 
-    describe("get user id and then change info", () => {
-      let Mike_id = "";
-      before((done) => {
-        User.find({username: "Mike"}).then((users) => {
-          Mike_id = users[0]._id;
-          done();
-        })
-      });
-
-      it("change setting of the user", (done) => {
-        chai.request(app).patch("/api/users/setting/" + Mike_id).send({
-          email: "changed@mail.com",
-          tel: "123",
-          old_password: "12345",
-          new_password: "changed"
-        }).then(res => {
-          expect(res).to.have.status(200);
-          expect(res.body.email).to.equals("changed@mail.com");
+    describe("get menu id then update", () => {
+      let menu_id = "";
+      before(done => {
+        MenuItem.find({}).then(menus => {
+          menu_id = menus[0]._id;
           done()
         })
       });
 
-      it("change setting error with incorrect password", (done) => {
-        chai.request(app).patch("/api/users/setting/" + Mike_id).send({
-          email: "changed@mail.com",
-          tel: "123",
-          old_password: "1234",
-          new_password: "changed2"
-        }).then(res => {
-          expect(res).to.have.status(400);
-          expect(res.text).to.equals('Password incorrect');
-          done()
-        })
-      });
-
-      it("change avatar", (done) => {
-        chai.request(app).patch("/api/users/change-avatar/" + Mike_id)
+      it("update menu", done => {
+        chai.request(app).patch("/api/menu/" + menu_id)
+          .send({
+            image: "updated"
+          })
           .then(res => {
             expect(res).to.have.status(200);
-            expect(res.text).to.equals('avatar updated');
+            expect(res.body.image).to.equals("updated");
             done()
           })
-      });
-
+      })
     });
 
   });
 
-  describe("PUT ./users", () =>{
+  describe("PUT ./menu", () => {
     before((done) => {
-      User.deleteMany({}, () => {});
-      //create dummy user
-      const user1 = new User({
-        accountType: "Admin",
-        username: "Mike",
-        password: "12345",
-        email: "goodcitizen@mail.com",
-        tel: "6478828888",
-        workFor: "abc123"
+      MenuItem.deleteMany({}, () => {
       });
-      user1.save().then(() => done());
+      const menu = new MenuItem({
+        name: "Takoyaki",
+        price: 100,
+        ingredients: "apple",
+        calories: 2,
+        restaurant: "dummy"
+      });
+      menu.save().then(() => done());
     });
-    describe("get user id and then change info", () => {
-      let Mike_id = "";
-      before((done) => {
-        User.find({username: "Mike"}).then((users) => {
-          Mike_id = users[0]._id;
-          done();
-        })
-      });
-
-      it("update changes", done => {
-        chai.request(app).put("/api/users/get/"+ Mike_id).then((res) => {
-          // console.log(res);
-          expect(res).to.have.status(200);
+    describe("get menu id then put", () => {
+      let menu_id = "";
+      before(done => {
+        MenuItem.find({}).then(menus => {
+          menu_id = menus[0]._id;
           done()
         })
       });
-    })
 
+      it("put menu", done => {
+        chai.request(app).put("/api/menu/EditMenuItem")
+          .send({
+            id: menu_id,
+            name: "burger",
+            price: 1,
+            ingredients: "nothing",
+            calories: 2
+          })
+          .then(res => {
+            expect(res).to.have.status(200);
+            expect(res.body.name).to.equals("burger");
+            done()
+          })
+      })
+    });
   });
 
 });
