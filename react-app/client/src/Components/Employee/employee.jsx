@@ -503,7 +503,7 @@ class Employee extends Component {
         });
         this.get_table(this.state.validate_user.workFor);
         if (in_list === false) {
-            this.setState({to_be_reserved: this.state.to_be_reserved.filter((value) => value != null)});
+            this.state.to_be_reserved = this.state.to_be_reserved.filter((value) => value != null)
             this.setState({to_be_reserved: [...this.state.to_be_reserved, value]});
         }
         console.log(this.state.to_be_reserved);
@@ -574,6 +574,7 @@ class Employee extends Component {
         }
     };
     remove_from_reserved = index => {
+        this.state.to_be_reserved = this.state.to_be_reserved.filter((value) => value != null)
         this.setState({
             //TODO: Backend handle
             to_be_reserved: this.state.to_be_reserved.filter(
@@ -609,6 +610,7 @@ class Employee extends Component {
             this.setModalState(false);
             this.create_waitlist(new_wl);
         }
+        this.update_rest_waitlist(this.state.rest_obj.workFor)
     };
     render_button = (value, index) => {
         if (this.state.items[index].reserved) {
