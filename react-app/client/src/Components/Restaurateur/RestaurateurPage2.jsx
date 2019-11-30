@@ -159,6 +159,7 @@ class RestaurateurPage2 extends Component {
               </div>
             </div>
           </div>
+          <br/><br/>
         </div>
       );
     }

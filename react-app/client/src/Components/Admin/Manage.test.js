@@ -25,6 +25,8 @@ describe("Manage", () => {
       };
       const spy = jest.spyOn(wrapper.instance(), "showManaging");
       const a = instance.manageRestaurant(event);
+      const spy = jest.spyOn(wrapper.instance(), "showManaging");
+      const a = instance.manageRestaurant(event);
       expect(spy).toHaveBeenCalled();
     });
   });

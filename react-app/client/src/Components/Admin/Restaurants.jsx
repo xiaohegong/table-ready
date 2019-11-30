@@ -19,7 +19,7 @@ function RestRow(props) {
             <td><Link to={ownerLink}>{rest.owner_name}</Link></td>
             <td>{rest.location}</td>
             <td>{rest.phoneNumber}</td>
-            <td>{rest.operationHour}</td>
+            {/*<td>{rest.operationHour}</td>*/}
             <td><Button outline color="danger" size="sm" onClick={() => {
                 del(rest._id);
             }}>Delete
@@ -165,7 +165,7 @@ class Restaurants extends Component {
                                             <th scope="col">Owner</th>
                                             <th scope="col">Location</th>
                                             <th scope="col">Contact</th>
-                                            <th scope="col">Hours</th>
+                                            {/*<th scope="col">Hours</th>*/}
                                             <th scope="col">Action</th>
                                         </tr>
                                         </thead>

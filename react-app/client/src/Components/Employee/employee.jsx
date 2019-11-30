@@ -21,6 +21,8 @@ import Popover from 'react-bootstrap/Popover';
 import {Redirect} from 'react-router-dom';
 import Form from "react-bootstrap/Form";
 import {connect} from "react-redux";
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import {faCheck, faBan, faUser, faCalendarAlt, faClock, faConciergeBell} from '@fortawesome/free-solid-svg-icons';
 
 const dayjs = require('dayjs');
 // fake data generator
@@ -250,7 +252,7 @@ class Employee extends Component {
             loading: true,
             valid: false
         };
-        console.log(this.state)
+        console.log(this.state);
     }
 
     tokenConfig = () => {
@@ -503,7 +505,7 @@ class Employee extends Component {
         });
         this.get_table(this.state.validate_user.workFor);
         if (in_list === false) {
-            this.setState({to_be_reserved: this.state.to_be_reserved.filter((value) => value != null)});
+            this.state.to_be_reserved = this.state.to_be_reserved.filter((value) => value != null);
             this.setState({to_be_reserved: [...this.state.to_be_reserved, value]});
         }
         console.log(this.state.to_be_reserved);
@@ -574,6 +576,7 @@ class Employee extends Component {
         }
     };
     remove_from_reserved = index => {
+        this.state.to_be_reserved = this.state.to_be_reserved.filter((value) => value != null);
         this.setState({
             //TODO: Backend handle
             to_be_reserved: this.state.to_be_reserved.filter(
@@ -609,6 +612,7 @@ class Employee extends Component {
             this.setModalState(false);
             this.create_waitlist(new_wl);
         }
+        this.update_rest_waitlist(this.state.rest_obj.workFor);
     };
     render_button = (value, index) => {
         if (this.state.items[index].reserved) {
@@ -746,7 +750,9 @@ class Employee extends Component {
                         onStateChange={state => this.handleStateChange(state)}
                         handleMousemove={() => handleMousemove(this)}
                     >
-              <span id="reservation_container" onMouseDown={this.removefocus}>
+                        <h2 style={{display: 'inline'}}>Manage Guests Seating</h2>
+                        <p>Drag and drop groups of guests to tables of appropriate capacity!</p>
+                        <span id="reservation_container" onMouseDown={this.removefocus}>
                 {draggables.map((item, index) => (
                     //Fix bug
                     <div key={index}>{item}</div>
@@ -807,6 +813,8 @@ class Employee extends Component {
                     </Menu>
                     <div id="page-wrap">
                         <Navbar profile_link={`/userpage/${this.props.match.params.id}`}/>
+                        <h5>Welcome! Click <FontAwesomeIcon icon={faCheck}/> to sit a group of guests
+                            and <FontAwesomeIcon icon={faBan}/> to remove guests.</h5>
                         <div id="cal" style={{height: '80px'}}>
                             <DatePicker onChange={
                                 (value) => {
@@ -822,9 +830,11 @@ class Employee extends Component {
                         </div>
                         <div id="res-holder">
                             <strong id="reserv-header">Reservations</strong>
-                            {this.state.items.filter((item) => {return item.type === "Reservation"}).length === 0 ? (
+                            {this.state.items.filter((item) => {
+                                return item.type === "Reservation";
+                            }).length === 0 ? (
                                 <React.Fragment>
-                                    <br />
+                                    <br/>
                                     <p>No reservation added for today yet.</p>
                                     <p>Please click the "New Guests" button to add a new reservation.</p>
                                 </React.Fragment>
@@ -834,26 +844,29 @@ class Employee extends Component {
                                     return (
                                         <OverlayTrigger
                                             trigger="click"
+                                            rootClose
                                             key={index}
                                             placement={"down"}
                                             overlay={
                                                 <Popover id={`popover-positioned-${"down"}`}>
                                                     <Popover.Content>
                                                         <div>
-                                     <span><img className="info-png"
-                                                src={process.env.PUBLIC_URL + "/images/restaurant_images/calendar.png"}></img><span
+                                                            <span> <FontAwesomeIcon icon={faClock}/>
+                                     <span
                                          className=
-                                             "reservation_time">{item.estimated_time}</span><span
-                                         className="reservation_date">/{item.date_of_arrival}</span></span>
+                                             "reservation_time">{item.estimated_time}</span></span>
+                                                        </div>
+                                                        <div>
+                                     <span> <FontAwesomeIcon icon={faCalendarAlt}/>
+                                         <span
+                                             className="reservation_date">  {item.date_of_arrival}</span></span>
                                                         </div>
                                                         <div className="num_people">
-                                                            <span><img className="info-png"
-                                                                       src={process.env.PUBLIC_URL + "/images/restaurant_images/avatar.png"}></img><span
+                                                            <span> <FontAwesomeIcon icon={faUser}/><span
                                                                 className="attendence">{item.people}</span></span>
                                                         </div>
                                                         <div>
-                                                            <span><img className="info-png"
-                                                                       src={process.env.PUBLIC_URL + "/images/restaurant_images/receptionist.png"}></img><span
+                                                            <span> <FontAwesomeIcon icon={faConciergeBell}/><span
                                                                 className="attendence">{item.reserved ? 'Reserved' : 'Not Reserved'}</span></span>
                                                         </div>
                                                         <div className="user_profile_holder">
@@ -892,9 +905,11 @@ class Employee extends Component {
                         </div>
                         <div id="res-holder">
                             <strong id="reserv-header">Waitlist</strong>
-                            {this.state.items.filter((item) => {return item.type === "Waitlist"}).length === 0 ? (
+                            {this.state.items.filter((item) => {
+                                return item.type === "Waitlist";
+                            }).length === 0 ? (
                                 <React.Fragment>
-                                    <br />
+                                    <br/>
                                     <p>No one is on the waitlist for today yet.</p>
                                     <p>Please click the "New Guests" button to add guests to the waitlist.</p>
                                 </React.Fragment>
@@ -904,26 +919,29 @@ class Employee extends Component {
                                     return (
                                         <OverlayTrigger
                                             trigger="click"
+                                            rootClose
                                             key={index}
                                             placement={"down"}
                                             overlay={
                                                 <Popover id={`popover-positioned-${"down"}`}>
                                                     <Popover.Content>
                                                         <div>
-                                     <span><img className="info-png"
-                                                src={process.env.PUBLIC_URL + "/images/restaurant_images/calendar.png"}></img><span
+                                                            <span> <FontAwesomeIcon icon={faClock}/>
+                                     <span
                                          className=
-                                             "reservation_time">{item.estimated_time}</span><span
-                                         className="reservation_date">/{item.date_of_arrival}</span></span>
+                                             "reservation_time">{item.estimated_time}</span></span>
+                                                        </div>
+                                                        <div>
+                                     <span> <FontAwesomeIcon icon={faCalendarAlt}/>
+                                         <span
+                                             className="reservation_date">  {item.date_of_arrival}</span></span>
                                                         </div>
                                                         <div className="num_people">
-                                                            <span><img className="info-png"
-                                                                       src={process.env.PUBLIC_URL + "/images/restaurant_images/avatar.png"}></img><span
+                                                            <span> <FontAwesomeIcon icon={faUser}/> <span
                                                                 className="attendence">{item.people}</span></span>
                                                         </div>
                                                         <div>
-                                                            <span><img className="info-png"
-                                                                       src={process.env.PUBLIC_URL + "/images/restaurant_images/receptionist.png"}></img><span
+                                                            <span><FontAwesomeIcon icon={faConciergeBell}/><span
                                                                 className="attendence">{item.reserved ? 'Reserved' : 'Not Reserved'}</span></span>
                                                         </div>
                                                         <div className="user_profile_holder">
