@@ -72,7 +72,7 @@ class Table extends Component {
       };
       axios
         .post(
-          "/api/resetaurants/newTable",
+          "/table/newTable",
           {
             restaurant_id: this.props.res_id
           },
@@ -82,7 +82,8 @@ class Table extends Component {
           this.fetchTable()
         )
         .catch(err => {
-          console.log(400);
+
+          console.log(err);
         });
     }
 
@@ -98,13 +99,14 @@ class Table extends Component {
               <div className="list-group employee-list">
                   {this.state.tableItem.map(tableItem => {
                       return (
-                        <TableItem
+                        <><TableItem
                           key={uid()}
                           id = {tableItem._id}
                           capacity = {tableItem.table_capacity}
                           name = {tableItem.name}
                           deleteItem={this.deleteItem}
                         />
+                          <br/></>
                       );
                   })}
               </div>

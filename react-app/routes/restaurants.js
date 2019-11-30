@@ -84,35 +84,7 @@ router.post('/newRestaurant', (req, res) => {
     });
 });
 
-router.post('/newTable', (req, res) => {
-  const table = new Table({
-    rest_id: req.body.restaurant_id
-  });
-  table
-    .save()
-    .then(table => {
-      log('NEW TABLE CREATED');
-      res.send(table);
-    })
-    .catch(err => {
-      log(err);
-      res.send({ code: 400, err });
-    });
-});
 
-router.post('/updateTable', (req, res) => {
-  Table.findByIdAndUpdate(req.body._id, {
-    table_capacity: req.body.tableNum,
-    name: req.body.name
-  })
-    .then(table => {
-      res.send(table);
-    })
-    .catch(err => {
-      log(err);
-      res.send({ code: 400, err });
-    });
-});
 
 router.post('/updateRestaurant', (req, res) => {
   Restaurant.findByIdAndUpdate(req.body._id, {
