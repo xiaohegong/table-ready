@@ -8,17 +8,6 @@ import uid from "uid";
 configure({adapter: new Adapter()});
 
 describe("AddNewMenuItem", () => {
-  // let wrapper;
-  //
-  // beforeEach(() => {
-  //   const initial_state = {
-  //     page: 'user',
-  //     query: ''
-  //   };
-  //   wrapper = shallow(<Manage/>);
-  //   wrapper.setState(initial_state);
-  // });
-
 
   it("num of elements", () => {
     const myMock = jest.fn();
