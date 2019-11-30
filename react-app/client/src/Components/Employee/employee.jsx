@@ -806,7 +806,7 @@ class Employee extends Component {
               </span>
                     </Menu>
                     <div id="page-wrap">
-                        <Navbar/>
+                        <Navbar profile_link={`/userpage/${this.props.match.params.id}`}/>
                         <div id="cal" style={{height: '80px'}}>
                             <DatePicker onChange={
                                 (value) => {
