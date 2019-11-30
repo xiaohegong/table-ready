@@ -77,7 +77,7 @@ class Admin extends Component {
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-        return this.props !== nextProps || this.state.propUser !== nextState.propUser;
+        return this.props !== nextProps || this.state.propUser !== nextState.propUser || this.state.page !== nextState.page;
     }
 
     componentWillUpdate(nextProps, nextState, nextContext) {

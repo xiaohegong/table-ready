@@ -14,41 +14,74 @@ import {
     Label,
 } from 'reactstrap';
 
+const log = console.log;
 axios.defaults.baseURL = '../';
 
 class Setting extends Component {
     constructor(props) {
         super(props);
         this.confirmChange = this.confirmChange.bind(this);
+        this.state = {
+            error: false,
+            user: null
+        };
     }
+
+    componentDidMount() {
+        axios
+            .get('/api/users/get/' + this.props.id)
+            .then(res => {
+                this.setState({user: res.data[0]});
+            })
+            .catch(err => {
+                console.log(err.response.data);
+                this.setState({msg: err.response.data});
+            });
+    }
+
 
     confirmChange = () => {
         const new_email = document.getElementById("nf-email").value;
-        const new_password = document.getElementById("nf-password").value;
-        if (new_email === '' || new_password === '') {
-            alert("Please fill all boxes!");
+        const new_tel = document.getElementById("tel").value;
+        const old_password = document.getElementById("oldPassword").value;
+        const new_password = document.getElementById("newPassword").value;
+
+        const email = new_email === '' ? this.state.user.email : new_email;
+        const tel = new_tel === '' ? this.state.user.tel : new_tel;
+        if (new_password === '' || new_password.length < 4) {
+            this.setState({
+                error: true,
+                message: "Password must be longer than 4 characters!"
+            });
+            return;
+        }
+        if (!old_password || old_password === '') {
+            this.setState({
+                error: true,
+                message: 'Old Password Must be filled in to make any changes'
+            });
         } else {
-            const cur_info = this.props.id;
-            const link = '/api/users/get/' + cur_info;
-            console.log(cur_info);
-            console.log("above is curr user id");
-            console.log(link);
-            let old_user_info;
-            axios.get(link)
+            const user = {
+                email,
+                tel,
+                old_password,
+                new_password
+            };
+
+            axios
+                .patch('/api/users/setting/' + this.props.id, user)
                 .then(res => {
-                    old_user_info = res.data;
-                    old_user_info.password = new_password;
-                    old_user_info.email = new_email;
-                    axios.put(link, old_user_info)
-                        .then(res => {
-                            console.log('User info updated!');
-                        })
-                        .catch(err => {
-                            console.log(err);
-                        });
+                    this.setState({
+                        error: false,
+                        message: "User information successfully updated!"
+                    });
                 })
-                .catch((error) => {
-                    console.log(error);
+                .catch(err => {
+                    console.log(err.response.data);
+                    this.setState({
+                        error: true,
+                        message: err.response.data
+                    });
                 });
         }
 
@@ -62,6 +95,16 @@ class Setting extends Component {
     render() {
         return (
             <div className='setting'>
+                {this.state.message && this.state.error ? (
+                    <div className="alert alert-danger" role="alert">
+                        {this.state.message}
+                    </div>
+                ) : null}
+                {this.state.message && !this.state.error ? (
+                    <div className="alert alert-success" role="alert">
+                        {this.state.message}
+                    </div>
+                ) : null}
                 <div className='setting-container'>
                     <div className='row'>
                         <Card>
@@ -77,8 +120,21 @@ class Setting extends Component {
                                         <FormText className="help-block">Please enter your new email</FormText>
                                     </FormGroup>
                                     <FormGroup>
+                                        <Label htmlFor="nf-email">New Phone Number</Label>
+                                        <Input type="email" id="tel" name="nf-email"
+                                               placeholder="Enter New Phone Number..."
+                                               autoComplete="email"/>
+                                        <FormText className="help-block">Please enter your new email</FormText>
+                                    </FormGroup>
+                                    <FormGroup>
+                                        <Label htmlFor="nf-password">Old Password</Label>
+                                        <Input type="password" id="oldPassword" name="nf-password"
+                                               placeholder="Enter Password.." autoComplete="current-password"/>
+                                        <FormText className="help-block">Please enter your old password</FormText>
+                                    </FormGroup>
+                                    <FormGroup>
                                         <Label htmlFor="nf-password">New Password</Label>
-                                        <Input type="password" id="nf-password" name="nf-password"
+                                        <Input type="password" id="newPassword" name="nf-password"
                                                placeholder="Enter Password.." autoComplete="current-password"/>
                                         <FormText className="help-block">Please enter your new password</FormText>
                                     </FormGroup>
@@ -86,7 +142,7 @@ class Setting extends Component {
                             </CardBody>
                             <CardFooter>
                                 <Button type="submit" size="sm" color="primary" onClick={this.confirmChange}><i
-                                    className="fa fa-dot-circle-o"></i> Submit</Button>
+                                    className="fa fa-dot-circle-o"></i> Confirm</Button>
                                 <Button type="reset" size="sm" color="danger" onClick={this.resetInputBox}><i
                                     className="fa fa-ban"></i> Reset</Button>
                             </CardFooter>

@@ -20,6 +20,7 @@ import Navbar from '../Navbar.jsx';
 import '../../Stylesheets/restaurateur_page.scss';
 import RestaurateurSettingModal from '../Restaurateur/RestaurateurSettingModal';
 import AvatarModal from '../Restaurateur/AvatarModal';
+import RestaurantListItem from '../Restaurateur/RestaurantListItem'
 
 
 class Userpage extends React.Component {
@@ -27,17 +28,18 @@ class Userpage extends React.Component {
         super(props);
         this.state = {
             invitations: [],
-            approved: false
+            approved: false,
+            rest_obj: null
         };
     }
 
     componentDidMount() {
-        console.log(this.props);
-        axios.get(`/restinfo/${this.props.match.params.id}`).then(
-            res => {
-                this.setState({invitations: res.data});
-            }
-        );
+        axios.get(`/restinfo/${this.props.match.params.id}`)
+            .then(
+                res => {
+                    this.setState({invitations: res.data});
+                }
+            )
     }
 
     deleteInvitation = (index) => {
@@ -85,6 +87,36 @@ class Userpage extends React.Component {
 
         ))
     }
+    render_invitations = () => {
+        return (
+            <div className="col-md-9">
+                <h2 style={{ display: 'inline' }}>Your Invitations</h2>
+                <div className="restaurants-display">
+                    {this.state.invitations.length === 0 ? (
+                    <div  style={{margin: "5%"}}>
+                    <React.Fragment>
+                        <br/>
+                        <p>    Welcome! You don't have invitation to join any restaurant yet.</p>
+                        <p>    Please request your restaurant managers to send you an invitation and check back!</p>
+                    </React.Fragment>
+                    </div>
+                ) : this.render_page()}
+                  </div>
+                </div>
+            
+        )
+    }
+    render_restaurant = () => {
+        return (
+            <div>
+                <Link to={`/employee/${this.props.match.params.id}`}>
+                    <Button>To my Restaruant</Button>
+                </Link>
+                
+            </div>
+        )
+    }
+
     new_render_page = () => {
         return (
         <div className="restaurateur-page">
@@ -109,13 +141,12 @@ class Userpage extends React.Component {
                   </li>
                 </ul>
               </div>
-
-              <div className="col-md-9">
-                <h2 style={{ display: 'inline' }}>Your Invitations</h2>
-                <div className="restaurants-display">
-                  {this.render_page()}
-                  </div>
-                </div>
+            
+            <div>
+                {this.props.current_user.workFor === "" ? this.render_invitations() : this.render_restaurant()}
+            </div>
+              
+              
               </div>
             </div>
           </div>
@@ -124,7 +155,6 @@ class Userpage extends React.Component {
     }
 
     render() {
-        {
             if (this.state.approved) {
                 return <Redirect to={`/employee/${this.props.match.params.id}`}/>;
             }
@@ -134,24 +164,13 @@ class Userpage extends React.Component {
                 return (
                     <div>
                         <Navbar/>
-                        {this.state.invitations.length === 0 ? (
-                            <div  style={{margin: "5%"}}>
-                            <React.Fragment>
-                                <br/>
-                                <p>    Welcome! You don't have invitation to join any restaurant yet.</p>
-                                <p>    Please request your restaurant managers to send you an invitation and check back!</p>
-                            </React.Fragment>
-                            </div>
-                        ) : this.new_render_page()}
+                        {this.new_render_page()}
                     </div>
 
                 );
             }
-
-        }
     }
 }
-
 const mapStateToProps = state => ({
     isAuthenticated: state.auth.isAuthenticated,
     error: state.error,
