@@ -13,8 +13,6 @@ function RestRow(props) {
     const restLink = `/restaurateur2/${rest._id}`;
     const ownerLink = `/restaurateur/${rest.owner}`;
 
-    log(rest);
-
     return (
         <tr key={rest._id.toString()}>
             <th scope="row"><Link to={restLink}>{rest.name}</Link></th>
@@ -114,10 +112,8 @@ class Restaurants extends Component {
         }
 
         return res.map((rest, index) => {
-                log(rest);
                 log(this.state.users);
                 let owner = this.state.users.find((user) => {
-                    log(user._id);
                     return user._id === rest.owner;
                 });
 
