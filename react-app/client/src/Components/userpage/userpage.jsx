@@ -47,19 +47,16 @@ class Userpage extends React.Component {
                 this.setState({
                     current_user: res.data[0]
                 });
-                console.log(this.state.current_user);
-            })
-            .then(() => {
                 if (this.state.current_user.workFor !== "") {
                     axios.post("/api/restaurants/findRestaurant", {_id: this.state.current_user.workFor})
                         .then(res => {
+                            console.log(res)
                             this.setState({
                                 rest_obj: res.data[1][0]
                             });
                         });
                 }
-
-            });
+            })
 
     }
 

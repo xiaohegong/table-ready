@@ -316,14 +316,17 @@ class Employee extends Component {
             .then((response) => {
                 id = response.data;
                 console.log(response.data);
-                axios.post('/restaurant/updateReservation', {
-                    _id: this.state.rest_obj._id,
-                    reservations: [...this.state.rest_obj.reservations, id]
-                })
-                    .then(this.update_rest_waitlist(this.state.employee_obj.workFor))
-                    .catch(function (error) {
-                        console.log(error);
-                    });
+                if(typeof(id) === "string"){
+                    axios.post('/restaurant/updateReservation', {
+                        _id: this.state.rest_obj._id,
+                        reservations: [...this.state.rest_obj.reservations, id]
+                    })
+                        .then(this.update_rest_waitlist(this.state.employee_obj.workFor))
+                        .catch(function (error) {
+                            console.log(error);
+                        });
+                }
+
             })
             .catch(error => {
                 console.log(error);
@@ -612,7 +615,7 @@ class Employee extends Component {
             this.setModalState(false);
             this.create_waitlist(new_wl);
         }
-        this.update_rest_waitlist(this.state.rest_obj.workFor);
+        this.update_rest_waitlist(this.state.validate_user.workFor);
     };
     render_button = (value, index) => {
         if (this.state.items[index].reserved) {
