@@ -13,7 +13,6 @@ import {withRouter} from "react-router-dom";
 import {Link} from 'react-router-dom';
 import userlist from './userlist';
 import axios from 'axios';
-import {withCookies} from 'react-cookie';
 import {connect} from "react-redux";
 import {Redirect} from 'react-router-dom';
 import Navbar from '../Navbar.jsx';

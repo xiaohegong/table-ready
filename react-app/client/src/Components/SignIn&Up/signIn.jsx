@@ -96,7 +96,6 @@ class SignIn extends Component {
         <div id="divPage">
           <div className="container">
             <img id="avatar" src={Avatar} alt="Avatar" />
-            <button className="btn"> + </button>
           </div>
           <br />
           <br />

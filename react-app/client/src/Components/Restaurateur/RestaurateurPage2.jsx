@@ -99,7 +99,7 @@ class RestaurateurPage2 extends Component {
 
       return (
         <div>
-          <Navbar cookies={this.props.cookies}/>
+          <Navbar/>
           <div className="restaurateur-page-2">
             <div className="container">
               <div className="row">

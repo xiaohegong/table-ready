@@ -103,7 +103,7 @@ class Admin extends Component {
         return (
             <div className='admin-page'>
                 <Navbar/>
-                {this.props.current_user._id !== this.props.match.params.id ? (
+                {this.props.current_user._id !== this.props.match.params.id && this.state.propUser ? (
                     <div className="alert alert-info" role="alert">
                         {"You are now viewing as Super Admin: " + this.state.propUser.username}
                     </div>
