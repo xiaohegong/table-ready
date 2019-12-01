@@ -24,5 +24,5 @@
 
 ### Handoff plan
 
-We will have a handoff meeting with our partner to discuss about the end result of our application and any possible future issues and plans. We will be handing off the codebase, deployment tools, database access and planning documents. These are mostly already owned by our partner as we asked her to register and set up before we start. 
-Our partner told us that she does have a developer team that may be able to help her maintain the product in the future. So we believe providing her access to the codebase, database and etc will be sufficient. 
+We will have a handoff meeting with our partner to discuss about the end result of our application and any possible future issues and plans. We will be handing off the codebase, deployment tools, database access and planning documents. These are mostly already owned by our partner as we asked her to register required accounts before we start. 
+We've also compiled a summary of the tools we've used and instructions on maintaining them. Our partner told us that she does have a developer team that may be able to help her maintain the product in the future. So we believe providing her access to the codebase, database and the tools we used will be sufficient. 
