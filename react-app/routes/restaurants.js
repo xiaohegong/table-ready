@@ -60,7 +60,7 @@ router.post('/newRestaurant', (req, res) => {
     name: req.body.name,
     phoneNumber: req.body.phoneNumber,
     location: req.body.location,
-    cuisine: req.body.cuisine,
+    Cuisine: req.body.cuisine,
     operationHour: req.body.hours,
     owner: req.body.owner
   });
