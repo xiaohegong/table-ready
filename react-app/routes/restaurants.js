@@ -1,5 +1,5 @@
 const express = require('express');
-const User = require('../models/user');
+const User = require('../models/user.js');
 const router = express.Router();
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
@@ -60,7 +60,7 @@ router.post('/newRestaurant', (req, res) => {
     name: req.body.name,
     phoneNumber: req.body.phoneNumber,
     location: req.body.location,
-    cuisine: req.body.cuisine,
+    Cuisine: req.body.cuisine,
     operationHour: req.body.hours,
     owner: req.body.owner
   });
