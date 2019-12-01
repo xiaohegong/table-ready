@@ -2,11 +2,33 @@ import React, {Component} from 'react';
 import axios from "axios";
 
 class TableItem extends Component {
-  state = { codeBlock:<><div><strong>Name: </strong><span>{this.props.name}</span></div>
-      <div><strong>Capacity: </strong><span>{this.props.capacity}</span></div></> };
+  constructor(props) {
+    super(props);
+    this.editCode = this.editCode.bind(this);
+    this.submit = this.submit.bind(this)
+    // this.test1 = this.test1.bind(this);
+  }
+
+  state = { codeBlock:<><><div><strong>Name: </strong><p>{this.props.name}</p></div>
+      <div><strong>Capacity: </strong><p>{this.props.capacity}</p></div></></> };
+  componentDidMount() {
+    this.setState({button:<><span
+      className="btn btn-sm btn-outline-success"
+      onClick={this.editCode}
+      style={{marginBottom:"10px"}}
+    >
+              Edit
+            </span></>})
+  }
 
   editCode = () => {
     this.setState({
+      button:<><button
+        className="btn btn-outline-success btn-sm"
+        onClick={this.submit}
+      >
+        Done
+      </button></>,
       codeBlock: (
         <>
           <textarea id="name" row="2">
@@ -15,12 +37,7 @@ class TableItem extends Component {
           <textarea id="capacity" row="2">
             {this.props.capacity}
           </textarea>
-          <button
-            className="addNewButton btn btn-outline-success btn-sm"
-            onClick={this.submit}
-          >
-            Done
-          </button>
+
         </>
       )
     });
@@ -48,7 +65,13 @@ class TableItem extends Component {
         const capacity = document.getElementById("capacity").value;
         const name = document.getElementById("name").value;
         this.setState({
-
+          button:<><span
+            className="btn btn-sm btn-outline-success"
+            onClick={this.editCode}
+            style={{marginBottom:"10px"}}
+          >
+              Edit
+            </span></>,
           codeBlock: (
             <><div><strong>Name: </strong><p>{name}</p></div>
               <div><strong>Capacity: </strong><p>{capacity}</p></div></>
@@ -80,13 +103,7 @@ class TableItem extends Component {
           </div>
 
           <div className="col col-md-2">
-            <span
-              className="btn btn-sm btn-outline-success"
-              onClick={this.editCode}
-              style={{marginBottom:"10px"}}
-            >
-              Edit
-            </span>
+            {this.state.button}
             <span
               className="btn btn-sm btn-outline-danger"
               onClick={deleteItem.bind(this, id)}
