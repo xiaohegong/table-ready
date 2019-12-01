@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const url =
-  'mongodb+srv://admin:admin@cluster0-hopsi.mongodb.net/table_ready?retryWrites=true&w=majority';
+  'mongodb://tordevtr2:A9wWScfasqRwNKotoB7VAdVXaZnZlFfK0xZ0BkRluOE3gcdvCXCiSQ3miGeqfDsFIlcv4T2onXVALohWxF9wnQ==@tordevtr2.documents.azure.com:10255/table_ready?ssl=true';
 
 function connect() {
   mongoose.set('debug', true);
