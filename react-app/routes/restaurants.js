@@ -60,7 +60,7 @@ router.post('/newRestaurant', (req, res) => {
     name: req.body.name,
     phoneNumber: req.body.phoneNumber,
     location: req.body.location,
-    Cuisine: req.body.cuisine,
+    cuisine: req.body.cuisine,
     operationHour: req.body.hours,
     owner: req.body.owner
   });
@@ -120,7 +120,7 @@ router.post('/updateRestaurant', (req, res) => {
     name: req.body.name,
     phoneNumber: req.body.phoneNumber,
     location: req.body.location,
-    Cuisine: req.body.cuisine,
+    cuisine: req.body.cuisine,
     operationHour: req.body.hours
   })
     .then(restaurant => {

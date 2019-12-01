@@ -136,7 +136,7 @@ class RestaurateurPage2 extends Component {
                       <strong>Rating: </strong> {this.state.info.Rating}
                     </li>
                     <li className="list-group-item">
-                      <strong>Cuisine: </strong> {this.state.info.Cuisine}
+                      <strong>Cuisine: </strong> {this.state.info.cuisine}
                     </li>
                   </ul>
                   <h2>Options</h2>

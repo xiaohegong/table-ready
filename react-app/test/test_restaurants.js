@@ -125,7 +125,7 @@ describe("Restaurant", () => {
           name: "updated name",
           phoneNumber: "12345",
           location: "Mercury",
-          Cuisine: "Burger",
+          cuisine: "Burger",
           operationHour: "Not Open"
         }).then(res => {
           expect(res).to.have.status(200);
