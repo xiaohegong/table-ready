@@ -11,6 +11,7 @@
 - We left the payment related implementations to d3 as it is not a very important feature and may be very complicated to implement. 
 - After we are done with d2, we discussed with our partner about how she want the payment to be implemented. She said she would not want this feature to be implemented for now as she's worried about the security aspects.
 - Since there won't be any real users for this application for some time, she asked us to allocate the time to the main restaurant managing features.
+- We also used this extra time to add tests for both server calls and react components, achieving about 80% test coverage covering all of the important functionalities. 
 
 2. Reduced the scope of viewing restaurant table layout. 
 - Initially, our partner mentioned that she would like to see the actual table layout on the restaurant management page if we have time.
