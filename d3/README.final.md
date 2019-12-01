@@ -94,7 +94,7 @@ There are three types of end users for our app: restaurant managers, restaurant 
     * If a group of guests are done, click the "ban" button on their card. When the table is cleaned up and ready again, click the "ban" button on the table.
 - To cancel a reservation or remove guests from the waitlist, click on the "ban" on their card.
 
-#### Navigating as System Admin User
+##### Navigating as System Admin User
 - After you are logged in, you will see the "Manage" pane, which displays the list of all users and restaurant registered in the system. You can:
   - search an user/restaurant using the search bar.
   - remove an user/restaurant by clicking on the "Delete" button.
