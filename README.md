@@ -94,7 +94,7 @@ There are three types of end users for our app: restaurant managers, restaurant 
     * If a group of guests are done, click the "ban" button on their card. When the table is cleaned up and ready again, click the "ban" button on the table.
 - To cancel a reservation or remove guests from the waitlist, click on the "ban" on their card.
 
-#### Navigating as System Admin User
+##### Navigating as System Admin User
 - After you are logged in, you will see the "Manage" pane, which displays the list of all users and restaurant registered in the system. You can:
   - search an user/restaurant using the search bar.
   - remove an user/restaurant by clicking on the "Delete" button.
@@ -114,6 +114,17 @@ Simply visit the live app on:  https://table-ready.herokuapp.com/
 3. `npm run dev`
 4. Finally, open your browser and navigate the app. 
 
+### Running tests 
+#### Tests for server calls
+1. `cd react-app/`
+2. Start your local mongodb database: `mongod`
+3. Run `npm test`
+4. You will see all the test results and test coverage summary
+
+#### Tests for react components
+1. `cd react-app/clients`
+2. Run `npm test`
+4. You will see all the test results.
 
 
  ## Licenses 

@@ -114,6 +114,17 @@ Simply visit the live app on:  https://table-ready.herokuapp.com/
 3. `npm run dev`
 4. Finally, open your browser and navigate the app. 
 
+### Running tests 
+#### Tests for server calls
+1. `cd react-app/`
+2. Start your local mongodb database: `mongod`
+3. Run `npm test`
+4. You will see all the test results and test coverage summary
+
+#### Tests for react components
+1. `cd react-app/clients`
+2. Run `npm test`
+4. You will see all the test results.
 
 
  ## Licenses 
