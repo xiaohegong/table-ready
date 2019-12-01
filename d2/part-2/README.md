@@ -34,7 +34,7 @@ There are three types of targeted users for our app: restaurant managers, restau
  <!-- * How do you access it? Are accounts pre-created or does a user register? Where do you start? etc.  -->
  <!-- * Provide clear steps for using each feature described above -->
 ### Live App
-https://table-ready.herokuapp.com/
+https://table-ready2.herokuapp.com/
 
 #### Usages
 ##### Log in & Sign up
