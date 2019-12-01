@@ -3,8 +3,9 @@ import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
-import {DatePicker} from "@y0c/react-datepicker";
+import DatePicker from "react-datepicker";
 import {Checkbox} from "@material-ui/core";
+import "react-datepicker/dist/react-datepicker.css";
 
 const dayjs = require('dayjs');
 
@@ -15,15 +16,22 @@ class VerticalModal extends React.Component {
         date: dayjs().format('YYYY/MM/DD'),
         time_arrive: null,
         time: null,
-        type: null
+        type: null,
+        startDate: new Date()
     };
-    showdate = value => {
-        const year = value.$y;
-        const month = value.$M + 1;
-        const day = value.$D;
-        const date = `${year}/${month}/${day}`;
-        this.state.date = date;
-    };
+
+    handleChange = date => {
+        let tmp = date.toLocaleDateString("en-US")
+        tmp = tmp.split("/")
+        this.setState({
+          startDate: date
+        });
+        const year = tmp[2];
+        const month = tmp[0];
+        const day = tmp[1];
+        const datei = `${year}/${month}/${day}`;
+        this.state.date = datei;
+      };
 
     render() {
         return (
@@ -62,12 +70,16 @@ class VerticalModal extends React.Component {
                                 ></Form.Control>
                             </Form.Group>
                             <Form.Group as={Col} md="auto">
-                                <DatePicker
+                                {/* <DatePicker
                                     onChange={value => this.showdate(value)}
                                     showDefaultIcon
                                     initialDate={dayjs().format('YYYY/MM/DD')}
                                     clear
-                                ></DatePicker>
+                                ></DatePicker> */}
+                                 <DatePicker
+                                        selected={this.state.startDate}
+                                        onChange={this.handleChange}
+                                    />
                             </Form.Group>
                         </Form.Row>
                         <Form.Row>
