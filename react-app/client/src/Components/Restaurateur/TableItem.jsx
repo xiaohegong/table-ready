@@ -2,8 +2,8 @@ import React, {Component} from 'react';
 import axios from "axios";
 
 class TableItem extends Component {
-  state = { codeBlock:<><div><strong>Name: </strong><p>{this.props.name}</p></div>
-      <div><strong>Capacity: </strong><p>{this.props.capacity}</p></div></> };
+  state = { codeBlock:<><div><strong>Name: </strong><span>{this.props.name}</span></div>
+      <div><strong>Capacity: </strong><span>{this.props.capacity}</span></div></> };
 
   editCode = () => {
     this.setState({
@@ -35,7 +35,7 @@ class TableItem extends Component {
     };
     axios
       .post(
-        "/api/restaurants/updateTable",
+        "/table/updateTable",
         {
           _id: this.props.id,
           tableNum: document.getElementById("capacity").value,

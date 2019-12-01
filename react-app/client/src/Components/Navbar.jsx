@@ -8,7 +8,7 @@ import { logout } from '../actions/authActions';
 import PropTypes from 'prop-types';
 
 class Navbar extends React.Component {
-  state = {};
+  state = {}
   static propTypes = {
     logout: PropTypes.func.isRequired
   };
@@ -138,7 +138,7 @@ class Navbar extends React.Component {
               >
                 Logout
               </button>
-              <Link to="/">
+              <Link to={this.props.profile_link !== undefined ? this.props.profile_link : '/'}>
                 <img
                   id="user-avatar"
                   src={this.props.current_user.image}

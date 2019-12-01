@@ -303,6 +303,36 @@ app.delete('/api/removeWaitlist/:id', (req, res) => {
     });
 });
 
+app.post('/table/newTable', (req, res) => {
+  const table = new Table({
+    rest_id: req.body.restaurant_id
+  });
+  table
+    .save()
+    .then(table => {
+      log('NEW TABLE CREATED');
+      res.send(table);
+    })
+    .catch(err => {
+      log(err);
+      res.send({ code: 400, err });
+    });
+});
+
+app.post('/table/updateTable', (req, res) => {
+  Table.findByIdAndUpdate(req.body._id, {
+    table_capacity: req.body.tableNum,
+    name: req.body.name
+  })
+    .then(table => {
+      res.send(table);
+    })
+    .catch(err => {
+      log(err);
+      res.send({ code: 400, err });
+    });
+});
+
 
 
 
@@ -329,3 +359,5 @@ const port = process.env.PORT || 5000;
 app.listen(port, () => {
   log('Listening on port 5000...');
 });
+
+module.exports = app;

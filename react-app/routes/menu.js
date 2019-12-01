@@ -1,5 +1,5 @@
 const express = require('express');
-const User = require('../models/user');
+const User = require('../models/user.js');
 const router = express.Router();
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
@@ -12,7 +12,7 @@ router.patch('/:id', (req, res) => {
   if (!ObjectID.isValid(req.params.id)) {
     res.status(404).send('id not valid');
   }
-  console.log(req.body);
+  // console.log(req.body);
   MenuItem.findByIdAndUpdate(req.params.id, { image: req.body.image }, { new: true })
     .then(restaurant => {
       if (!restaurant) {
@@ -41,7 +41,7 @@ router.post('/newMenuItem', (req, res) => {
     })
     .catch(err => {
       log(err);
-      res.send({ code: 404, err });
+      res.status(400).send({  err });
     });
 });
 
@@ -52,12 +52,12 @@ router.post('/findMenuByRestaurant', (req, res) => {
       res.send(menus);
     },
     error => {
-      res.send({ code: 404, error });
+      res.status(400).send({  error });
     }
   );
 });
 
-router.delete('/deleteMenuItem/?:id', (req, res) => {
+router.delete('/deleteMenuItem/:id', (req, res) => {
   // const restaurant_id = req.body.restaurant_id;
   const menu_id = req.params.id;
   if (menu_id) {
@@ -66,7 +66,7 @@ router.delete('/deleteMenuItem/?:id', (req, res) => {
         res.send(users);
       },
       error => {
-        res.send({ code: 404, error });
+        res.status(400).send({ error });
       }
     );
   }
@@ -81,12 +81,12 @@ router.put('/EditMenuItem', (req, res) => {
       price: req.body.price,
       ingredients: req.body.ingredients,
       calories: req.body.calories
-    }).then(
+    }, {new: true}).then(
       users => {
         res.send(users);
       },
       error => {
-        res.send({ code: 404, error });
+        res.status(400).send({ error });
       }
     );
   }

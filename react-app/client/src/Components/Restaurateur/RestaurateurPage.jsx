@@ -43,7 +43,7 @@ class RestaurateurPage extends Component {
       .catch(err => {
         console.log(err);
       });
-    console.log(this.props.auth);
+
     axios
       .get('/api/users/auth/' + this.props.match.params.id, this.tokenConfig())
       .then(res => {

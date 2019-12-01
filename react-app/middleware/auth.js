@@ -1,6 +1,6 @@
 const config = require('config');
 const jwt = require('jsonwebtoken');
-const User = require('../models/user');
+const User = require('../models/user.js');
 
 function isAuth(req, res, next) {
   const token = req.header('x-auth-token');
@@ -32,6 +32,7 @@ function isSuperAdmin(req, res, next) {
     if (!user) {
       res.status(404).send('User not found');
     }
+    // console.log(user);
     if (user.accountType === 'SuperAdmin') {
       req.isSuperAdmin = true;
     } else {

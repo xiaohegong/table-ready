@@ -38,10 +38,7 @@ const UserSchema = new Schema({
     type:Array,
     default: []
   },
-  restaurantInvitation:{
-    type:Array,
-    default: []
-  },
+
   email: String,
   tel: String
 });
