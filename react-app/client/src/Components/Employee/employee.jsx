@@ -272,6 +272,7 @@ class Employee extends Component {
         this.setState({
             current_date: date.getFullYear()+"/"+(date.getMonth()+1).toString(10)+"/"+date.getDate()
         })
+        console.log(this.state.current_date)
         axios.get(`/api/users/get/${this.props.match.params.id}`).then(user => {
             console.log(user);
 
@@ -322,7 +323,7 @@ class Employee extends Component {
                     _id: this.state.rest_obj._id,
                     reservations: [...this.state.rest_obj.reservations, id]
                 })
-                    .then(this.update_rest_waitlist(this.state.employee_obj.workFor))
+                    .then(res => {this.update_rest_waitlist(this.state.employee_obj.workFor)})
                     .catch(function (error) {
                         console.log(error);
                     });
