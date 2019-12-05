@@ -268,6 +268,10 @@ class Employee extends Component {
     };
 
     componentDidMount() {
+        const date = new Date()
+        this.setState({
+            current_date: date.getFullYear()+"/"+(date.getMonth()+1).toString(10)+"/"+date.getDate()
+        })
         axios.get(`/api/users/get/${this.props.match.params.id}`).then(user => {
             console.log(user);
 
