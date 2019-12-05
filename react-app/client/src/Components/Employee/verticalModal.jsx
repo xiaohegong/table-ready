@@ -96,7 +96,9 @@ class VerticalModal extends React.Component {
                             <Form.Group as={Col} md="auto">
                                 <Form.Label>Waitlist</Form.Label>
                                 <Checkbox onChange={(e) => {
-                                    this.state.type = "Waitlist";
+                                    if(e.target.checked){
+                                        this.state.type = "Waitlist";
+                                    }
                                 }}></Checkbox>
                             </Form.Group>
                         </Form.Row>
