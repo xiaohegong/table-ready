@@ -2,7 +2,7 @@ const app = require("../server");
 const chai = require("chai");
 const chaiHttp = require("chai-http");
 const mongoose = require("mongoose");
-const url = process.env.MONGODB_URI || 'mongodb://localhost:27017/TableReadyTest';
+const url = 'mongodb://localhost:27017/TableReadyTest';
 const Restaurant = require("../models/restaurant.js");
 const Table = require("../models/table");
 const {expect} = chai;
@@ -125,7 +125,7 @@ describe("Restaurant", () => {
           name: "updated name",
           phoneNumber: "12345",
           location: "Mercury",
-          Cuisine: "Burger",
+          cuisine: "Burger",
           operationHour: "Not Open"
         }).then(res => {
           expect(res).to.have.status(200);

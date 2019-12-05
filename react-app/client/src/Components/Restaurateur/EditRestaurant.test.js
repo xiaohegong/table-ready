@@ -14,7 +14,7 @@ describe("DressCode", () => {
       name: 'Jason',
       phoneNumber: '321123',
       location: 'Toronto',
-      Cuisine: 'American',
+      cuisine: 'American',
       operationHour: '24hr',
     };
     const wrapper = shallow(<EditRestaurant.WrappedComponent info={fake_info} link={fake_link}/>);

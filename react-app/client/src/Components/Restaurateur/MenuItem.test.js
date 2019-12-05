@@ -35,8 +35,6 @@ describe("MenuItem", () => {
     expect(text).toEqual(4);
     const link = wrapper.find('Link').length;
     expect(link).toEqual(1);
-    const image = wrapper.find('img').length;
-    expect(image).toEqual(1);
 
   });
 

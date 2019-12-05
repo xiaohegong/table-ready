@@ -106,7 +106,7 @@ class EditRestaurant extends Component {
                 <input
                   type="text"
                   className="form-control"
-                  defaultValue={this.props.info.Cuisine}
+                  defaultValue={this.props.info.cuisine}
                   id="cuisine"
                   name="cuisine"
                 />

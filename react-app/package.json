@@ -4,7 +4,7 @@
   "description": "This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).",
   "main": "server.js",
   "scripts": {
-    "test": "mocha",
+    "test": "nyc --reporter=html --reporter=text -x '*/node_modules, */Stylesheets' mocha --timeout=20000  --exit",
     "start": "node server.js",
     "heroku-postbuild": "cd client && npm install --only=dev && npm install && npm run build",
     "client": "cd client && npm start",
@@ -40,7 +40,6 @@
     "mongodb": "^3.3.3",
     "mongoose": "^5.7.8",
     "multer": "^1.4.2",
-    "nyc": "^14.1.1",
     "passport": "^0.4.0",
     "popper.js": "^1.16.0",
     "query-string": "^6.9.0",
@@ -56,6 +55,7 @@
   "devDependencies": {
     "check-prop-types": "^1.1.2",
     "concurrently": "^5.0.0",
-    "nodemon": "^1.19.4"
+    "nodemon": "^1.19.4",
+    "nyc": "^14.1.1"
   }
 }

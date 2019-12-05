@@ -10,7 +10,6 @@ import RestaurateurPage2 from "./Components/Restaurateur/RestaurateurPage2";
 import Admin from "./Components/Admin/Admin";
 import Employee from "./Components/Employee/employee";
 import "./App.scss";
-import { withCookies, useCookies } from "react-cookie";
 import Userpage from './Components/userpage/userpage'
 // import NotFound from "./Components/page_not_found/page_not_found";
 import NotFound from './Components/page_not_found/404';

@@ -5,9 +5,7 @@ import {green} from '@material-ui/core/colors';
 import './employee.css';
 import Card from 'react-bootstrap/Card';
 import Navbar from '../Navbar.jsx';
-import CardColumns from 'react-bootstrap/CardColumns';
 import Checkbox from '@material-ui/core/Checkbox';
-import Button from 'react-bootstrap/Button';
 import '@y0c/react-datepicker/assets/styles/calendar.scss';
 import {DatePicker} from '@y0c/react-datepicker';
 import {slide as Menu} from 'react-burger-menu';
@@ -290,14 +288,14 @@ class Employee extends Component {
         this.setState({
             //TODO: Backend handle
             to_be_reserved: this.state.to_be_reserved.filter(
-                i => i.id != this.state.to_be_reserved[index].id
+                i => i.id !== this.state.to_be_reserved[index].id
             )
         });
     };
     remove_reservation_from_items = index => {
         this.delete_data(this.state.items[index]);
         this.setState({
-            items: this.state.items.filter(i => i.id != this.state.items[index].id)
+            items: this.state.items.filter(i => i.id !== this.state.items[index].id)
         });
     };
 
@@ -638,15 +636,6 @@ class Employee extends Component {
                     ></img>
                 </button>
             );
-        }
-    };
-
-    is_authenticated = () => {
-        const user = this.props.cookies.cookies.cur_user;
-        if (user.accountType !== 'Admin') {
-            return true;
-        } else {
-            return false;
         }
     };
 

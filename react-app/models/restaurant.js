@@ -6,7 +6,7 @@ const Schema = mongoose.Schema;
 const { MongoClient, ObjectID } = require("mongodb");
 const MenuItem = require("./MenuItem.js");
 const Table = require("./table.js");
-const User = require("./user.js");
+const Users = require("./users.js");
 
 const RestaurantSchema = new Schema({
   owner: {
@@ -64,7 +64,7 @@ const RestaurantSchema = new Schema({
 });
 
 RestaurantSchema.pre('remove', { document: true },function (next) {
-  console.log(User)
+  console.log(Users)
   const restaurant_id = this._id;
   console.log("rest_id",restaurant_id);
   MenuItem.deleteMany(
@@ -85,7 +85,7 @@ RestaurantSchema.pre('remove', { document: true },function (next) {
       console.log("FAILED", error)
     }
   );
-  User.update({ workFor:restaurant_id},
+  Users.update({ workFor:restaurant_id},
     {$set:{workFor: ""}
   }).then(
     res =>{
