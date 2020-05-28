@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const url = 'mongodb://tordevtr2:A9wWScfasqRwNKotoB7VAdVXaZnZlFfK0xZ0BkRluOE3gcdvCXCiSQ3miGeqfDsFIlcv4T2onXVALohWxF9wnQ==@tordevtr2.documents.azure.com:10255/table_ready?ssl=true';
+const url = 'mongodb+srv://user:user@table-ready-f4oyo.mongodb.net/test?retryWrites=true&w=majority';
 
 function connect() {
     mongoose.set('debug', true);
